@@ -1,0 +1,27 @@
+#send-form {
+    position: absolute;
+    left: 25%;
+    top: 250px;
+    width: 50%;
+    text-align: center;
+}
+
+input[type=number] {
+    color: #fff;
+    border-bottom-color: #fff;
+    border-bottom-width: 2px;
+}
+
+.input-field input[type=number]:focus+label, .input-field input[type=number]:focus:not([readonly]) {
+    border-bottom-color: #fff;
+    border-bottom-width: 2px;
+    box-shadow: none;
+}
+
+.input-field input[type=number]:focus + label, .input-field input[type=number]:focus:not([readonly]) + label {
+    color: #fff
+}
+
+#send-form .row {
+    margin-bottom: 0px;
+}

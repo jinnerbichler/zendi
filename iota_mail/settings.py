@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'nopassword',
+    'wallet'
 ]
 
 MIDDLEWARE = [
@@ -70,6 +72,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'iota_mail.wsgi.application'
 
+AUTHENTICATION_BACKENDS = ('nopassword.backends.email.EmailBackend',)
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
