@@ -17,11 +17,11 @@
     <link rel="stylesheet" href="{% static 'wallet/css/nas.min.css'%}">
     <link rel="stylesheet" href="{% static 'wallet/css/custom.css'%}">
     <!-- Favicons-->
-    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="shortcut icon" href="{% static 'wallet/favicon.ico'%}">
     <meta name="msapplication-config" content="/favicons/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
     <!-- Site title-->
-    <title>SendIota</title>
+    <title>Zėndi</title>
 </head>
 <body>
 <div class="loading-overlay" id="loading-overlay"></div>
@@ -35,7 +35,7 @@
         <div class="nav-wrapper">
             <div class="row">
                 <div class="col s12 l6">
-                    <div class="brand-logo">Sėndī</div>
+                    <div class="brand-logo">Zėndi</div>
                 </div>
                 <div class="col s12 l6">
                     <ul class="hide-on-med-and-down table-of-contents">
@@ -61,6 +61,7 @@
 <main class="main" id="main">
     <div class="triangles hero" id="triangles">
         <div id="output"></div>
+        <h1>Exhange money with joy.</h1>
         <form id="send-form" action="mailer/mailer.php" novalidate autocomplete="off">
             <div class="row">
                 <div class="col s12 l5">

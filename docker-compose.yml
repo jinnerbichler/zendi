@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+
+  db:
+    image: postgres:9.6.3
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=sendiDB
+
+  web:
+    build: .
+    entrypoint: /bin/bash ./entrypoint.sh
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    restart: on-failure
+    links:
+      - db:db

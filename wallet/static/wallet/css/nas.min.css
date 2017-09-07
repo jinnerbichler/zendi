@@ -78,10 +78,10 @@ h2 {
     -webkit-transform: translate3d(-50%, -50%, 0);
     transform: translate3d(-50%, -50%, 0);
     position: absolute;
-    top: 50%;
+    top: 30%;
     left: 50%;
     margin: 0;
-    font-size: 7rem;
+    font-size: 5rem;
     font-weight: 200;
     letter-spacing: 5px;
     color: #fff;

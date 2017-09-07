@@ -177,6 +177,4 @@ ENV/
 
 # End of https://www.gitignore.io/api/osx,pydev,python,pycharm
 
-private.sh
 db.sqlite3
-news_scraper/migrations/*

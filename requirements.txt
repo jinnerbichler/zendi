@@ -1,1 +1,2 @@
-django-nopassword==3.0.2
+django==1.11.4
+psycopg2
