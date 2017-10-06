@@ -36,8 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'nopassword',
-    'wallet'
+    'wallet',
+    'nopassword'
 ]
 
 MIDDLEWARE = [
@@ -81,7 +81,7 @@ DATABASES = {
     }
 }
 
-AUTHENTICATION_BACKENDS = ('nopassword.backends.email.EmailBackend',)
+AUTHENTICATION_BACKENDS = ('wallet.backend.EmailBackend',)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
@@ -119,9 +119,12 @@ LOGGING = {
         }
     },
     'loggers': {
-        '': {
+        'root   ': {
             'handlers': ['console'],
             'level': 'DEBUG'
         }
     }
 }
+
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = '1025'
