@@ -3,6 +3,6 @@ from wallet import views
 
 urlpatterns = [
     url(r'^$', views.index),
-    url(r'^send-coins/$', views.send_coins_init, name='send_coin'),
-    url(r'^send-coins-exec', views.send_coins_exec, name='send_coin_exec')
+    url(r'^send-tokens/$', views.send_tokens_init, name='send_tokens'),
+    url(r'^send-tokens-exec', views.send_tokens_exec, name='send_tokens_exec')
 ]

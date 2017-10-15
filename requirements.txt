@@ -1,3 +1,4 @@
 django==1.11.4
+djangorestframework==3.7.0
 psycopg2
 pyota==2.0.0
