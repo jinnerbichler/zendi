@@ -3,7 +3,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from wallet.api.iota_api import new_seed
+from wallet.iota_.iota_api import new_seed
 
 
 class IotaSeed(models.Model):
