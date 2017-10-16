@@ -1,18 +1,14 @@
 import logging
 
-import requests
-from iota import Iota, ProposedTransaction, Address, TryteString, Tag
-from iota.adapter.sandbox import SandboxAdapter
+from iota import Iota, ProposedTransaction, Address, TryteString
 from iota.adapter.wrappers import RoutingWrapper
 from iota.crypto.types import Seed
 
 AUTH_TOKEN = '03f7571a-bb6c-4a5d-86eb-0fd73f02da78'
 SANDBOX_URI = 'https://sandbox.iota.org/api/v1/'
-SEED = b'MHPMRXKXECRNBLGZAUVHFFWLWMWBLOYKSICDAFOOHNHIQYZPILWXFSRUQCTSPKVXMGYWMLVLNFI9ISNKQ'
+DEFAULT_DEPTH = 3
 
-logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
-logger.setLevel('DEBUG')
 
 # create default adapter
 DEFAULT_ADAPTER = RoutingWrapper('http://localhost:14265/api/v1/commands')
@@ -30,7 +26,7 @@ def new_seed():
     Creates a new seed and returns the string representation.
     :return: String (ascii) representation of new seed.
     """
-    return Seed.random()._trytes.decode('ascii')  # ToDo: Test this! ...as_string is not working
+    return trytes2string(Seed.random())
 
 
 class IotaApi:
@@ -39,37 +35,66 @@ class IotaApi:
             adapter = DEFAULT_ADAPTER
 
         # convert seed
-        seed = Seed.from_bytes(seed.encode('ascii'))
+        seed = Seed(string2trytes(seed))
+
         self.api = Iota(adapter=adapter, seed=seed)
         self.api.adapter.set_logger(logger)
 
     def get_new_address(self):
-        return self.api.get_new_addresses()[0]
+        """
+        Fetch new address from IRI (deterministically)
+        :return: String representation of new address
+        """
+        response = self.api.get_new_addresses(count=None)
+        return trytes2string(response['addresses'][0])
 
     def get_address_balance(self, address):
+        address = Address(string2trytes(address))
         return self.api.get_balances([address])[address]
 
     def get_account_balance(self):
         return self.api.get_inputs()['totalBalance']
 
+    def transfer(self, receiver_address, change_address, value, tag=None, message=None):
+        if message:
+            message = TryteString.from_string(message)
 
-if __name__ == '__main__':
-    iota_api = IotaApi(seed=SEED)
+        # convert addresses
+        receiver_address = Address(string2trytes(receiver_address))
+        change_address = Address(string2trytes(change_address))
 
-    print(iota_api.api.get_node_info())
+        # construct transaction
+        transaction = ProposedTransaction(address=receiver_address, value=value, tag=tag, message=message)
 
-    inputs = iota_api.api.get_inputs()
+        # trigger transfer
+        self.api.send_transfer(depth=DEFAULT_DEPTH, transfers=[transaction], change_address=change_address)
 
-    print(inputs)
 
-    send_to = Address(
-        b'FWAWQKLNAVEPOCDNKJUERBD9YKNWLZWQLVDOI99MDGCJOLYBFMSLVAUGFQVECFIULMFGCRURRMEWVFQDWKZAXZELOW')
-    # transaction = ProposedTransaction(address=send_to,
-    #                                   value=10,
-    #                                   tag=Tag(b'ADAPT'),
-    #                                   message=TryteString.from_string('Hello!'))
-    # bundle = iota_api.api.send_transfer(depth=100, transfers=[transaction], inputs=inputs['inputs'])
-    # print(bundle)
-    print(iota_api.api.get_inputs())
+def trytes2string(trytes):
+    return str(trytes)
 
-    print(iota_api.api.get_balances([send_to]))
+
+def string2trytes(string):
+    return string.encode()
+
+
+# if __name__ == '__main__':
+#     iota_api = IotaApi(seed=SEED)
+#
+#     print(iota_api.api.get_node_info())
+#
+#     inputs = iota_api.api.get_inputs()
+#
+#     print(inputs)
+#
+#     send_to = Address(
+#         b'FWAWQKLNAVEPOCDNKJUERBD9YKNWLZWQLVDOI99MDGCJOLYBFMSLVAUGFQVECFIULMFGCRURRMEWVFQDWKZAXZELOW')
+#     # transaction = ProposedTransaction(address=send_to,
+#     #                                   value=10,
+#     #                                   tag=Tag(b'ADAPT'),
+#     #                                   message=TryteString.from_string('Hello!'))
+#     # bundle = iota_api.api.send_transfer(depth=100, transfers=[transaction], inputs=inputs['inputs'])
+#     # print(bundle)
+#     print(iota_api.api.get_inputs())
+#
+#     print(iota_api.api.get_balances([send_to]))

@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -6,10 +8,13 @@ from urllib.parse import urlencode
 
 from rest_framework.status import HTTP_401_UNAUTHORIZED
 
-from wallet.user_utils import get_user_safe, get_new_address, send_iota
+import wallet.iota_.iota_utils as iota_utils
+from wallet.user_utils import get_user_safe
 from django.shortcuts import render, redirect
 
 from wallet.forms import SendForm
+
+logger = logging.getLogger(__name__)
 
 
 def index(request):
@@ -35,7 +40,10 @@ def send_tokens_init(request):
             login_code.next = exec_url
             login_code.save()
 
+            # ToDo: check balance and notify in mail if not enought
+
             # send login code
+            logger.info('Sending login code to %s (new: %s)', send_user, is_new)
             login_code.send_login_code(secure=request.is_secure(),
                                        host=request.get_host(),
                                        new_user=is_new)
@@ -49,7 +57,7 @@ def send_tokens_init(request):
 def send_tokens_exec(request):
     from_mail = request.GET['from_mail']
     to_mail = request.GET['to_mail']
-    amount = request.GET['amount']
+    amount = int(request.GET['amount'])
     message = request.GET['message']  # optional
 
     # check if authorised user matches
@@ -57,7 +65,7 @@ def send_tokens_exec(request):
         return HttpResponse('Invalid mail', status=HTTP_401_UNAUTHORIZED)
 
     # send tokens
-    send_iota(sender=from_mail, receiver=to_mail, amount=amount, message=message)
+    iota_utils.send_tokens(sender=from_mail, receiver=to_mail, amount=amount, msg=message)
 
     logout(request)
     return redirect('/')

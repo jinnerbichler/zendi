@@ -104,9 +104,10 @@ STATIC_URL = '/static/'
 
 LOGGING = {
     'version': 1,
+    'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': '%(levelname)s %(asctime)s %(name)s %(message)s'
+            'format': '%(asctime)s %(name)s %(levelname)s %(message)s'
         },
         'simple': {
             'format': '%(levelname)s %(message)s'
@@ -120,9 +121,10 @@ LOGGING = {
         }
     },
     'loggers': {
-        'root   ': {
+        'wallet': {
             'handlers': ['console'],
-            'level': 'DEBUG'
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
+            'propagate': True
         }
     }
 }
