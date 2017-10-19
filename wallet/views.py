@@ -9,6 +9,7 @@ from urllib.parse import urlencode
 from rest_framework.status import HTTP_401_UNAUTHORIZED
 
 import wallet.iota_.iota_utils as iota_utils
+from wallet.iota_ import NotEnoughBalanceException
 from wallet.user_utils import get_user_safe
 from django.shortcuts import render, redirect
 
@@ -40,8 +41,6 @@ def send_tokens_init(request):
             login_code.next = exec_url
             login_code.save()
 
-            # ToDo: check balance and notify in mail if not enought
-
             # send login code
             logger.info('Sending login code to %s (new: %s)', send_user, is_new)
             login_code.send_login_code(secure=request.is_secure(),
@@ -60,12 +59,16 @@ def send_tokens_exec(request):
     amount = int(request.GET['amount'])
     message = request.GET['message']  # optional
 
-    # check if authorised user matches
+    # check if authorised user matches sending mail
     if from_mail != request.user.email:
         return HttpResponse('Invalid mail', status=HTTP_401_UNAUTHORIZED)
 
-    # send tokens
-    iota_utils.send_tokens(sender=from_mail, receiver=to_mail, amount=amount, msg=message)
+    try:
+        # send tokens
+        iota_utils.send_tokens(sender=from_mail, receiver=to_mail, amount=amount, msg=message)
+    except NotEnoughBalanceException as e:
+        # ToDo: handle this case
+        pass
 
     logout(request)
     return redirect('/')
