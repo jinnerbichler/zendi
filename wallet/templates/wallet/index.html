@@ -1,66 +1,8 @@
+{% extends "wallet/base.html" %}
+
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <!-- Making sure the web-site will scale fine on mobiles-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Trying to force IE to perform at its best-->
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <!-- Meta description, aim for about 150 characters-->
-    <meta name="description" content="This theme is a very beautiful and minimalistic theme with a gorgeous animation that will make the user remember your website and want to come back.">
-    <!-- Stylesheets-->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Work+Sans:200,300,400,700">
-    <link rel="stylesheet" href="{% static 'wallet/libs/materialize/css/materialize.min.css'%}">
-    <link rel="stylesheet" href="{% static 'wallet/libs/textillate/assets/animate.css'%}">
-    <link rel="stylesheet" href="{% static 'wallet/css/linea.min.css'%}">
-    <link rel="stylesheet" href="{% static 'wallet/css/nas.min.css'%}">
-    <link rel="stylesheet" href="{% static 'wallet/css/custom.css'%}">
-    <!-- Favicons-->
-    <link rel="shortcut icon" href="{% static 'wallet/favicon.ico'%}">
-    <meta name="msapplication-config" content="/favicons/browserconfig.xml">
-    <meta name="theme-color" content="#ffffff">
-    <!-- Site title-->
-    <title>Zėndi</title>
-</head>
-<body>
-<div class="loading-overlay" id="loading-overlay"></div>
-<!-- Pace loader-->
-<div class="pace" id="pace">
-    <div class="pace-activity"></div>
-</div>
-<!-- Navigation-->
-<div class="navbar-fixed zero-height">
-    <nav>
-        <div class="nav-wrapper">
-            <div class="row">
-                <div class="col s12 l6">
-                    <div class="brand-logo">Zėndi</div>
-                </div>
-                <div class="col s12 l6">
-                    <ul class="hide-on-med-and-down table-of-contents">
-                        <li>
-                            <a href="#cases">Send</a>
-                        </li>
-                        <li>
-                            <a href="#services">Withdraw</a>
-                        </li>
-                        <li>
-                            <a href="#stories">Deposit</a>
-                        </li>
-                        <li>
-                            <a href="#contact">About</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
-</div>
-<!-- Main content-->
-<main class="main" id="main">
-    <div class="triangles hero" id="triangles">
-        <div id="output"></div>
+
+{% block content %}
         <h1>Exhange money with joy.</h1>
         <form id="send-form" action="send-tokens/" novalidate autocomplete="off" method="post">
 
@@ -87,8 +29,6 @@
                         <label for="{{ form.amount.id_for_label }}">Mi</label>
                         {{ form.amount }}
                         {{ form.amount.errors }}
-{#                        <input id="amount" type="number" name="amount">#}
-{#                        <label for="amount">Mi</label>#}
                     </div>
                 </div>
             </div>
@@ -98,8 +38,6 @@
                         <label for="{{ form.message.id_for_label }}">Message (optional)</label>
                         {{ form.message }}
                         {{ form.message.errors }}
-{#                        <input id="message" type="text" name="message">#}
-{#                        <label for="message">Message (optional)</label>#}
                     </div>
                 </div>
             </div>
@@ -109,53 +47,4 @@
                 </div>
             </div>
         </form>
-    </div>
-</main>
-<!-- Footer-->
-
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col s12 l4 margin-on-medium-and-down">&copy; 1996—2016 Nås</div>
-            <div class="col s12 l4 margin-on-medium-and-down">
-                <ul>
-                    <li>
-                        <a class="underline" href="#!">Facebook</a>
-                    </li>
-                    <li>
-                        <a class="underline" href="#!">Twitter</a>
-                    </li>
-                    <li>
-                        <a class="underline" href="#!">VK</a>
-                    </li>
-                    <li>
-                        <a class="underline" href="#!">Github</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="col s12 l4 margin-on-medium-and-down">
-                <address>B R James, 30 W 47th St
-                    <br>New York, NY 10036
-                    <br>
-                </address>
-                <a class="underline" href="https://maps.google.com?daddr=B+R+James+30+W=47th+St+NY+10036" target="_blank">Get directions</a>&nbsp;(opens in new tab).
-                <p>
-                    <a class="underline" href="mailto:hello@nas.io">hello@nas.io</a>
-                    <br>+1-917-643-4346</p>
-            </div>
-        </div>
-    </div>
-</footer>
-<!-- Libraries-->
-<script src="{% static 'wallet/libs/jquery/jquery.min.js'%}"></script>
-<script src="{% static 'wallet/libs/materialize/js/materialize.min.js'%}"></script>
-<script src="{% static 'wallet/libs/textillate/jquery.textillate.js'%}"></script>
-<script src="{% static 'wallet/libs/textillate/assets/jquery.lettering.js'%}"></script>
-<script src="{% static 'wallet/libs/textillate/assets/jquery.fittext.js'%}"></script>
-<!-- Nas scripts-->
-<script src="{% static 'wallet/js/config.js'%}"></script>
-<script src="{% static 'wallet/js/nas.js'%}"></script>
-<script src="{% static 'wallet/libs/flat-surface-shader/deploy/fss.js'%}"></script>
-<script src="{% static 'wallet/js/triangles-i.js'%}"></script>
-</body>
-</html>
+{% endblock %}
