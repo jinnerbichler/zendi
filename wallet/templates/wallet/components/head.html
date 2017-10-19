@@ -1,0 +1,24 @@
+{% load static %}
+
+<head>
+    <meta charset="utf-8">
+    <!-- Making sure the web-site will scale fine on mobiles-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Trying to force IE to perform at its best-->
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <!-- Meta description, aim for about 150 characters-->
+    <meta name="description" content="This theme is a very beautiful and minimalistic theme with a gorgeous animation that will make the user remember your website and want to come back.">
+    <!-- Stylesheets-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Work+Sans:200,300,400,700">
+    <link rel="stylesheet" href="{% static 'wallet/libs/materialize/css/materialize.min.css' %}">
+    <link rel="stylesheet" href="{% static 'wallet/libs/textillate/assets/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'wallet/css/linea.min.css' %}">
+    <link rel="stylesheet" href="{% static 'wallet/css/nas.min.css' %}">
+    <link rel="stylesheet" href="{% static 'wallet/css/custom.css' %}">
+    <!-- Favicons-->
+    <link rel="shortcut icon" href="{% static 'wallet/favicon.ico' %}">
+    <meta name="msapplication-config" content="/favicons/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Site title-->
+    <title>{% block title %}Zėndi - Exchange Money with Joy!{% endblock %}</title>
+</head>
