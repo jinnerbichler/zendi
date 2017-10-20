@@ -1,13 +1,32 @@
+// noinspection NodeJsCodingAssistanceForCoreModules
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const wepback = require('webpack');
 
-// create plugins
+// ------------------------------------------------------------------
+//                    Create Plugins
+// ------------------------------------------------------------------
 const extractPlugin = new ExtractTextPlugin({
     filename: 'main.css'
 });
+// noinspection JSUnresolvedFunction
+const providePlugin = new wepback.ProvidePlugin({
+    $: 'jquery',
+    jQuery: 'jquery',
+    Materialize: 'materialize-css'
+});
+const cleanPlugin = new CleanWebpackPlugin(['wallet/static/wallet']);
+const copyFilesPlugin = new CopyWebpackPlugin([{
+    // copy all favicon data
+    from: 'assets/img/favicons',
+    to: 'img/favicons'
+}, {
+    // copy dependencies of theme
+    from: 'assets/theme',
+    to: 'theme'
+}]);
 
 module.exports = {
     entry: './assets/js/app.js',
@@ -17,64 +36,63 @@ module.exports = {
         // publicPath: '/wallet/static/wallet'
     },
     module: {
-        rules: [{
-            test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-            use: [{
-                loader: 'url-loader',
-                options: {
-                    name: '[name].[ext]',
-                    outputPath: 'font/',
-                    limit: 80000,
-                }
+        rules: [
+            {
+                // ------------------------------------------------------------------
+                //                    Load Fonts
+                // ------------------------------------------------------------------
+                test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                use: [{
+                    loader: 'url-loader',
+                    options: {
+                        name: '[name].[ext]',
+                        outputPath: 'font/',
+                        limit: 80000,
+                    }
+                }]
+            }, {
+                // ------------------------------------------------------------------
+                //                    Load Vector Graphics
+                // ------------------------------------------------------------------
+                test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                loader: 'file-loader'
+            }, {
+                // ------------------------------------------------------------------
+                //                    Load Vector Graphics
+                // ------------------------------------------------------------------
+                test: /\.js$/,
+                use: [{
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['es2015']
+                    }
+                }]
+            }, {
+                // ------------------------------------------------------------------
+                //                    Load SCSS Styles
+                // ------------------------------------------------------------------
+                test: /\.scss$/,
+                use: extractPlugin.extract({
+                    use: ['css-loader', 'sass-loader']
+                }),
+                exclude: ['assets/theme/']
+            }, {
+                // ------------------------------------------------------------------
+                //                    Load Images
+                // ------------------------------------------------------------------
+                test: /\.(jpg|png)$/,
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        name: '[name].[ext]',
+                        outputPath: 'img/',
+                    }
+                }]
             }]
-        }, {
-            test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-            loader: 'file-loader'
-        }, {
-            test: /\.js$/,
-            use: [{
-                loader: 'babel-loader',
-                options: {
-                    presets: ['es2015']
-                }
-            }]
-        }, {
-            test: /\.scss$/,
-            use: extractPlugin.extract({
-                use: ['css-loader', 'sass-loader']
-            }),
-            exclude: ['assets/theme/']
-        }, {
-            test: /\.(jpg|png)$/,
-            use: [{
-                loader: 'file-loader',
-                options: {
-                    name: '[name].[ext]',
-                    outputPath: 'img/',
-                }
-            }]
-        }
-        ]
     },
     plugins: [
-        new wepback.ProvidePlugin({
-            $: 'jquery',
-            jQuery: 'jquery',
-            Materialize: 'materialize-css'
-        }),
+        providePlugin,
         extractPlugin,
-        new CleanWebpackPlugin(['wallet/static/wallet']),
-        new CopyWebpackPlugin([
-            // copy all favicon data
-            {
-                from: 'assets/img/favicons',
-                to: 'img/favicons'
-            },
-            // copy dependencies of theme
-            {
-                from: 'assets/theme',
-                to: 'theme'
-            },
-        ])
-    ]
+        cleanPlugin,
+        copyFilesPlugin]
 };
