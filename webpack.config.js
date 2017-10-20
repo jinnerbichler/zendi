@@ -28,6 +28,9 @@ const copyFilesPlugin = new CopyWebpackPlugin([{
     to: 'theme'
 }]);
 
+// ------------------------------------------------------------------
+//                    Configure Webpack
+// ------------------------------------------------------------------
 module.exports = {
     entry: './assets/js/app.js',
     output: {
