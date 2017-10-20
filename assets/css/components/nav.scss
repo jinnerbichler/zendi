@@ -1,0 +1,101 @@
+nav {
+    position: relative;
+    height: 5rem;
+    line-height: 5rem;
+    background-color: transparent;
+    box-shadow: none;
+
+    .nav-wrapper {
+        margin: 0 5rem;
+    }
+
+    ul {
+        @include display(flex);
+        @include justify-content(space-between);
+
+        a {
+            position: relative;
+            display: inline;
+            padding: 0;
+            font-size: 1.5rem;
+            letter-spacing: -.04em;
+            border-bottom: 2px solid transparentize($white, .5);
+
+            &:hover {
+                background-color: transparent;
+                border-bottom-color: $white;
+            }
+        }
+    }
+
+    ul a,
+    .brand-logo {
+        color: $white;
+    }
+
+    .black-logo {
+        display: none;
+    }
+
+    &.dark {
+        background-color: transparentize($white, .03);
+
+        ul a,
+        .brand-logo {
+            color: $black;
+        }
+
+        ul a {
+            border-bottom-color: transparentize($black, .5);
+
+            &:hover {
+                border-bottom-color: $black;
+            }
+        }
+
+        .table-of-contents a:hover {
+            color: $black;
+        }
+
+        .black-logo {
+            display: inline;
+        }
+
+        .white-logo {
+            display: none;
+        }
+    }
+}
+
+.table-of-contents {
+    li {
+        padding: 0;
+    }
+
+    a {
+        display: inline;
+        padding: 0;
+        font-weight: 400;
+        color: $white;
+
+        &:hover,
+        &.active {
+            padding: 0;
+            color: $white;
+            border-left: 0;
+        }
+
+        &.active {
+            color: $black;
+            border-top: 2px solid $black;
+        }
+    }
+}
+
+.navbar-fixed {
+    z-index: 1000;
+}
+
+.brand-logo img {
+    width: 75px;
+}

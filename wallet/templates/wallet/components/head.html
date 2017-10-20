@@ -7,18 +7,30 @@
     <!-- Trying to force IE to perform at its best-->
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <!-- Meta description, aim for about 150 characters-->
-    <meta name="description" content="This theme is a very beautiful and minimalistic theme with a gorgeous animation that will make the user remember your website and want to come back.">
-    <!-- Stylesheets-->
+    <meta name="description"
+          content="This theme  is a very beautiful and minimalistic theme with a gorgeous animation that will make the user remember your website and want to come back.">
+
+    <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Work+Sans:200,300,400,700">
-    <link rel="stylesheet" href="{% static 'wallet/libs/materialize/css/materialize.min.css' %}">
-    <link rel="stylesheet" href="{% static 'wallet/libs/textillate/assets/animate.css' %}">
-    <link rel="stylesheet" href="{% static 'wallet/css/linea.min.css' %}">
-    <link rel="stylesheet" href="{% static 'wallet/css/nas.min.css' %}">
-    <link rel="stylesheet" href="{% static 'wallet/css/custom.css' %}">
+
+    <!-- Stylesheets of theme-->
+    <!--<link rel="stylesheet" href="{% static 'wallet/theme/materialize/css/materialize.css' %}">-->
+    <link rel="stylesheet" href="{% static 'wallet/theme/textillate/assets/animate.css' %}">
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="{% static 'wallet/main.css' %}">
+
     <!-- Favicons-->
-    <link rel="shortcut icon" href="{% static 'wallet/favicon.ico' %}">
-    <meta name="msapplication-config" content="/favicons/browserconfig.xml">
+    <link rel="icon" sizes="180x180" href="{% static 'wallet/img/favicons/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" href="{% static 'wallet/img/favicons/favicon-32x32.png' %}"
+          sizes="32x32">
+    <link rel="icon" type="image/png" href="{% static 'wallet/img/favicons/favicon-16x16.png' %}"
+          sizes="16x16">
+    <link rel="manifest" href="{% static 'wallet/img/favicons/manifest.json' %}">
+    <link rel="shortcut icon" href="{% static 'wallet/img/favicons/favicon.ico' %}">
+    <meta name="msapplication-config" content="{% static 'wallet/img/favicons/browserconfig.xml' %}">
     <meta name="theme-color" content="#ffffff">
+
     <!-- Site title-->
     <title>{% block title %}Zėndi - Exchange Money with Joy!{% endblock %}</title>
 </head>

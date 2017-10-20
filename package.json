@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack-dev-server",
     "build:prod": "webpack -p",
-    "build:dev": "webpack --progress --colors"
+    "build:dev": "webpack --progress --colors",
+    "watch": "webpack --watch"
   },
   "keywords": [],
   "author": "Maximilian Schwarzmüller",
@@ -24,10 +25,13 @@
     "file-loader": "^0.10.1",
     "node-sass": "^4.5.1",
     "sass-loader": "^6.0.3",
+    "url-loader": "^0.6.2",
     "webpack": "^2.3.2",
     "webpack-dev-server": "^2.4.2"
   },
   "dependencies": {
-    "jquery": "^3.2.1"
+    "jquery": "^3.2.1",
+    "materialize-css": "^0.100.2",
+    "materialize-loader": "^2.0.2"
   }
 }

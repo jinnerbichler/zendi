@@ -1,0 +1,11 @@
+.blue-purple-gradient {
+    @include linear-gradient(to right, #df0eff, #5b0bbb);
+}
+
+.blue-green-gradient {
+    @include linear-gradient(to right, #54e8a1, #464181);
+}
+
+.red-purple-gradient {
+    @include linear-gradient(to right, #ff0961, #2e0961);
+}

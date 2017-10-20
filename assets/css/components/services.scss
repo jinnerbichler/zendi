@@ -1,0 +1,43 @@
+.services-section {
+    i {
+        @include prefixer(background-clip, text, webkit);
+        @include prefixer(text-fill-color, transparent, webkit);
+        font-size: 10rem;
+    }
+
+    .service-title {
+        margin: 2rem 0 .5rem;
+        font-size: 2rem;
+        font-weight: 300;
+        line-height: 1;
+    }
+
+    .service-description {
+        font-size: 1.25rem;
+        color: color('grey', 'lighten-1');
+    }
+
+    svg {
+        opacity: 0;
+    }
+
+    &.animate {
+        svg {
+            opacity: 1;
+
+            > * {
+                @include animation(draw 5s forwards 1 $ease-out-sine);
+                stroke: $black;
+                stroke-width: 1;
+                stroke-dasharray: 500px;
+                stroke-dashoffset: 500px;
+            }
+        }
+    }
+}
+
+@include keyframes(draw) {
+    to {
+        stroke-dashoffset: 0;
+    }
+}

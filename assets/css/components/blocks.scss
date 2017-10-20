@@ -1,0 +1,88 @@
+.square {
+    padding-bottom: 100%;
+}
+
+.rectangle {
+    padding-bottom: 70%;
+}
+
+.rectangle-vertical {
+    padding-bottom: 140%;
+}
+
+.rectangle-horizontal {
+    padding-bottom: 35%;
+}
+
+@media #{$medium-and-down} {
+    .rectangle,
+    .rectangle-vertical,
+    .rectangle-horizontal {
+        padding-bottom: 70%;
+    }
+}
+
+.block {
+    position: relative;
+    display: block;
+    height: 0;
+    overflow: hidden;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    .content {
+        @include transition(opacity .4s $ease-out-circ);
+        @include display(flex);
+        @include justify-content(center);
+        @include align-items(center);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: transparentize($white, .15);
+        opacity: 0;
+    }
+
+    .title {
+        font-size: 2.5rem;
+        letter-spacing: -.07em;
+    }
+
+    &:hover .content {
+        opacity: 1;
+    }
+}
+
+.blocks {
+    .row {
+        margin: 0;
+    }
+
+    .col {
+        padding: 0;
+    }
+
+    &.spacious {
+        .block {
+            margin: 2.5rem;
+        }
+
+        &.no-margin .block {
+            margin: 0;
+        }
+
+        .rectangle-vertical {
+            padding-bottom: calc(140% + 5rem);
+        }
+
+        @media #{$medium-and-down} {
+            .rectangle-vertical {
+                padding-bottom: 70%;
+            }
+
+            .block {
+                margin: 1.5rem;
+            }
+        }
+    }
+}

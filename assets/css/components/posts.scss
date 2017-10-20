@@ -1,0 +1,47 @@
+.posts-covers > div {
+    @include transition(all 30s $ease-out-sine);
+    @include transform(scale(1));
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 505;
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    &.active {
+        display: block;
+    }
+
+    &.zoom {
+        @include transform(scale(1.5));
+    }
+}
+
+.posts {
+    position: relative;
+    z-index: 510;
+    font-size: 1.75rem;
+
+    a {
+        display: block;
+        padding: 1.5rem 1rem;
+        border-bottom: 2px solid $black;
+
+        &:hover {
+            color: $white;
+            background: $black;
+        }
+
+        &.opacity:hover {
+            opacity: 1;
+        }
+
+        &.opacity {
+            opacity: 0;
+        }
+    }
+}

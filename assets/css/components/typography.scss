@@ -1,0 +1,101 @@
+html {
+    font-family: 'Work Sans', sans-serif;
+    color: $black;
+}
+
+body,
+input,
+textarea,
+select,
+button {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-kerning: normal;
+    -moz-font-feature-settings: 'liga', 'kern';
+}
+
+.huge {
+    font-size: 5rem;
+    font-weight: 300;
+    line-height: 1.3;
+    letter-spacing: -.01em;
+
+    @media #{$small-and-down} {
+        font-size: 2.5rem;
+    }
+}
+
+@media #{$small-and-down} {
+    h1 {
+        font-size: 2.5rem;
+    }
+}
+
+h2 {
+    margin-bottom: 4rem;
+    font-weight: 300;
+    letter-spacing: .5rem;
+    text-transform: uppercase;
+
+    @media #{$small-and-down} {
+        font-size: 2.5rem;
+    }
+}
+
+.brand-logo {
+    letter-spacing: .2rem;
+    text-transform: uppercase;
+}
+
+.hero h1 {
+    @include transform(translate3d(-50%, -50%, 0));
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: 0;
+    font-size: 7rem;
+    font-weight: 200;
+    letter-spacing: 5px;
+    color: $white;
+    text-align: center;
+    text-transform: uppercase;
+
+    @media #{$small-and-down} {
+        font-size: 2.5rem;
+    }
+
+    &.bold {
+        font-weight: 700;
+        letter-spacing: 10px;
+    }
+}
+
+blockquote {
+    padding: 0;
+    font-size: 2.5rem;
+    font-weight: 400;
+    letter-spacing: -.01em;
+    border: 0;
+
+    .quote {
+        margin-left: -16px;
+    }
+
+    @media #{$small-and-down} {
+        font-size: 1.75rem;
+
+        .quote {
+            margin-left: -12px;
+        }
+    }
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+h2 + h3 {
+    margin-top: -3rem;
+    color: color('grey', 'lighten-1');
+}

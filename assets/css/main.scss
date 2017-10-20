@@ -1,0 +1,25 @@
+@import '../../node_modules/bourbon/app/assets/stylesheets/bourbon';
+@import 'components/variables';
+
+//import Materialize
+$roboto-font-path: "../../node_modules/materialize-css/dist/fonts/roboto/";
+@import '../../node_modules/materialize-css/sass/materialize';
+
+// import components of Nas theme
+@import 'components/global';
+@import 'components/typography';
+@import 'components/helpers';
+@import 'components/nav';
+@import 'components/blocks';
+@import 'components/spinner';
+@import 'components/triangles';
+@import 'components/gradients';
+@import 'components/services';
+@import 'components/posts';
+@import 'components/footer';
+@import 'components/form';
+@import 'components/slider';
+@import 'components/modal';
+@import 'components/toasts';
+
+@import 'pages/landing-page';

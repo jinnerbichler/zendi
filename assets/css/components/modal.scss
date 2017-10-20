@@ -1,0 +1,64 @@
+.modal.bottom-sheet {
+    z-index: 1300;
+    height: 100%;
+    max-height: inherit;
+    background-color: $white;
+
+    .modal-content {
+        padding-top: 5rem;
+        padding-bottom: 5rem;
+    }
+
+    .spacious-images img {
+        margin: 2.5rem 0;
+    }
+
+    p {
+        margin: 0;
+
+        &:not(:first-of-type) {
+            text-indent: 2rem;
+        }
+    }
+
+    h3 {
+        margin-top: 4rem;
+    }
+
+    .author {
+        img {
+            position: relative;
+            top: 12px;
+            width: 50px;
+            margin-right: 1rem;
+            margin-left: -62px;
+            border-radius: 50%;
+        }
+
+        @media #{$small-and-down} {
+            display: none;
+        }
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 0;
+    left: 1.5rem;
+    z-index: 10000;
+    font-size: 3rem;
+
+    @media #{$medium-and-up} {
+        &::after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            font-size: 1rem;
+            content: 'esc';
+        }
+    }
+}
+
+.modal-nav-container {
+    padding: 4rem 0;
+}

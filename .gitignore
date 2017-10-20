@@ -178,3 +178,5 @@ ENV/
 # End of https://www.gitignore.io/api/osx,pydev,python,pycharm
 
 db.sqlite3
+node_modules
+wallet/static/*

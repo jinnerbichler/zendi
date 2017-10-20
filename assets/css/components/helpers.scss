@@ -1,0 +1,28 @@
+.full-width {
+    width: 100%;
+    max-width: 100%;
+}
+
+.grayscale {
+    @include filter(grayscale(100%));
+}
+
+.zero-height {
+    height: 0;
+}
+
+.bg-position-bottom {
+    background-position: bottom !important;
+}
+
+.bg-position-top {
+    background-position: top !important;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}

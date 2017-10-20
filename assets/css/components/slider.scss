@@ -1,0 +1,13 @@
+.slider .indicators .indicator-item {
+    background-color: transparentize($black, .75);
+
+    &.active {
+        background-color: $black;
+    }
+}
+
+.explore-case {
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+}

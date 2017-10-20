@@ -1,0 +1,53 @@
+section {
+    padding: 5rem 0;
+}
+
+.section {
+    padding: 5rem 0;
+}
+
+footer {
+    padding: 20px 2rem 0;
+}
+
+iframe {
+    border: 0;
+}
+
+figure {
+    margin: 0;
+}
+
+strong {
+    font-weight: 700;
+}
+
+address {
+    font-style: normal;
+}
+
+a {
+    color: $black;
+}
+
+.responsive-img {
+    width: 100%;
+}
+
+canvas {
+    display: block;
+}
+
+.hero {
+    position: relative;
+}
+
+@media #{$medium-and-down} {
+    .margin-on-medium-and-down {
+        margin-bottom: 1.5rem;
+    }
+
+    .big-margin-on-medium-and-down {
+        margin-bottom: 3rem;
+    }
+}
