@@ -2,11 +2,11 @@ import logging
 
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from nopassword.utils import get_username_field
 from urllib.parse import urlencode
 
-from rest_framework.status import HTTP_401_UNAUTHORIZED
+from rest_framework.status import HTTP_401_UNAUTHORIZED, HTTP_400_BAD_REQUEST, HTTP_200_OK
 
 import wallet.iota_.iota_utils as iota_utils
 from wallet.iota_ import NotEnoughBalanceException
@@ -46,8 +46,12 @@ def send_tokens_init(request):
             login_code.send_login_code(secure=request.is_secure(),
                                        host=request.get_host(),
                                        new_user=is_new)
+
+            user_message = 'Authentication email was sent to {}. ' \
+                           'Please check you inbox.'.format(send_user.email)
+            return JsonResponse(data={'message': user_message})
         else:
-            return render(request, 'wallet/index.html', {'form': form})
+            return JsonResponse(data={'error': True, 'message': 'Invalid form data'})
 
     return redirect('/')
 
@@ -65,10 +69,15 @@ def send_tokens_exec(request):
 
     try:
         # send tokens
-        iota_utils.send_tokens(sender=from_mail, receiver=to_mail, amount=amount, msg=message)
+        # iota_utils.send_tokens(sender=from_mail, receiver=to_mail, amount=amount, msg=message)
+        pass
     except NotEnoughBalanceException as e:
         # ToDo: handle this case
         pass
 
+    return redirect('/')
+
+
+def logout_user(request):
     logout(request)
     return redirect('/')

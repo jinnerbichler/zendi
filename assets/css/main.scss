@@ -1,3 +1,4 @@
+$output-bourbon-deprecation-warnings: false; // disable warning till v.5.0 is released.
 @import '../../node_modules/bourbon/app/assets/stylesheets/bourbon';
 @import 'components/variables';
 
@@ -22,4 +23,6 @@ $roboto-font-path: "../../node_modules/materialize-css/dist/fonts/roboto/";
 @import 'components/modal';
 @import 'components/toasts';
 
+// application specific styles
+@import 'common';
 @import 'pages/landing-page';

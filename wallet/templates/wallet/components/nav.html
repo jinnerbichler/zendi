@@ -22,6 +22,14 @@
                         <li>
                             <a href="#contact">About</a>
                         </li>
+                        {% if user.is_authenticated %}
+                        <li>
+                            <a href="/dashboard">Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="/logout">Logout</a>
+                        </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>

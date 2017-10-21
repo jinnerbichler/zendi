@@ -32,7 +32,7 @@ const copyFilesPlugin = new CopyWebpackPlugin([{
 //                    Configure Webpack
 // ------------------------------------------------------------------
 module.exports = {
-    entry: './assets/js/app.js',
+    entry: ['whatwg-fetch', './assets/js/app.js'],
     output: {
         path: path.resolve(__dirname, 'wallet/static/wallet'),
         filename: 'bundle.js',

@@ -1,17 +1,15 @@
 {
-  "name": "webpack2-basics",
+  "name": "Iota-Mail-Payments",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack-dev-server",
     "build:prod": "webpack -p",
-    "build:dev": "webpack --progress --colors",
+    "build": "webpack --progress --colors",
     "watch": "webpack --watch"
   },
   "keywords": [],
-  "author": "Maximilian Schwarzmüller",
+  "author": "Johannes Innerbichler",
   "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.24.0",
@@ -32,6 +30,7 @@
   "dependencies": {
     "jquery": "^3.2.1",
     "materialize-css": "^0.100.2",
-    "materialize-loader": "^2.0.2"
+    "materialize-loader": "^2.0.2",
+    "whatwg-fetch": "^2.0.3"
   }
 }

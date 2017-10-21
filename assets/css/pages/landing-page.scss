@@ -1,12 +1,17 @@
 #landing-page {
   h1 {
+    top: 30%;
     font-size: 4.5em;
+  }
+
+  .row {
+    margin-bottom: 0;
   }
 
   #send-form {
     position: absolute;
     left: 25%;
-    top: 500px;
+    top: 50%;
     width: 50%;
     text-align: center;
   }

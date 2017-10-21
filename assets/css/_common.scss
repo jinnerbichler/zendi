@@ -1,0 +1,17 @@
+#message-box {
+  margin-top: 20px;
+  background-color: color("blue", "base");
+  opacity: 0.95;
+
+  .close {
+    cursor: pointer;
+  }
+
+  &.info {
+    background-color: color("green", "base");
+  }
+
+  &.error {
+    background-color: color("red", "base");
+  }
+}
