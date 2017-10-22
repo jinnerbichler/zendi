@@ -5,11 +5,3 @@ class NotEnoughBalanceException(Exception):
         self.balance = balance
         message = '{} has not enough balance ({}) for sending {} IOTA'.format(user, balance, proposed_amount)
         super().__init__(message, *args)
-
-
-def trytes2string(trytes):
-    return str(trytes)
-
-
-def string2trytes_bytesarray(string):
-    return string.encode('utf-8')
