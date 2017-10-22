@@ -3,7 +3,7 @@ $board-bg-color: white;
 #dashboard {
 
   position: absolute;
-  top: 5rem; // space to navbar
+  top: 8rem; // space to navbar
   left: 0;
   width: 100%;
 
@@ -46,12 +46,16 @@ $board-bg-color: white;
 
       h1 {
         font-size: 25px;
-        font-weight: bold;
+        font-weight: 300;
       }
 
       .transactions {
         @extend .z-depth-0;
         background: transparent;
+
+        li:last-child .row {
+          border-bottom: 0; // remove last border at the bottom
+        }
 
         .collapsible-header {
           background: transparent;
@@ -63,6 +67,14 @@ $board-bg-color: white;
 
         .transaction {
           @extend .hoverable;
+
+          .collapsible-body {
+            padding: 2rem 1rem 2rem 1rem;
+          }
+
+          a {
+            text-decoration: underline;
+          }
         }
 
         .col {

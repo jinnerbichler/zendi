@@ -21,7 +21,7 @@ class ClientRedirectResponse(JsonResponse):
 
 
 def index(request):
-    initial_values = {'sender_mail': request.user.email } if request.user.is_authenticated else {}
+    initial_values = {'sender_mail': request.user.email} if request.user.is_authenticated else {}
     form = SendTokensForm(initial=initial_values)
     return render(request, 'wallet/index.html', {'form': form})
 
@@ -84,7 +84,7 @@ def send_tokens_exec(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'wallet/dashboard.html', {})
+    return render(request, 'wallet/dashboard.html', {'logo_appendix': 'Dashboard'})
 
 
 def logout_user(request):
