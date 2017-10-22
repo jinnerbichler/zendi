@@ -1,8 +1,11 @@
 import logging
+import time
 
 from iota import Iota, ProposedTransaction, Address, TryteString
 from iota.adapter.wrappers import RoutingWrapper
 from iota.crypto.types import Seed
+
+from wallet.iota_ import trytes2string, string2trytes_bytesarray
 
 AUTH_TOKEN = '03f7571a-bb6c-4a5d-86eb-0fd73f02da78'
 SANDBOX_URI = 'https://sandbox.iota.org/api/v1/'
@@ -35,7 +38,7 @@ class IotaApi:
             adapter = DEFAULT_ADAPTER
 
         # convert seed
-        seed = Seed(string2trytes(seed))
+        seed = Seed(string2trytes_bytesarray(seed))
 
         self.api = Iota(adapter=adapter, seed=seed)
         self.api.adapter.set_logger(logger)
@@ -49,7 +52,7 @@ class IotaApi:
         return trytes2string(response['addresses'][0])
 
     def get_address_balance(self, address):
-        address = Address(string2trytes(address))
+        address = Address(string2trytes_bytesarray(address))
         return self.api.get_balances([address])[address]
 
     def get_account_balance(self):
@@ -60,23 +63,18 @@ class IotaApi:
             message = TryteString.from_string(message)
 
         # convert addresses
-        receiver_address = Address(string2trytes(receiver_address))
-        change_address = Address(string2trytes(change_address))
+        receiver_address = Address(string2trytes_bytesarray(receiver_address))
+        change_address = Address(string2trytes_bytesarray(change_address))
 
         # construct transaction
         transaction = ProposedTransaction(address=receiver_address, value=value, tag=tag, message=message)
 
         # trigger transfer
-        self.api.send_transfer(depth=DEFAULT_DEPTH, transfers=[transaction], change_address=change_address)
+        bundles = self.api.send_transfer(depth=DEFAULT_DEPTH,
+                                         transfers=[transaction],
+                                         change_address=change_address)
 
-
-def trytes2string(trytes):
-    return str(trytes)
-
-
-def string2trytes(string):
-    return string.encode()
-
+        return bundles['bundle']
 
 # if __name__ == '__main__':
 #     iota_api = IotaApi(seed=SEED)
