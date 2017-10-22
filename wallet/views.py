@@ -9,7 +9,8 @@ from nopassword.utils import get_username_field
 from rest_framework.status import HTTP_401_UNAUTHORIZED
 
 from wallet.forms import SendTokensForm
-from wallet.iota_ import NotEnoughBalanceException
+from wallet.iota_ import NotEnoughBalanceException, iota_utils
+from wallet.iota_.iota_utils import send_tokens
 from wallet.user_utils import get_user_safe
 
 logger = logging.getLogger(__name__)
@@ -72,8 +73,10 @@ def send_tokens_exec(request):
 
     try:
         # send tokens
-        # iota_utils.send_tokens(sender=sender_mail, receiver=receiver_mail, amount=amount, msg=message)
-        pass
+        bundle = send_tokens(sender=sender_mail, receiver=receiver_mail, amount=amount, msg=message)
+
+        print(bundle)
+
     except NotEnoughBalanceException as e:
         # ToDo: handle this case
         pass

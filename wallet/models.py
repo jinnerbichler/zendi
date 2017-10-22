@@ -23,6 +23,18 @@ class IotaAddress(models.Model):
         unique_together = (('user', 'address'))
 
 
+class IotaExecutedTransaction(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_transactions')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_transactions')
+    receiver_address = models.TextField()
+    bundle_hash = models.TextField()
+    transaction_hash = models.TextField()
+    amount = models.BigIntegerField()
+    execution_time = models.DateTimeField()
+    message = models.TextField(default='')
+
+
+
 # noinspection PyUnusedLocal, PyUnresolvedReferences
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

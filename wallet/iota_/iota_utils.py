@@ -1,10 +1,15 @@
 # noinspection PyUnresolvedReferences
 import logging
+from datetime import datetime
+
+from django.utils.timezone import make_aware
+from pytz import UTC
 
 from wallet.iota_ import NotEnoughBalanceException
 from wallet.iota_.iota_api import IotaApi
-from wallet.models import IotaAddress
+from wallet.models import IotaAddress, IotaExecutedTransaction
 from wallet.user_utils import get_user_safe
+from wallet.iota_ import trytes2string, string2trytes_bytesarray
 
 logger = logging.getLogger(__name__)
 
@@ -48,12 +53,29 @@ def send_tokens(sender, receiver, amount, msg=None):
 
     try:
         # send transaction
-        api.transfer(receiver_address=receiving_address,
-                     change_address=change_address,
-                     value=amount,
-                     message=msg)
+        bundle = api.transfer(receiver_address=receiving_address,
+                              change_address=change_address,
+                              value=amount,
+                              message=msg)
 
         # ToDo: inform users via mail
+
+        # check for consistency
+        transaction = bundle.transactions[0]
+        assert trytes2string(transaction.address) == receiving_address
+
+        # save successfully executed transaction
+        execution_time = make_aware(datetime.fromtimestamp(transaction.timestamp), timezone=UTC)
+        IotaExecutedTransaction.objects.get_or_create(sending=sending_user,
+                                                      receiver=receiving_user,
+                                                      receiver_address=receiving_address,
+                                                      bundle_hash=trytes2string(bundle.hash),
+                                                      transaction_hash=trytes2string(transaction.hash),
+                                                      amount=amount,
+                                                      execution_time=execution_time,
+                                                      message=msg)
+
+        return bundle
     except:
         logger.exception('Error while transferring %i IOTA from %s to %s (address %s, new:%s)',
                          amount, sending_user, receiving_user, receiving_address, is_new)
