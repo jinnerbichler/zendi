@@ -46,8 +46,8 @@ def send_tokens(sender, receiver, amount, msg=None):
     logger.info('Sending %i IOTA from %s to %s (address: %s, new:%s)',
                 amount, sending_user, receiving_user, receiving_address, is_new)
 
-    # send transaction
     try:
+        # send transaction
         api.transfer(receiver_address=receiving_address,
                      change_address=change_address,
                      value=amount,

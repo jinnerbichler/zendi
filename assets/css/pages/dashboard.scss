@@ -1,0 +1,83 @@
+$board-bg-color: white;
+
+#dashboard {
+
+  position: absolute;
+  top: 5rem; // space to navbar
+  left: 0;
+  width: 100%;
+
+  h1 {
+    margin-top: 60px;
+    font-size: 3em;
+    position: relative;
+  }
+
+  .content {
+    background: rgba($board-bg-color, 0.0);
+    min-height: 500px;
+    padding: 30px;
+    border-radius: 2px;
+    //@extend .z-depth-5;
+
+    // ================== Balance Board ==========================
+    #balance-card {
+      @extend .z-depth-3, .black-text;
+      background: rgba($board-bg-color, 0.9);
+
+      .card-image {
+        max-width: 20%;
+        margin: 34px 0 0 20px;
+      }
+
+      .card-title {
+        font-size: 27px;
+      }
+
+      p {
+        font-size: 30px;
+      }
+    }
+
+    // ================== Recent Transactions ===================
+    .recent-transactions {
+      margin-top: 40px;
+      color: white;
+
+      h1 {
+        font-size: 25px;
+        font-weight: bold;
+      }
+
+      .transactions {
+        @extend .z-depth-0;
+        background: transparent;
+
+        .collapsible-header {
+          background: transparent;
+        }
+
+        &.collapsible {
+          border: 0;
+        }
+
+        .transaction {
+          @extend .hoverable;
+        }
+
+        .col {
+          margin-bottom: -7px;
+
+          &.icon {
+            padding-left: 0;
+          }
+        }
+
+        .row {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+}

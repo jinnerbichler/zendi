@@ -1,5 +1,6 @@
-import $ from 'jquery'
-import {toast} from 'materialize-css'
+import $ from 'jquery';
+import {toast} from 'materialize-css';
+import '../img/iota-logo.png';
 import '../css/main.scss';
 import {postSendToken} from './api-service';
 import {showMessageBox, hideMessageBox} from "./common";

@@ -15,20 +15,34 @@
 
         {{ form.non_field_errors }}
         <div class="row">
+
+            {# Show sender email depending on authentication state #}
+            {% if user.is_authenticated %}
+            {{ form.sender_mail.as_hidden }}
+            <div class="col s12 l10">
+                <div class="input-field">
+                    <label for="{{ form.receiver_mail.id_for_label }}">Send to Email</label>
+                    {{ form.receiver_mail }}
+                    {{ form.receiver_mail.errors }}
+                </div>
+            </div>
+            {% else %}
             <div class="col s12 l5">
                 <div class="input-field">
-                    <label for="{{ form.from_mail.id_for_label }}">Send from Email</label>
-                    {{ form.from_mail }}
-                    {{ form.from_mail.errors }}
+                    <label for="{{ form.sender_mail.id_for_label }}">Send from Email</label>
+                    {{ form.sender_mail }}
+                    {{ form.sender_mail.errors }}
                 </div>
             </div>
             <div class="col s12 l5">
                 <div class="input-field">
-                    <label for="{{ form.to_mail.id_for_label }}">Send to Email</label>
-                    {{ form.to_mail }}
-                    {{ form.to_mail.errors }}
+                    <label for="{{ form.receiver_mail.id_for_label }}">Send to Email</label>
+                    {{ form.receiver_mail }}
+                    {{ form.receiver_mail.errors }}
                 </div>
             </div>
+            {% endif %}
+
             <div class="col s12 l2">
                 <div class="input-field">
                     <label for="{{ form.amount.id_for_label }}">Mi</label>
