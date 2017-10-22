@@ -49,7 +49,7 @@ def send_tokens(sender, receiver, amount, msg=None):
     change_address = get_new_address(sending_user)
     receiving_address = get_new_address(receiving_user)
 
-    logger.info('Sending %i IOTA from %s to %s (address: %s, new:%s)',
+    logger.info('Sending %i IOTA from %s to %s (address: %s, new: %s)',
                 amount, sending_user, receiving_user, receiving_address, is_new)
 
     try:
