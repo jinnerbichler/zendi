@@ -9,7 +9,7 @@ from wallet.iota_ import NotEnoughBalanceException
 from wallet.iota_.iota_api import IotaApi
 from wallet.models import IotaAddress, IotaExecutedTransaction
 from wallet.user_utils import get_user_safe
-from wallet.iota_ import trytes2string, string2trytes_bytesarray
+from wallet.iota_ import trytes2string
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +32,7 @@ def get_new_address(user):
     return new_address
 
 
+# noinspection PyUnresolvedReferences,PyBroadException
 def send_tokens(sender, receiver, amount, msg=None):
     # get proper users
     _, sending_user = get_user_safe(email=sender)
@@ -53,10 +54,14 @@ def send_tokens(sender, receiver, amount, msg=None):
 
     try:
         # send transaction
+        pow_start_time = time.time()
         bundle = api.transfer(receiver_address=receiving_address,
                               change_address=change_address,
                               value=amount,
                               message=msg)
+
+        pow_execution_time = time.time() - pow_start_time
+        logger.info('Performed PoW in %i secs', pow_execution_time, extras={'pow_time': pow_execution_time})
 
         # ToDo: inform users via mail
 
@@ -66,7 +71,7 @@ def send_tokens(sender, receiver, amount, msg=None):
 
         # save successfully executed transaction
         execution_time = make_aware(datetime.fromtimestamp(transaction.timestamp), timezone=UTC)
-        IotaExecutedTransaction.objects.get_or_create(sending=sending_user,
+        IotaExecutedTransaction.objects.get_or_create(sender=sending_user,
                                                       receiver=receiving_user,
                                                       receiver_address=receiving_address,
                                                       bundle_hash=trytes2string(bundle.hash),

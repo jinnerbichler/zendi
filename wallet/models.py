@@ -33,6 +33,13 @@ class IotaExecutedTransaction(models.Model):
     execution_time = models.DateTimeField()
     message = models.TextField(default='')
 
+    def __repr__(self):
+        return '<IotaExecutedTransaction \n\tsender={sender}\n\treceiver={receiver}\n\t' \
+               'receiver_addr={receiver_address}\n\tamount={amount}\n\tmessage={message}\n\t' \
+               'bundle_hash={bundle_hash}\n\ttransaction_hash={transaction_hash}\n\t' \
+               'execution_time={execution_time}>'.format(sender=self.sender,
+                                                         receiver=self.receiver,
+                                                         **self.__dict__)
 
 
 # noinspection PyUnusedLocal, PyUnresolvedReferences

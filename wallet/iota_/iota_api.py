@@ -1,4 +1,5 @@
 import logging
+import time
 
 from iota import Iota, ProposedTransaction, Address, TryteString
 from iota.adapter.wrappers import RoutingWrapper
