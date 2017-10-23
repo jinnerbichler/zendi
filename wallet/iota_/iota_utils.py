@@ -45,6 +45,7 @@ def get_balance(user, api=None):
     return api.get_account_balance()
 
 
+# noinspection PyUnresolvedReferences,PyBroadException
 def send_tokens(sender, receiver, amount, msg=None):
     # get proper users
     _, sending_user = get_user_safe(email=sender)
@@ -61,23 +62,42 @@ def send_tokens(sender, receiver, amount, msg=None):
     change_address = get_new_address(sending_user)
     receiving_address = get_new_address(receiving_user)
 
-    logger.info('Sending %i IOTA from %s to %s (address: %s, new:%s)',
+    logger.info('Sending %i IOTA from %s to %s (address: %s, new: %s)',
                 amount, sending_user, receiving_user, receiving_address, is_new)
 
-    # noinspection PyBroadException
     try:
         # send transaction
-        api.transfer(receiver_address=receiving_address,
-                     change_address=change_address,
-                     value=amount,
-                     message=msg)
+        pow_start_time = time.time()
+        bundle = api.transfer(receiver_address=receiving_address,
+                              change_address=change_address,
+                              value=amount,
+                              message=msg)
+
+        pow_execution_time = time.time() - pow_start_time
+        logger.info('Performed PoW in %i secs', pow_execution_time, extras={'pow_time': pow_execution_time})
 
         # ToDo: inform users via mail
-    except:
+
+        # check for consistency
+        transaction = bundle.transactions[0]
+        assert trytes2string(transaction.address) == receiving_address
+
+        # save successfully executed transaction
+        execution_time = make_aware(datetime.fromtimestamp(transaction.timestamp), timezone=UTC)
+        IotaExecutedTransaction.objects.get_or_create(sender=sending_user,
+                                                      receiver=receiving_user,
+                                                      receiver_address=receiving_address,
+                                                      bundle_hash=trytes2string(bundle.hash),
+                                                      transaction_hash=trytes2string(transaction.hash),
+                                                      amount=amount,
+                                                      execution_time=execution_time,
+                                                      message=msg)
+
+        return bundle
+    except Exception as e:
         logger.exception('Error while transferring %i IOTA from %s to %s (address %s, new:%s)',
                          amount, sending_user, receiving_user, receiving_address, is_new)
-
-    return
+        raise e
 
 
 def iota_display_format(amount):
