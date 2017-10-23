@@ -10,6 +10,8 @@ from rest_framework.status import HTTP_401_UNAUTHORIZED
 
 from wallet.forms import SendTokensForm
 from wallet.iota_ import NotEnoughBalanceException
+from wallet.iota_ import NotEnoughBalanceException, iota_utils
+from wallet.iota_.iota_utils import iota_display_format
 from wallet.user_utils import get_user_safe
 
 logger = logging.getLogger(__name__)
@@ -72,7 +74,7 @@ def send_tokens_exec(request):
 
     try:
         # send tokens
-        # iota_utils.send_tokens(sender=sender_mail, receiver=receiver_mail, amount=amount, msg=message)
+        iota_utils.send_tokens(sender=sender_mail, receiver=receiver_mail, amount=amount, msg=message)
         pass
     except NotEnoughBalanceException as e:
         # ToDo: handle this case
@@ -84,7 +86,12 @@ def send_tokens_exec(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'wallet/dashboard.html', {'logo_appendix': 'Dashboard'})
+    balance = iota_utils.get_balance(request.user)
+    displayed_amount, displayed_unit = iota_display_format(balance)
+
+    return render(request, 'wallet/dashboard.html', {'logo_appendix': 'Dashboard',
+                                                     'balance_amount': displayed_amount,
+                                                     'balance_unit': displayed_unit})
 
 
 def logout_user(request):

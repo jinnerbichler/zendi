@@ -17,7 +17,7 @@ Zėndi Dashboard
                 <div class="col s4 offset-s4 card horizontal" id="balance-card">
                     <div class="card-content center-align">
                         <span class="card-title">Balance</span>
-                        <p>40 Mi IOTA</p>
+                        <p>{{ balance_amount|floatformat:4 }} {{ balance_unit }}</p>
                     </div>
                     <div class="card-image">
                         <img src="{% static 'wallet/img/iota-logo.png' %}" alt="IOTA Logo">
