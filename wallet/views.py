@@ -84,10 +84,9 @@ def send_tokens_exec(request):
 
 @login_required
 def dashboard(request):
-
-    balance = iota_utils.get_new_address()
-
-    return render(request, 'wallet/dashboard.html', {'logo_appendix': 'Dashboard'})
+    balance = iota_utils.get_balance(request.user)
+    return render(request, 'wallet/dashboard.html', {'logo_appendix': 'Dashboard',
+                                                     'balance': balance})
 
 
 def logout_user(request):

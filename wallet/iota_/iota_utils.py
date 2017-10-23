@@ -26,8 +26,9 @@ def get_new_address(user):
 
     return new_address
 
-def get_balance(user):
 
+def get_balance(user):
+    return 34
 
 
 def send_tokens(sender, receiver, amount, msg=None):
