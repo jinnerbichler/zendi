@@ -15,7 +15,7 @@ class IotaSeed(models.Model):
 
 
 class IotaAddress(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     address = models.TextField(unique=True)
     attached = models.BooleanField(default=False)
 

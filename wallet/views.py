@@ -74,7 +74,7 @@ def send_tokens_exec(request):
 
     try:
         # send tokens
-        iota_utils.send_tokens(sender=sender_mail, receiver=receiver_mail, amount=amount, msg=message)
+        iota_utils.send_tokens(sender=sender_mail, receiver=receiver_mail, amount=amount, message=message)
         pass
     except NotEnoughBalanceException as e:
         # ToDo: handle this case
@@ -86,8 +86,13 @@ def send_tokens_exec(request):
 
 @login_required
 def dashboard(request):
+
+    # fetch balance data
     balance = iota_utils.get_balance(request.user)
     displayed_amount, displayed_unit = iota_display_format(balance)
+
+    # fetch transaction data
+    transactions = iota_utils.get_transactions(request.user)
 
     return render(request, 'wallet/dashboard.html', {'logo_appendix': 'Dashboard',
                                                      'balance_amount': displayed_amount,

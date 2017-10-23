@@ -11,5 +11,5 @@ def trytes2string(trytes):
     return str(trytes)
 
 
-def string2trytes_bytesarray(string):
+def string2trytes_bytes(string):
     return string.encode('utf-8')

@@ -2,12 +2,16 @@
 import logging
 import functools
 import operator
+import time
+from datetime import datetime
 
+from django.utils.timezone import make_aware
 from iota import STANDARD_UNITS
+from pytz import UTC
 
-from wallet.iota_ import NotEnoughBalanceException
+from wallet.iota_ import NotEnoughBalanceException, trytes2string
 from wallet.iota_.iota_api import IotaApi
-from wallet.models import IotaAddress
+from wallet.models import IotaAddress, IotaExecutedTransaction
 from wallet.user_utils import get_user_safe
 
 logger = logging.getLogger(__name__)
@@ -32,7 +36,7 @@ def get_new_address(user, api=None):
     """
     # create and store new address
     new_address = api.get_new_address()
-    IotaAddress.objects.get_or_create(user=user, address=new_address)
+    IotaAddress.objects.update_or_create(user=user, address=new_address)
 
     logger.info('Generated address %s for user %s', new_address, user)
 
@@ -45,8 +49,17 @@ def get_balance(user, api=None):
     return api.get_account_balance()
 
 
-# noinspection PyUnresolvedReferences,PyBroadException
-def send_tokens(sender, receiver, amount, msg=None):
+# noinspection PyUnusedLocal
+@api_resolver
+def get_transactions(user, api=None):
+    transfers = api.get_transfers()
+
+    for bundle in transfers:
+        print(bundle)
+
+
+# noinspection PyBroadException
+def send_tokens(sender, receiver, amount, message=None):
     # get proper users
     _, sending_user = get_user_safe(email=sender)
     is_new, receiving_user = get_user_safe(email=receiver)
@@ -71,10 +84,10 @@ def send_tokens(sender, receiver, amount, msg=None):
         bundle = api.transfer(receiver_address=receiving_address,
                               change_address=change_address,
                               value=amount,
-                              message=msg)
+                              message=message)
 
         pow_execution_time = time.time() - pow_start_time
-        logger.info('Performed PoW in %i secs', pow_execution_time, extras={'pow_time': pow_execution_time})
+        logger.info('Performed PoW in %i secs', pow_execution_time, extra={'pow_time': pow_execution_time})
 
         # ToDo: inform users via mail
 
@@ -91,7 +104,7 @@ def send_tokens(sender, receiver, amount, msg=None):
                                                       transaction_hash=trytes2string(transaction.hash),
                                                       amount=amount,
                                                       execution_time=execution_time,
-                                                      message=msg)
+                                                      message=message)
 
         return bundle
     except Exception as e:
