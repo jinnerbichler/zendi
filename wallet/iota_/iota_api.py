@@ -55,6 +55,9 @@ class IotaApi:
     def get_account_balance(self):
         return self.api.get_inputs()['totalBalance']
 
+    def get_transactions(self):
+        return self.api.get_transfers(inclusion_states=True)['bundles']
+
     def transfer(self, receiver_address, change_address, value, tag=None, message=None):
         if message:
             message = TryteString.from_string(message)
