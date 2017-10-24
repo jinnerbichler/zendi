@@ -1,4 +1,5 @@
 # noinspection PyUnresolvedReferences
+import collections
 import logging
 import functools
 import operator
@@ -15,6 +16,8 @@ from wallet.models import IotaAddress, IotaExecutedTransaction
 from wallet.user_utils import get_user_safe
 
 logger = logging.getLogger(__name__)
+
+Transaction = collections.namedtuple('Transaction', 'bundle_hash is_confirmed address time hash value')
 
 
 def api_resolver(func):
@@ -52,10 +55,20 @@ def get_balance(user, api=None):
 # noinspection PyUnusedLocal
 @api_resolver
 def get_transactions(user, api=None):
-    transfers = api.get_transfers()
+    bundles = api.get_transfers(inclusion_states=True)
+    return convert_bundles(bundles)
 
-    for bundle in transfers:
-        print(bundle)
+
+# noinspection PyUnusedLocal
+@api_resolver
+def get_account_data(user, api=None):
+    account_data = api.get_account_data(inclusion_states=True)
+
+    # convert account data (get account data retrieves only outgoing transactions)
+    balance = account_data['balance']
+    outgoing_transactions = convert_bundles(account_data['bundles'])
+
+    return balance, outgoing_transactions
 
 
 # noinspection PyBroadException
@@ -111,6 +124,19 @@ def send_tokens(sender, receiver, amount, message=None):
         logger.exception('Error while transferring %i IOTA from %s to %s (address %s, new:%s)',
                          amount, sending_user, receiving_user, receiving_address, is_new)
         raise e
+
+
+def convert_bundles(bundles):
+    transactions = []
+    for bundle in bundles:
+        for transaction in bundle.transactions:
+            transactions.append(Transaction(bundle_hash=trytes2string(transaction.bundle_hash),
+                                            is_confirmed=transaction.is_confirmed,
+                                            address=trytes2string(transaction.address),
+                                            time=make_aware(datetime.fromtimestamp(transaction.timestamp)),
+                                            hash=trytes2string(transaction.hash),
+                                            value=transaction.value))
+    return transactions
 
 
 def iota_display_format(amount):

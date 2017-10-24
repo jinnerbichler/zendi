@@ -82,7 +82,7 @@ DATABASES = {
     }
 }
 
-AUTHENTICATION_BACKENDS = ('wallet.auth_backend.EmailBackend',)
+AUTHENTICATION_BACKENDS = ('wallet.auth_backend.EmailBackend', 'django.contrib.auth.backends.ModelBackend')
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
@@ -131,3 +131,6 @@ LOGGING = {
 
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = '1025'
+
+# IOTA Test settings
+SEED_DEBUG = 'LMNYFOADUYUERQWHIRGBJMFAINRVWPMWBLMLBVDLTLTSPYBZYH9AAWQ9FEEESYVQRWJTQOJI9HEUMKDI9'
