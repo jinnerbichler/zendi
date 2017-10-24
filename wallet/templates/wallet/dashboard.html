@@ -1,119 +1,154 @@
 {% extends "wallet/components/base.html" %}
-
 {% load static %}
+{% load wallet_extras %}
 
 {% block logo %}
-Zėndi Dashboard
+    Zėndi Dashboard
 {% endblock %}
 
 {% block content %}
 
-<!--suppress HtmlUnknownTarget, XmlInvalidId -->
-<div id="dashboard">
+    <!--suppress HtmlUnknownTarget, XmlInvalidId -->
+    <div id="dashboard">
 
-    <div class="row">
-        <div class="col s8 offset-s2 content">
-            <div class="row">
-                <div class="col s4 offset-s4 card horizontal" id="balance-card">
-                    <div class="card-content center-align">
-                        <span class="card-title">Balance</span>
-                        <p>{{ balance_amount|floatformat:4 }} {{ balance_unit }}</p>
-                    </div>
-                    <div class="card-image">
-                        <img src="{% static 'wallet/img/iota-logo.png' %}" alt="IOTA Logo">
+        <div class="row">
+            <div class="col s8 offset-s2 content">
+                <div class="row">
+                    <div class="col s4 offset-s4 card horizontal" id="balance-card">
+                        <div class="card-content center-align">
+                            <span class="card-title">Balance</span>
+                            <p>{{ balance|iota_display_format }}</p>
+                        </div>
+                        <div class="card-image">
+                            <img src="{% static 'wallet/img/iota-logo.png' %}" alt="IOTA Logo">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row recent-transactions">
-                <h1>Recent Transactions</h1>
-                <ul class="collapsible collapsible-accordion transactions" data-collapsible="accordion">
-                    <li class="transaction">
-                        <div class="collapsible-header row">
-                            <div class="col s1 icon"><i class="material-icons">call_received</i></div>
-                            <div class="col s3">j.innerbichler@gmail.com</div>
-                            <div class="col s3">18.5.2017 01:10PM</div>
-                            <div class="col s2">3 Mi IOTA</div>
-                            <div class="col s2 left-align">
-                                <span class="new badge" data-badge-caption="">Complete</span>
-                            </div>
-                            <div class="col s1"></div>
-                        </div>
-                        <div class="collapsible-body row" style="display: none;">
-                            <div class="col s4 ">
-                                From:<br>
-                                <a href="#xy">0x2340982ASD234SDF234234234234234</a>
-                                <span>(j.innerbichler@gmail.com)</span><br>
-                            </div>
-                            <div class="col s4 ">
-                                To:<br>
-                                <a href="#xy">0x2340982ASD234SDF234234234234234</a>
-                                <span>(j.innerbichler@gmail.com)</span><br>
-                            </div>
-                            <div class="col s4">
-                                Transaction:<br><a href="#xt">0x2340982ASD234SDF234234234234234</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="transaction">
-                        <div class="collapsible-header row">
-                            <div class="col s1 icon"><i class="material-icons">call_made</i></div>
-                            <div class="col s3">j.innerbichler@gmail.com</div>
-                            <div class="col s3">18.5.2017 01:10PM</div>
-                            <div class="col s2">3 Mi IOTA</div>
-                            <div class="col s2 left-align"><span class="new badge" data-badge-caption="">Complete</span>
-                            </div>
-                            <div class="col s1"></div>
-                        </div>
-                        <div class="collapsible-body" style="display: none;">
-                            from<span class="address">j.innerbichler@gmail.ccom-</span>
-                        </div>
-                    </li>
-                    <li class="transaction">
-                        <div class="collapsible-header row">
-                            <div class="col s1 icon"><i class="material-icons">call_received</i></div>
-                            <div class="col s3">j.innerbichler@gmail.com</div>
-                            <div class="col s3">18.5.2017 01:10PM</div>
-                            <div class="col s2">3 Mi IOTA</div>
-                            <div class="col s2 left-align"><span class="new badge" data-badge-caption="">Complete</span>
-                            </div>
-                            <div class="col s1"></div>
-                        </div>
-                        <div class="collapsible-body" style="display: none;">
-                            from<span class="address">j.innerbichler@gmail.ccom-</span>
-                        </div>
-                    </li>
-                </ul>
-                <!--<table class="responsive-table highlight">-->
-                <!--<thead>-->
-                <!--<tr>-->
-                <!--<th>Receiver</th>-->
-                <!--<th>Date</th>-->
-                <!--<th>Volume</th>-->
-                <!--<th>Status</th>-->
-                <!--</tr>-->
-                <!--</thead>-->
+                <div class="row recent-transactions">
+                    <h1>Recent Transactions</h1>
+                    <ul class="collapsible collapsible-accordion transactions" data-collapsible="accordion">
 
-                <!--<tbody>-->
-                <!--<tr>-->
-                <!--<td>Alvin</td>-->
-                <!--<td>Eclair</td>-->
-                <!--<td>$0.87</td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                <!--<td>Alan</td>-->
-                <!--<td>Jellybean</td>-->
-                <!--<td>$3.76</td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                <!--<td>Jonathan</td>-->
-                <!--<td>Lollipop</td>-->
-                <!--<td>$7.00</td>-->
-                <!--</tr>-->
-                <!--</tbody>-->
-                <!--</table>-->
+                        {% for transaction in transactions %}
+
+                            <li class="transaction">
+                                <div class="collapsible-header row">
+                                    <div class="col s1 icon">
+                                        <i class="material-icons">
+                                            {% if transaction.value == 0 %}
+                                                remove
+                                            {% elif transaction.in_going %}
+                                                call_received
+                                            {% else %}
+                                                call_made
+                                            {% endif %}
+                                        </i>
+                                    </div>
+                                    <div class="col s4">
+                                        <span>
+                                            {% if transaction.email %}
+                                                {{ transaction.email }}
+                                            {% else %}
+                                                {{ transaction.address|truncatechars:20 }}
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    <div class="col s3">{{ transaction.time }}</div>
+                                    <div class="col s2">{{ transaction.value|iota_display_format }}</div>
+                                    <div class="col s2 left-align">
+                                        {% if transaction.is_confirmed %}
+                                            <span class="new badge green"
+                                                  data-badge-caption="">Complete</span>
+                                        {% else %}
+                                            <span class="new badge blue" data-badge-caption="">Pending</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="collapsible-body row" style="display: none;">
+                                    <div class="col s4 ">
+                                        {% if transaction.in_going %}
+                                            From address:&nbsp;
+                                        {% else %}
+                                            To address:&nbsp;
+                                        {% endif %}
+                                        <br>
+                                        <a href="#xy">{{ transaction.address|truncatechars:30 }}</a><br>
+                                        {% if transaction.email %}
+                                            <span>({{ transaction.email }})</span>
+                                        {% endif %}
+
+                                    </div>
+                                    <div class="col s4 ">
+                                        Bundle:<br>
+                                        <a href="#xy">{{ transaction.bundle_hash|truncatechars:30 }}</a>
+                                    </div>
+                                    <div class="col s4">
+                                        Transaction:<br>
+                                        <a href="#xt"> {{ transaction.hash|truncatechars:30 }}</a>
+                                    </div>
+                                </div>
+                            </li>
+
+                        {% endfor %}
+
+                        {#                        <li class="transaction">#}
+                        {#                            <div class="collapsible-header row">#}
+                        {#                                <div class="col s1 icon"><i class="material-icons">call_received</i></div>#}
+                        {#                                <div class="col s3">j.innerbichler@gmail.com</div>#}
+                        {#                                <div class="col s3">18.5.2017 01:10PM</div>#}
+                        {#                                <div class="col s2">3 Mi IOTA</div>#}
+                        {#                                <div class="col s2 left-align">#}
+                        {#                                    <span class="new badge" data-badge-caption="">Complete</span>#}
+                        {#                                </div>#}
+                        {#                                <div class="col s1"></div>#}
+                        {#                            </div>#}
+                        {#                            <div class="collapsible-body row" style="display: none;">#}
+                        {#                                <div class="col s4 ">#}
+                        {#                                    From:<br>#}
+                        {#                                    <a href="#xy">0x2340982ASD234SDF234234234234234</a>#}
+                        {#                                    <span>(j.innerbichler@gmail.com)</span><br>#}
+                        {#                                </div>#}
+                        {#                                <div class="col s4 ">#}
+                        {#                                    To:<br>#}
+                        {#                                    <a href="#xy">0x2340982ASD234SDF234234234234234</a>#}
+                        {#                                    <span>(j.innerbichler@gmail.com)</span><br>#}
+                        {#                                </div>#}
+                        {#                                <div class="col s4">#}
+                        {#                                    Transaction:<br><a href="#xt">0x2340982ASD234SDF234234234234234</a>#}
+                        {#                                </div>#}
+                        {#                            </div>#}
+                        {#                        </li>#}
+                        {#                        <li class="transaction">#}
+                        {#                            <div class="collapsible-header row">#}
+                        {#                                <div class="col s1 icon"><i class="material-icons">call_made</i></div>#}
+                        {#                                <div class="col s3">j.innerbichler@gmail.com</div>#}
+                        {#                                <div class="col s3">18.5.2017 01:10PM</div>#}
+                        {#                                <div class="col s2">3 Mi IOTA</div>#}
+                        {#                                <div class="col s2 left-align"><span class="new badge" data-badge-caption="">Complete</span>#}
+                        {#                                </div>#}
+                        {#                                <div class="col s1"></div>#}
+                        {#                            </div>#}
+                        {#                            <div class="collapsible-body" style="display: none;">#}
+                        {#                                from<span class="address">j.innerbichler@gmail.ccom-</span>#}
+                        {#                            </div>#}
+                        {#                        </li>#}
+                        {#                        <li class="transaction">#}
+                        {#                            <div class="collapsible-header row">#}
+                        {#                                <div class="col s1 icon"><i class="material-icons">call_received</i></div>#}
+                        {#                                <div class="col s3">j.innerbichler@gmail.com</div>#}
+                        {#                                <div class="col s3">18.5.2017 01:10PM</div>#}
+                        {#                                <div class="col s2">3 Mi IOTA</div>#}
+                        {#                                <div class="col s2 left-align"><span class="new badge" data-badge-caption="">Complete</span>#}
+                        {#                                </div>#}
+                        {#                                <div class="col s1"></div>#}
+                        {#                            </div>#}
+                        {#                            <div class="collapsible-body" style="display: none;">#}
+                        {#                                from<span class="address">j.innerbichler@gmail.ccom-</span>#}
+                        {#                            </div>#}
+                        {#                        </li>#}
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
 
-</div>
+    </div>
 {% endblock %}

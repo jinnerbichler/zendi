@@ -19,10 +19,6 @@ for a in DEFAULT_ADAPTER.routes.values():
     a.set_logger(logger)
 
 
-# for cmd in ['attachToTangle', 'storeTransactions', 'broadcastTransactions']:
-#     adapter.add_route(cmd, 'http://localhost:14265/api/v1/commands'),
-
-# noinspection PyProtectedMember
 def new_seed():
     """
     Creates a new seed and returns the string representation.
@@ -35,6 +31,8 @@ class IotaApi:
     def __init__(self, seed, adapter=None):
         if adapter is None:
             adapter = DEFAULT_ADAPTER
+
+        adapter._logger.setLevel(logging.DEBUG)
 
         # convert seed
         seed = Seed(string2trytes_bytes(seed))

@@ -1,23 +1,20 @@
-# noinspection PyUnresolvedReferences
 import collections
 import logging
 import functools
-import operator
 import time
 from datetime import datetime
 
 from django.utils.timezone import make_aware
-from iota import STANDARD_UNITS
 from pytz import UTC
 
-from wallet.iota_ import NotEnoughBalanceException, trytes2string
+from wallet.iota_ import NotEnoughBalanceException, trytes2string, convert_bundles
 from wallet.iota_.iota_api import IotaApi
 from wallet.models import IotaAddress, IotaExecutedTransaction
 from wallet.user_utils import get_user_safe
 
 logger = logging.getLogger(__name__)
 
-Transaction = collections.namedtuple('Transaction', 'bundle_hash is_confirmed address time hash value')
+Transaction = collections.namedtuple('Transaction', 'bundle_hash is_confirmed address email time hash value')
 
 
 def api_resolver(func):
@@ -46,33 +43,30 @@ def get_new_address(user, api=None):
     return new_address
 
 
-# noinspection PyUnusedLocal
 @api_resolver
 def get_balance(user, api=None):
-    return api.get_account_balance()
+    balance = api.get_account_balance()
+    logger.info('Fetched balance for user %s (balance: %i)', user, balance)
+    return balance
 
 
-# noinspection PyUnusedLocal
-@api_resolver
-def get_transactions(user, api=None):
-    bundles = api.get_transfers(inclusion_states=True)
-    return convert_bundles(bundles)
-
-
-# noinspection PyUnusedLocal
 @api_resolver
 def get_account_data(user, api=None):
     account_data = api.get_account_data(inclusion_states=True)
 
-    # convert account data (get account data retrieves only outgoing transactions)
-    balance = account_data['balance']
-    outgoing_transactions = convert_bundles(account_data['bundles'])
+    logger.debug('Requesting user data for user %s', user)
 
-    return balance, outgoing_transactions
+    # convert account data
+    balance = account_data['balance']
+    transactions = convert_bundles(bundles=account_data['bundles'], user_addresses=account_data['addresses'])
+
+    logger.info('Fetched data for user %s (#transactions: %i, balance: %i)', user, len(transactions), balance)
+
+    return balance, transactions
 
 
 # noinspection PyBroadException
-def send_tokens(sender, receiver, amount, message=None):
+def send_tokens(sender, receiver, value, message=None):
     # get proper users
     _, sending_user = get_user_safe(email=sender)
     is_new, receiving_user = get_user_safe(email=receiver)
@@ -82,21 +76,21 @@ def send_tokens(sender, receiver, amount, message=None):
     # check balance
     api = IotaApi(seed=sending_user.iotaseed.seed)
     balance = api.get_account_balance()
-    if balance < amount:
-        raise NotEnoughBalanceException(user=str(sending_user), proposed_amount=amount, balance=balance)
+    if balance < value:
+        raise NotEnoughBalanceException(user=str(sending_user), proposed_amount=value, balance=balance)
 
     change_address = get_new_address(sending_user)
     receiving_address = get_new_address(receiving_user)
 
     logger.info('Sending %i IOTA from %s to %s (address: %s, new: %s)',
-                amount, sending_user, receiving_user, receiving_address, is_new)
+                value, sending_user, receiving_user, receiving_address, is_new)
 
     try:
         # send transaction
         pow_start_time = time.time()
         bundle = api.transfer(receiver_address=receiving_address,
                               change_address=change_address,
-                              value=amount,
+                              value=value,
                               message=message)
 
         pow_execution_time = time.time() - pow_start_time
@@ -115,34 +109,12 @@ def send_tokens(sender, receiver, amount, message=None):
                                                       receiver_address=receiving_address,
                                                       bundle_hash=trytes2string(bundle.hash),
                                                       transaction_hash=trytes2string(transaction.hash),
-                                                      amount=amount,
+                                                      value=value,
                                                       execution_time=execution_time,
                                                       message=message)
 
         return bundle
     except Exception as e:
         logger.exception('Error while transferring %i IOTA from %s to %s (address %s, new:%s)',
-                         amount, sending_user, receiving_user, receiving_address, is_new)
+                         value, sending_user, receiving_user, receiving_address, is_new)
         raise e
-
-
-def convert_bundles(bundles):
-    transactions = []
-    for bundle in bundles:
-        for transaction in bundle.transactions:
-            transactions.append(Transaction(bundle_hash=trytes2string(transaction.bundle_hash),
-                                            is_confirmed=transaction.is_confirmed,
-                                            address=trytes2string(transaction.address),
-                                            time=make_aware(datetime.fromtimestamp(transaction.timestamp)),
-                                            hash=trytes2string(transaction.hash),
-                                            value=transaction.value))
-    return transactions
-
-
-def iota_display_format(amount):
-    previous_unit = 'i'
-    for unit, decimal in sorted(STANDARD_UNITS.items(), key=operator.itemgetter(1)):
-        if decimal >= amount / 10:
-            break
-        previous_unit = unit
-    return amount / STANDARD_UNITS[previous_unit], previous_unit

@@ -124,8 +124,18 @@ LOGGING = {
         'wallet': {
             'handlers': ['console'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
-            'propagate': True
+            'propagate': False
+        },
+        'requests': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
+            'propagate': False
         }
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+        'propagate': True
     }
 }
 
