@@ -12,7 +12,7 @@ Transaction = collections.namedtuple('Transaction', 'bundle_hash is_confirmed ad
                                                     'email time hash value in_going')
 
 
-class NotEnoughBalanceException(Exception):
+class InsufficientBalanceException(Exception):
     def __init__(self, *args, user, proposed_amount, balance):
         self.user = user
         self.proposed_amount = proposed_amount
