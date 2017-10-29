@@ -1,6 +1,7 @@
 {% load static %}
 
 <!-- Navigation-->
+<!--suppress HtmlUnknownTarget -->
 <div class="navbar-fixed zero-height">
     <nav>
         <div class="nav-wrapper">
@@ -16,21 +17,21 @@
                             <a href="/">Send</a>
                         </li>
                         <li>
-                            <a href="#services">Withdraw</a>
+                            <a href="/withdraw">Withdraw</a>
                         </li>
                         <li>
-                            <a href="#stories">Deposit</a>
+                            <a href="/deposit">Deposit</a>
                         </li>
                         <li>
                             <a href="#contact">About</a>
                         </li>
-                        {% if user.is_authenticated %}
                         <li>
                             <a href="/dashboard">Dashboard</a>
                         </li>
-                        <li>
-                            <a href="/logout">Logout</a>
-                        </li>
+                        {% if user.is_authenticated %}
+                            <li>
+                                <a href="/logout">Logout</a>
+                            </li>
                         {% endif %}
                     </ul>
                 </div>

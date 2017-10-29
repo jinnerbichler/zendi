@@ -1,12 +1,14 @@
 $output-bourbon-deprecation-warnings: false; // disable warning till v.5.0 is released.
 @import '../../node_modules/bourbon/app/assets/stylesheets/bourbon';
-@import 'components/variables';
 
 //import Materialize
 $roboto-font-path: "../../node_modules/materialize-css/dist/fonts/roboto/";
+$input-border: 1px solid white;
+$input-focus-color: white;
 @import '../../node_modules/materialize-css/sass/materialize';
 
 // import components of Nas theme
+@import 'components/variables';
 @import 'components/global';
 @import 'components/typography';
 @import 'components/helpers';
@@ -18,12 +20,14 @@ $roboto-font-path: "../../node_modules/materialize-css/dist/fonts/roboto/";
 @import 'components/services';
 @import 'components/posts';
 @import 'components/footer';
-@import 'components/form';
 @import 'components/slider';
 @import 'components/modal';
 @import 'components/toasts';
+@import 'components/form';
 
 // application specific styles
 @import 'common';
-@import 'pages/landing-page';
+@import 'pages/landing';
 @import 'pages/dashboard';
+@import 'pages/login';
+

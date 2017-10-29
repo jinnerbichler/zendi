@@ -1,9 +1,19 @@
-
 // #####################################################################
 // ###################### Send Token Request ###########################
 // #####################################################################
 function postSendToken(form) {
     return fetch('/send-tokens', {
+        method: 'POST',
+        body: new FormData(form),
+        credentials: 'same-origin',
+    }).then(checkStatus)
+        .then(logging)
+        .then(parseJSON)
+        .then(clientSideRedirect)
+}
+
+function postLogin(form, url) {
+    return fetch(url, {
         method: 'POST',
         body: new FormData(form),
         credentials: 'same-origin',
@@ -48,4 +58,4 @@ function parseJSON(response) {
     return response.json()
 }
 
-export {postSendToken}
+export {postSendToken, postLogin}

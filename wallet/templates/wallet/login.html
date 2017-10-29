@@ -1,0 +1,46 @@
+{% extends "wallet/components/base.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+
+    <div id="login-page">
+
+        <form method="post" class="login-form" id="login-form" autocomplete="off">
+            {% csrf_token %}
+            {{ form.media }}
+
+            <div class="row">
+                <div class="col s12">
+                    <div class="input-field">
+                        <input maxlength="30" id="username-input" name="username" type="email"
+                               class="username">
+                    </div>
+                    <div class="controls">
+                        <button type="submit"
+                                class="btn btn-large btn-flat waves-effect waves-dark white-text">
+                            {% trans "Login" %}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s12">
+                    {% include 'wallet/components/message_box.html' %}
+                </div>
+            </div>
+        </form>
+
+        <h1>Enter your mail to sign in</h1>
+    </div>
+{% endblock %}
+
+{% block custom_scripts %}
+    <script>
+        $(document).ready(function () {
+            $('#username-input').focus();
+        });
+    </script>
+{% endblock %}

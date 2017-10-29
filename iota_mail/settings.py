@@ -139,10 +139,13 @@ LOGGING = {
     }
 }
 
+# User handling
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/dashboard/'
+
+# SMTP credentials
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = '1025'
 
+# IOTA settings
 IOTA_NODE_URL = 'http://138.68.102.72:80/api/v1/commands'
-
-# IOTA Test settings
-SEED_DEBUG = 'LMNYFOADUYUERQWHIRGBJMFAINRVWPMWBLMLBVDLTLTSPYBZYH9AAWQ9FEEESYVQRWJTQOJI9HEUMKDI9'
