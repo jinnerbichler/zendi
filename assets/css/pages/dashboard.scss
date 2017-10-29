@@ -27,7 +27,7 @@ $board-bg-color: white;
 
       .card-image {
         max-width: 20%;
-        margin: 34px 0 0 20px;
+        margin: 40px 0 0 50px;
       }
 
       .card-title {
@@ -36,6 +36,10 @@ $board-bg-color: white;
 
       p {
         font-size: 30px;
+      }
+
+      .user-mail {
+        font-size: 10px;
       }
     }
 
