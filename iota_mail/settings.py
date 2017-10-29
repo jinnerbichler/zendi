@@ -82,7 +82,7 @@ DATABASES = {
     }
 }
 
-AUTHENTICATION_BACKENDS = ('wallet.auth_backend.EmailBackend',)
+AUTHENTICATION_BACKENDS = ('wallet.auth_backend.EmailBackend', 'django.contrib.auth.backends.ModelBackend')
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
@@ -124,10 +124,25 @@ LOGGING = {
         'wallet': {
             'handlers': ['console'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
-            'propagate': True
+            'propagate': False
+        },
+        'requests': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
+            'propagate': False
         }
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+        'propagate': True
     }
 }
 
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = '1025'
+
+IOTA_NODE_URL = 'http://138.68.102.72:80/api/v1/commands'
+
+# IOTA Test settings
+SEED_DEBUG = 'LMNYFOADUYUERQWHIRGBJMFAINRVWPMWBLMLBVDLTLTSPYBZYH9AAWQ9FEEESYVQRWJTQOJI9HEUMKDI9'

@@ -29,7 +29,7 @@ class IotaExecutedTransaction(models.Model):
     receiver_address = models.TextField()
     bundle_hash = models.TextField()
     transaction_hash = models.TextField()
-    amount = models.BigIntegerField()
+    value = models.BigIntegerField()
     execution_time = models.DateTimeField()
     message = models.TextField(default='')
 

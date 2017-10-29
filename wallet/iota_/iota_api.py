@@ -1,5 +1,6 @@
 import logging
 
+from django.conf import settings
 from iota import Iota, ProposedTransaction, Address, TryteString
 from iota.adapter.wrappers import RoutingWrapper
 from iota.crypto.types import Seed
@@ -13,16 +14,12 @@ DEFAULT_DEPTH = 3
 logger = logging.getLogger(__name__)
 
 # create default adapter
-DEFAULT_ADAPTER = RoutingWrapper('http://localhost:14265/api/v1/commands')
+DEFAULT_ADAPTER = RoutingWrapper(settings.IOTA_NODE_URL)
 DEFAULT_ADAPTER.set_logger(logger)
 for a in DEFAULT_ADAPTER.routes.values():
     a.set_logger(logger)
 
 
-# for cmd in ['attachToTangle', 'storeTransactions', 'broadcastTransactions']:
-#     adapter.add_route(cmd, 'http://localhost:14265/api/v1/commands'),
-
-# noinspection PyProtectedMember
 def new_seed():
     """
     Creates a new seed and returns the string representation.
@@ -35,6 +32,8 @@ class IotaApi:
     def __init__(self, seed, adapter=None):
         if adapter is None:
             adapter = DEFAULT_ADAPTER
+
+        adapter._logger.setLevel(logging.DEBUG)
 
         # convert seed
         seed = Seed(string2trytes_bytes(seed))
@@ -57,8 +56,14 @@ class IotaApi:
     def get_account_balance(self):
         return self.api.get_inputs()['totalBalance']
 
-    def get_transfers(self):
-        return self.api.get_transfers(inclusion_states=True)['bundles']
+    def get_transfers(self, inclusion_states=False):
+        return self.api.get_transfers(inclusion_states=inclusion_states)['bundles']
+
+    def get_account_data(self, inclusion_states=False):
+        return self.api.get_account_data(inclusion_states=inclusion_states)
+
+    def get_transactions_for_addresses(self, addresses):
+        return self.api.find_transactions(addresses=addresses)
 
     def transfer(self, receiver_address, change_address, value, tag=None, message=None):
         if message:
