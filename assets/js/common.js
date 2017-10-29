@@ -26,7 +26,7 @@ function showMessageBox(text, type = 'info') {
 function hideMessageBox() {
 
     const messageBox = $('#message-box');
-    messageBox.hide();
+    messageBox.slideUp();
 }
 
 

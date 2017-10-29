@@ -11,6 +11,13 @@
     <!--suppress HtmlUnknownTarget, XmlInvalidId -->
     <div id="dashboard">
 
+        {# message box #}
+        <div class="row">
+            <div class="col s8 offset-s2">
+                {% include 'wallet/components/message_box.html' %}
+            </div>
+        </div>
+
         <div class="row">
             <div class="col s8 offset-s2 content">
                 <div class="row">
@@ -103,4 +110,14 @@
         </div>
 
     </div>
+{% endblock %}
+
+{% block custom_scripts %}
+    <script>
+        {% if message %}
+            $(document).ready(function () {
+                window.showMessageBox('{{ message }}', '{{ message_type|default:"info" }}')
+            });
+        {% endif %}
+    </script>
 {% endblock %}

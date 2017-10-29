@@ -1,0 +1,1 @@
+You have successfully sent {{ amount_with_unit }} to {{ receiver }}.

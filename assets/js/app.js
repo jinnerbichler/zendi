@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import {toast} from 'materialize-css';
 import '../img/iota-logo.png';
 import '../css/main.scss';
 import {postSendToken} from './api-service';
@@ -21,4 +20,7 @@ $('#send-form').submit(function (event) {
             showMessageBox(`Error ${error}`, 'error');
         });
 });
+
+// global exports
+window.showMessageBox = showMessageBox;
 

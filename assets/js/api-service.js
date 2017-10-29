@@ -1,3 +1,7 @@
+
+// #####################################################################
+// ###################### Send Token Request ###########################
+// #####################################################################
 function postSendToken(form) {
     return fetch('/send-tokens', {
         method: 'POST',
@@ -9,6 +13,9 @@ function postSendToken(form) {
         .then(clientSideRedirect)
 }
 
+// #####################################################################
+// ###################### Response Callbacks ###########################
+// #####################################################################
 function logging(response) {
     console.log(`Response => URL: ${response.url}, Status: ${response.status}, Text: ${response.statusText}`);
     return response;

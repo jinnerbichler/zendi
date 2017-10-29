@@ -15,7 +15,7 @@
 </div>
 
 {% block navbar %}
-{% include 'wallet/components/nav.html' %}
+    {% include 'wallet/components/nav.html' %}
 {% endblock %}
 
 <!-- Main content-->
@@ -31,6 +31,8 @@
 {% include 'wallet/components/footer.html' %}
 
 {% include 'wallet/components/js.html' %}
+
+{% block custom_scripts %}{% endblock %}
 
 </body>
 </html>
