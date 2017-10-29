@@ -4,74 +4,75 @@
 
 {% block content %}
 
-<!--suppress HtmlUnknownTarget, XmlInvalidId -->
-<div id="landing-page">
+    <!--suppress HtmlUnknownTarget, XmlInvalidId -->
+    <div id="landing-page">
 
-    <h1>Exchange money with joy.</h1>
+        <h1>Exchange money with joy.</h1>
 
-    <form id="send-form" action="/send-tokens" novalidate autocomplete="off" method="post">
+        <form id="send-form" action="/send-tokens" novalidate autocomplete="off" method="post">
 
-        {% csrf_token %}
+            {% csrf_token %}
 
-        {{ form.non_field_errors }}
-        <div class="row">
+            {{ form.non_field_errors }}
+            <div class="row">
 
-            {# Show sender email depending on authentication state #}
-            {% if user.is_authenticated %}
-            {{ form.sender_mail.as_hidden }}
-            <div class="col s12 l10">
-                <div class="input-field">
-                    <label for="{{ form.receiver_mail.id_for_label }}">Send to Email</label>
-                    {{ form.receiver_mail }}
-                    {{ form.receiver_mail.errors }}
+                {# Show sender email depending on authentication state #}
+                {% if user.is_authenticated %}
+                    {{ form.sender_mail.as_hidden }}
+                    <div class="col s12 l10">
+                        <div class="input-field">
+                            <label for="{{ form.receiver_mail.id_for_label }}">Send to Email</label>
+                            {{ form.receiver_mail }}
+                            {{ form.receiver_mail.errors }}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col s12 l5">
+                        <div class="input-field">
+                            <label for="{{ form.sender_mail.id_for_label }}">Send from Email</label>
+                            {{ form.sender_mail }}
+                            {{ form.sender_mail.errors }}
+                        </div>
+                    </div>
+                    <div class="col s12 l5">
+                        <div class="input-field">
+                            <label for="{{ form.receiver_mail.id_for_label }}">Send to Email</label>
+                            {{ form.receiver_mail }}
+                            {{ form.receiver_mail.errors }}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="col s12 l2">
+                    <div class="input-field">
+                        <label for="{{ form.amount.id_for_label }}">Mi</label>
+                        {{ form.amount }}
+                        {{ form.amount.errors }}
+                    </div>
                 </div>
             </div>
-            {% else %}
-            <div class="col s12 l5">
-                <div class="input-field">
-                    <label for="{{ form.sender_mail.id_for_label }}">Send from Email</label>
-                    {{ form.sender_mail }}
-                    {{ form.sender_mail.errors }}
+            <div class="row">
+                <div class="col s12">
+                    <div class="input-field">
+                        <label for="{{ form.message.id_for_label }}">Message (optional)</label>
+                        {{ form.message }}
+                        {{ form.message.errors }}
+                    </div>
                 </div>
             </div>
-            <div class="col s12 l5">
-                <div class="input-field">
-                    <label for="{{ form.receiver_mail.id_for_label }}">Send to Email</label>
-                    {{ form.receiver_mail }}
-                    {{ form.receiver_mail.errors }}
+            <div class="row">
+                <div class="col s12 center">
+                    <button class="btn btn-large btn-flat waves-effect waves-dark white-text" id="send-tokens"
+                            type="submit">Send
+                    </button>
                 </div>
             </div>
-            {% endif %}
+            <div class="row">
+                <div class="col s12">
+                    {% include 'wallet/components/message_box.html' %}
+                </div>
+            </div>
+        </form>
 
-            <div class="col s12 l2">
-                <div class="input-field">
-                    <label for="{{ form.amount.id_for_label }}">Mi</label>
-                    {{ form.amount }}
-                    {{ form.amount.errors }}
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col s12">
-                <div class="input-field">
-                    <label for="{{ form.message.id_for_label }}">Message (optional)</label>
-                    {{ form.message }}
-                    {{ form.message.errors }}
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col s12 center">
-                <button class="btn btn-large btn-flat waves-effect waves-dark white-text" id="send-tokens"
-                        type="submit">Send
-                </button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col s12">
-                {% include 'wallet/components/message_box.html' %}
-            </div>
-    </form>
-
-</div>
+    </div>
 {% endblock %}

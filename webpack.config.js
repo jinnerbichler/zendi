@@ -15,7 +15,7 @@ const extractPlugin = new ExtractTextPlugin({
 const providePlugin = new wepback.ProvidePlugin({
     $: 'jquery',
     jQuery: 'jquery',
-    Materialize: 'materialize-css'
+    Materialize: 'materialize-css',
 });
 const cleanPlugin = new CleanWebpackPlugin(['wallet/static/wallet']);
 const copyFilesPlugin = new CopyWebpackPlugin([{
@@ -36,7 +36,11 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'wallet/static/wallet'),
         filename: 'bundle.js',
+        libraryTarget: 'var',
+        library: 'EntryPoint'
         // publicPath: '/wallet/static/wallet'
+        // libraryTarget: 'var',
+        // library: 'Bundle'
     },
     module: {
         rules: [
