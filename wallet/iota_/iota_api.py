@@ -1,5 +1,6 @@
 import logging
 
+from django.conf import settings
 from iota import Iota, ProposedTransaction, Address, TryteString
 from iota.adapter.wrappers import RoutingWrapper
 from iota.crypto.types import Seed
@@ -13,7 +14,7 @@ DEFAULT_DEPTH = 3
 logger = logging.getLogger(__name__)
 
 # create default adapter
-DEFAULT_ADAPTER = RoutingWrapper('http://localhost:14265/api/v1/commands')
+DEFAULT_ADAPTER = RoutingWrapper(settings.IOTA_NODE_URL)
 DEFAULT_ADAPTER.set_logger(logger)
 for a in DEFAULT_ADAPTER.routes.values():
     a.set_logger(logger)
