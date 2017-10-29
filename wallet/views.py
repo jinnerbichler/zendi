@@ -12,7 +12,7 @@ from nopassword.utils import get_username_field
 from rest_framework.status import HTTP_401_UNAUTHORIZED
 
 from wallet.forms import SendTokensForm
-from wallet.iota_ import NotEnoughBalanceException, iota_utils, iota_display_format
+from wallet.iota_ import InsufficientBalanceException, iota_utils, iota_display_format
 from wallet.templatetags.wallet_extras import iota_display_format_filter
 from wallet.user_utils import get_user_safe
 
@@ -77,10 +77,10 @@ def send_tokens_exec(request):
 
     # create message for user
     context = {'amount_with_unit': iota_display_format_filter(amount), 'receiver': receiver_mail}
-    user_message = render_to_string('wallet/messages/tokens_sent.txt', context)
+    user_message = render_to_string('wallet/messages/tokens_sent.txt', context=context)
 
     # compute redirect url
-    response = custom_redirect(dashboard, user_message=user_message, message_type='info')
+    response = custom_redirect(view=dashboard, user_message=user_message, message_type='info')
 
     # check if authorised user matches sending mail
     if sender_mail != request.user.email:
@@ -89,8 +89,9 @@ def send_tokens_exec(request):
     try:
         # send tokens
         iota_utils.send_tokens(sender=sender_mail, receiver=receiver_mail, value=amount, message=message)
-    except NotEnoughBalanceException as e:
-        response = custom_redirect(dashboard, user_message=str(e), message_type='error')
+    except InsufficientBalanceException:
+        user_message = render_to_string('wallet/messages/insufficient_balance.txt', context={})
+        response = custom_redirect(view=dashboard, user_message=user_message, message_type='error')
 
     return response
 
@@ -114,5 +115,5 @@ def logout_user(request):
     return redirect('/')
 
 
-def custom_redirect(view_name, **kwargs):
-    return redirect('{}?{}'.format(reverse(view_name), urlencode(kwargs)))
+def custom_redirect(view, **kwargs):
+    return redirect('{}?{}'.format(reverse(view), urlencode(kwargs)))

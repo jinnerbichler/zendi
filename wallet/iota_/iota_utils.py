@@ -7,7 +7,7 @@ from datetime import datetime
 from django.utils.timezone import make_aware
 from pytz import UTC
 
-from wallet.iota_ import NotEnoughBalanceException, trytes2string, convert_bundles
+from wallet.iota_ import InsufficientBalanceException, trytes2string, convert_bundles
 from wallet.iota_.iota_api import IotaApi
 from wallet.models import IotaAddress, IotaExecutedTransaction
 from wallet.user_utils import get_user_safe
@@ -77,7 +77,7 @@ def send_tokens(sender, receiver, value, message=None):
     api = IotaApi(seed=sending_user.iotaseed.seed)
     balance = api.get_account_balance()
     if balance < value:
-        raise NotEnoughBalanceException(user=str(sending_user), proposed_amount=value, balance=balance)
+        raise InsufficientBalanceException(user=str(sending_user), proposed_amount=value, balance=balance)
 
     change_address = get_new_address(sending_user)
     receiving_address = get_new_address(receiving_user)
