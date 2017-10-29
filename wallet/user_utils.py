@@ -1,8 +1,12 @@
+import logging
+
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.http import JsonResponse
+from django.contrib.auth import authenticate
 from django.urls import reverse_lazy
-from nopassword.utils import get_username
+from nopassword.utils import get_username, get_username_field
+
+logger = logging.getLogger(__name__)
 
 
 def get_user_safe(email):
@@ -38,3 +42,21 @@ def login_url(code, secure=False, host=None):
                             args=[username, code.code]),
 
     return '%s://%s%s' % ('https' if secure else 'http', host, view[0])
+
+
+def send_login_mail(request, next_url, email):
+    # get user
+    is_new, send_user = get_user_safe(email=email)
+
+    # create login code
+    login_code = authenticate(**{get_username_field(): send_user.username})
+    login_code.next = next_url
+    login_code.save()
+
+    # send login code
+    logger.info('Sending login code to %s (new: %s)', send_user, is_new)
+    login_code.send_login_code(secure=request.is_secure(),
+                               host=request.get_host(),
+                               new_user=is_new)
+
+    return 'Log in email was sent to {}. Please check you inbox.'.format(send_user.email)

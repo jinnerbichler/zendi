@@ -1,3 +1,14 @@
+.main {
+  h1 {
+    font-size: 4.5em;
+  }
+}
+
+.btn-flat:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  box-shadow: none;
+}
+
 .brand-logo {
   .appendix {
     text-transform: none;
@@ -21,4 +32,52 @@
   &.error {
     background-color: color("red", "base");
   }
+}
+
+.input-field label {
+  left: 0;
+  color: $white;
+}
+
+input[type=text],
+input[type=email],
+input[type=email],
+textarea.materialize-textarea {
+  color: $white;
+  border-bottom-color: $white;
+  border-bottom-width: 2px;
+}
+
+.input-field input[type=text]:focus:not([readonly]),
+.input-field input[type=email]:focus,
+.input-field input[type=email]:focus:not([readonly]),
+input[type=email]:focus,
+input[type=email]:focus:not([readonly]),
+textarea.materialize-textarea:focus,
+textarea.materialize-textarea:focus:not([readonly]) {
+  border-bottom-color: $white;
+  border-bottom-width: 2px;
+  box-shadow: none;
+
+  + label {
+    color: $white;
+  }
+}
+
+.input-field input[type=text].valid,
+.input-field input[type=email].valid,
+textarea.materialize-textarea.valid {
+  border-bottom-color: $white;
+  box-shadow: none;
+}
+
+.input-field input[type=text].invalid,
+.input-field input[type=email].invalid,
+textarea.materialize-textarea.invalid {
+  border-bottom-color: $white;
+  box-shadow: none;
+}
+
+.input-field .prefix.active {
+  color: $white;
 }
