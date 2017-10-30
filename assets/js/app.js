@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import '../img/iota-logo.png';
 import '../css/main.scss';
-import {postSendToken, postLogin} from './api-service';
+import {postSendToken, postLogin, getNewAddress} from './api';
 import 'materialize-css';
 import {showMessageBox, hideMessageBox} from "./common";
 
@@ -32,13 +32,28 @@ $('#login-form').submit(function (event) {
         .then((jsonResponse) => {
             const messageType = 'error' in jsonResponse ? 'error' : 'info';
             showMessageBox(jsonResponse['message'], messageType);
-            form.reset();
+            form.focus();
         })
         .catch((error) => {
             showMessageBox(`Error ${error}`, 'error');
         });
 });
 
+function fetchNewAddress(callback) {
+
+    getNewAddress()
+        .then((jsonResponse) => {
+            const newAddress = jsonResponse['address'];
+            callback(newAddress);
+        })
+        .catch((error) => {
+            // ToDO: Handle this case
+        });
+}
+
 // global exports
-window.showMessageBox = showMessageBox;
+const bundle = {};
+bundle.showMessageBox = showMessageBox;
+bundle.fetchNewAddress = fetchNewAddress;
+window.bundle = bundle;
 
