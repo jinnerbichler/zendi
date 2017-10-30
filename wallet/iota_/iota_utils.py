@@ -114,7 +114,8 @@ def send_tokens(request, sender, receiver, value, message=None):
                                              sender=sending_user,
                                              receiver=receiving_user,
                                              is_new=is_new,
-                                             amount=value)
+                                             amount=value,
+                                             message=message)
         return bundle
     except Exception as e:
         logger.exception('Error while transferring %i IOTA from %s to %s (address %s, new:%s)',
