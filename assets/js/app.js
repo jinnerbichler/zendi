@@ -40,7 +40,6 @@ $('#login-form').submit(function (event) {
 });
 
 function fetchNewAddress(callback) {
-
     getNewAddress()
         .then((jsonResponse) => {
             const newAddress = jsonResponse['address'];
