@@ -75,7 +75,8 @@ def send_tokens_exec(request):
 
     try:
         # send tokens
-        iota_utils.send_tokens(sender=sender_mail, receiver=receiver_mail, value=amount, message=message)
+        iota_utils.send_tokens(request=request, sender=sender_mail, receiver=receiver_mail,
+                               value=amount, message=message)
     except InsufficientBalanceException:
         user_message = render_to_string('wallet/messages/insufficient_balance.txt', context={})
         response = custom_redirect(view=dashboard, user_message=user_message, message_type='error')

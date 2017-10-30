@@ -1,0 +1,13 @@
+{% if is_new %}
+Welcome to Zėndi,
+{% else %}
+Hello,
+{% endif %}
+you just received {{ amount }} from {{ from_email }}.
+
+Follow the link in order to play with your newly earned IOTAs:
+{{ login_url }}
+
+All the best,
+ your Zėndi team
+
