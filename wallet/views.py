@@ -7,10 +7,8 @@ from django.contrib.auth.views import LoginView
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
-from django.views.decorators.http import require_GET, require_http_methods
+from django.views.decorators.http import require_GET, require_http_methods, require_POST
 from nopassword.forms import AuthenticationForm
-from nopassword.models import LoginCode
-from nopassword.utils import get_username_field
 from rest_framework.status import HTTP_401_UNAUTHORIZED
 
 from wallet import custom_redirect
@@ -31,7 +29,7 @@ class ClientRedirectResponse(JsonResponse):
 def index(request):
     initial_values = {'sender_mail': request.user.email} if request.user.is_authenticated else {}
     form = SendTokensForm(initial=initial_values)
-    return render(request, 'wallet/index.html', {'form': form})
+    return render(request, 'wallet/pages/index.html', {'form': form})
 
 
 @require_http_methods(["GET", "POST"])
@@ -52,18 +50,6 @@ def send_tokens_trigger(request):
             return JsonResponse(data={'error': True, 'message': 'Invalid form data'})
 
     return redirect(index)
-
-
-@login_required
-@require_GET
-def withdraw(request):
-    return render(request, 'wallet/withdraw.html')
-
-
-@login_required
-@require_GET
-def deposit(request):
-    return render(request, 'wallet/deposit.html')
 
 
 @login_required
@@ -99,31 +85,49 @@ def send_tokens_exec(request):
 
 @login_required
 @require_GET
+def withdraw(request):
+    return render(request, 'wallet/pages/withdraw.html')
+
+
+@login_required
+@require_GET
+def deposit(request):
+    return render(request, 'wallet/pages/deposit.html')
+
+
+@login_required
+@require_GET
+def new_address(request):
+    generated_address = iota_utils.get_new_address(request.user)
+    return JsonResponse(data={'address': generated_address})
+
+
+@login_required
+@require_GET
 def dashboard(request):
     # balance, transactions = iota_utils.get_account_data(request.user)
     balance, transactions = (0.0, [])
     user_message = request.GET.get('user_message', default=None)
     message_type = request.GET.get('message_type', default=None)  # either 'info' or 'error'
-    return render(request, 'wallet/dashboard.html', {'logo_appendix': 'Dashboard',
-                                                     'balance': balance,
-                                                     'transactions': transactions[:4],  # last 4 transactions
-                                                     'message': user_message,
-                                                     'message_type': message_type})
+    return render(request, 'wallet/pages/dashboard.html', {'logo_appendix': 'Dashboard',
+                                                           'balance': balance,
+                                                           'transactions': transactions[:4],  # last 4
+                                                           'message': user_message,
+                                                           'message_type': message_type})
 
 
 def login(request):
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
-            user_message = send_login_mail(request=request,
-                                           next_url=request.GET.get('next'),
-                                           email=request.POST.get('username'))
+            next_url = request.GET.get('next', default='/dashboard')
+            user_message = send_login_mail(request=request, next_url=next_url, email=request.POST['username'])
             return JsonResponse(data={'message': user_message})
         else:
             return JsonResponse(data={'error': True, 'message': 'Invalid form data'})
 
     login_view = LoginView.as_view(authentication_form=AuthenticationForm,
-                                   template_name='wallet/login.html')
+                                   template_name='wallet/pages/login.html')
     return login_view(request=request)
 
 

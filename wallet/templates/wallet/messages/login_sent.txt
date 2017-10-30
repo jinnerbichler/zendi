@@ -1,0 +1,1 @@
+Log in email was sent to {{ mail }}. Please check you inbox.

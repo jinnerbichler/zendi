@@ -23,6 +23,16 @@ function postLogin(form, url) {
         .then(clientSideRedirect)
 }
 
+
+function getNewAddress() {
+    return fetch('/new_address', {
+        method: 'GET',
+        credentials: 'same-origin',
+    }).then(checkStatus)
+        .then(logging)
+        .then(parseJSON)
+}
+
 // #####################################################################
 // ###################### Response Callbacks ###########################
 // #####################################################################
@@ -58,4 +68,4 @@ function parseJSON(response) {
     return response.json()
 }
 
-export {postSendToken, postLogin}
+export {postSendToken, postLogin, getNewAddress}

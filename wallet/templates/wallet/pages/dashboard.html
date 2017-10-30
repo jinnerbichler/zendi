@@ -5,7 +5,7 @@
 {% block content %}
 
     <!--suppress HtmlUnknownTarget, XmlInvalidId -->
-    <div id="dashboard">
+    <div id="dashboard" class="triangle-content">
 
         {# message box #}
         <div class="row">
@@ -112,7 +112,7 @@
     <script>
         {% if message %}
             $(document).ready(function () {
-                window.showMessageBox('{{ message }}', '{{ message_type|default:"info" }}')
+                window.bundle.showMessageBox('{{ message }}', '{{ message_type|default:"info" }}')
             });
         {% endif %}
     </script>

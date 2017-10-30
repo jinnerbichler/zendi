@@ -5,7 +5,9 @@
 
 {% block content %}
 
-    <div id="login-page">
+    <div id="login-page" class="triangle-content">
+
+        <h1>Enter your mail to sign in</h1>
 
         <form method="post" class="login-form" id="login-form" autocomplete="off">
             {% csrf_token %}
@@ -33,7 +35,6 @@
             </div>
         </form>
 
-        <h1>Enter your mail to sign in</h1>
     </div>
 {% endblock %}
 

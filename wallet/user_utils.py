@@ -3,6 +3,7 @@ import logging
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from nopassword.utils import get_username, get_username_field
 
@@ -55,8 +56,6 @@ def send_login_mail(request, next_url, email):
 
     # send login code
     logger.info('Sending login code to %s (new: %s)', send_user, is_new)
-    login_code.send_login_code(secure=request.is_secure(),
-                               host=request.get_host(),
-                               new_user=is_new)
+    login_code.send_login_code(secure=request.is_secure(), host=request.get_host(), new_user=is_new)
 
-    return 'Log in email was sent to {}. Please check you inbox.'.format(send_user.email)
+    return render_to_string('wallet/messages/login_sent.txt', context={'mail': send_user.email})
