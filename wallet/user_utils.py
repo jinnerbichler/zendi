@@ -64,7 +64,7 @@ def send_login_mail(request, next_url, email):
     return render_to_string('wallet/messages/login_sent.txt', context={'mail': send_user.email})
 
 
-def send_token_received_email(request, sender, receiver, amount, is_new):
+def send_token_received_email(request, sender, receiver, amount, is_new, message):
     # create login code
     login_code = authenticate(**{get_username_field(): receiver.username})
     login_code.next = '/dashboard'
@@ -79,7 +79,8 @@ def send_token_received_email(request, sender, receiver, amount, is_new):
                'code': login_code,
                'from_email': sender.email,
                'is_new': is_new,
-               'amount': iota_display_format_filter(amount)}
+               'amount': iota_display_format_filter(amount),
+               'message': message}
     text_content = render_to_string('wallet/email/tokens_received.txt', context)
     # html_content = render_to_string('wallet/email/login_email.html', context)
 
@@ -88,3 +89,5 @@ def send_token_received_email(request, sender, receiver, amount, is_new):
     msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
     # msg.attach_alternative(html_content, 'text/html')
     msg.send()
+
+    logger.info('Sent payment received mail to %s (new: %s)', receiver, is_new)
