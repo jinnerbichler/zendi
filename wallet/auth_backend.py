@@ -25,8 +25,8 @@ class EmailBackend(NoPasswordBackend):
         from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'root@example.com')
 
         context = {'url': login_url(code=code, secure=secure, host=host), 'code': code}
-        text_content = render_to_string('registration/login_email.txt', context)
-        html_content = render_to_string('registration/login_email.html', context)
+        text_content = render_to_string('wallet/email/login_email.txt', context)
+        html_content = render_to_string('wallet/email/login_email.html', context)
 
         msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
         msg.attach_alternative(html_content, 'text/html')
