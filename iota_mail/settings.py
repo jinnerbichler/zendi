@@ -139,6 +139,9 @@ LOGGING = {
     }
 }
 
+# Nopassword settings
+NOPASSWORD_LOGIN_CODE_TIMEOUT = 60*24*14  # in seconds
+
 # User handling
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'

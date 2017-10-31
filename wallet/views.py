@@ -76,7 +76,8 @@ def send_tokens_exec(request):
             return HttpResponse('Invalid mail', status=HTTP_401_UNAUTHORIZED)
         try:
             # send tokens
-            # iota_utils.send_tokens(sender=sender_mail, receiver=receiver_mail, value=amount, message=message)
+            # iota_utils.send_tokens(request=request, sender=sender_mail, receiver=receiver_mail,
+                               value=amount, message=message)
             pass
         except InsufficientBalanceException:
             user_message = render_to_string('wallet/messages/insufficient_balance.txt', context={})
@@ -107,15 +108,21 @@ def new_address(request):
 @login_required
 @require_GET
 def dashboard(request):
-    # balance, transactions = iota_utils.get_account_data(request.user)
-    balance, transactions = (0.0, [])
+    # balance = iota_utils.get_balance(request.user)
+    balance = 0
     user_message = request.GET.get('user_message', default=None)
     message_type = request.GET.get('message_type', default=None)  # either 'info' or 'error'
     return render(request, 'wallet/pages/dashboard.html', {'logo_appendix': 'Dashboard',
                                                            'balance': balance,
-                                                           'transactions': transactions[:4],  # last 4
                                                            'message': user_message,
                                                            'message_type': message_type})
+
+
+@login_required
+@require_GET
+def dashboard_transactions_ajax(request):
+    balance, transactions = iota_utils.get_account_data(request.user)
+    return render(request, 'wallet/components/transaction_list.html', {'transactions': transactions[:3]})
 
 
 def login(request):

@@ -7,6 +7,7 @@ from datetime import datetime
 from django.utils.timezone import make_aware
 from pytz import UTC
 
+from wallet import user_utils
 from wallet.iota_ import InsufficientBalanceException, trytes2string, convert_bundles
 from wallet.iota_.iota_api import IotaApi
 from wallet.models import IotaAddress, IotaExecutedTransaction
@@ -66,12 +67,10 @@ def get_account_data(user, api=None):
 
 
 # noinspection PyBroadException
-def send_tokens(sender, receiver, value, message=None):
+def send_tokens(request, sender, receiver, value, message=None):
     # get proper users
     _, sending_user = get_user_safe(email=sender)
     is_new, receiving_user = get_user_safe(email=receiver)
-
-    # ToDo: inform user about new wallet
 
     # check balance
     api = IotaApi(seed=sending_user.iotaseed.seed)
@@ -96,8 +95,6 @@ def send_tokens(sender, receiver, value, message=None):
         pow_execution_time = time.time() - pow_start_time
         logger.info('Performed PoW in %i secs', pow_execution_time, extra={'pow_time': pow_execution_time})
 
-        # ToDo: inform users via mail
-
         # check for consistency
         transaction = bundle.transactions[0]
         assert trytes2string(transaction.address) == receiving_address
@@ -112,7 +109,13 @@ def send_tokens(sender, receiver, value, message=None):
                                                       value=value,
                                                       execution_time=execution_time,
                                                       message=message)
-
+        # inform receiver via mail
+        user_utils.send_token_received_email(request=request,
+                                             sender=sending_user,
+                                             receiver=receiving_user,
+                                             is_new=is_new,
+                                             amount=value,
+                                             message=message)
         return bundle
     except Exception as e:
         logger.exception('Error while transferring %i IOTA from %s to %s (address %s, new:%s)',

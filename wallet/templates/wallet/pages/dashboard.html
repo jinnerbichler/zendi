@@ -29,78 +29,17 @@
                     </div>
                 </div>
                 <div class="row recent-transactions">
-                    <h1>Recent Transactions</h1>
-                    <ul class="collapsible collapsible-accordion transactions" data-collapsible="accordion">
 
-                        {% for transaction in transactions %}
+                    <div id="transactions-loading-container">
+                        <h1>Loading recent Transactions</h1>
+                        <div class="progress col s8 offset-s2">
+                            <div class="indeterminate"></div>
+                        </div>
+                    </div>
 
-                            <li class="transaction">
-                                <div class="collapsible-header row">
-                                    <div class="col s1 icon">
-                                        <i class="material-icons">
-                                            {% if transaction.value == 0 %}
-                                                remove
-                                            {% elif transaction.in_going %}
-                                                call_received
-                                            {% else %}
-                                                call_made
-                                            {% endif %}
-                                        </i>
-                                    </div>
-                                    <div class="col s4">
-                                        <span>
-                                            {% if transaction.email %}
-                                                {{ transaction.email }}
-                                            {% else %}
-                                                {{ transaction.address|truncatechars:20 }}
-                                            {% endif %}
-                                        </span>
-                                    </div>
-                                    <div class="col s3">{{ transaction.time }}</div>
-                                    <div class="col s2">{{ transaction.value|iota_display_format }}</div>
-                                    <div class="col s2 left-align">
-                                        {% if transaction.is_confirmed %}
-                                            <span class="new badge green"
-                                                  data-badge-caption="">Complete</span>
-                                        {% else %}
-                                            <span class="new badge blue" data-badge-caption="">Pending</span>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="collapsible-body row" style="display: none;">
-                                    <div class="col s4 ">
-                                        {% if transaction.in_going %}
-                                            From address:&nbsp;
-                                        {% else %}
-                                            To address:&nbsp;
-                                        {% endif %}
-                                        <br>
-                                        <a href="{{ transaction.address|iota_hash_info_url }}">
-                                            {{ transaction.address|truncatechars:30 }}
-                                        </a>
-                                        <br>
-                                        {% if transaction.email %}
-                                            <span>({{ transaction.email }})</span>
-                                        {% endif %}
-
-                                    </div>
-                                    <div class="col s4 ">
-                                        Bundle:<br>
-                                        <a href="{{ transaction.bundle_hash|iota_hash_info_url }}">
-                                            {{ transaction.bundle_hash|truncatechars:30 }}
-                                        </a>
-                                    </div>
-                                    <div class="col s4">
-                                        Transaction:<br>
-                                        <a href="{{ transaction.hash|iota_hash_info_url }}">
-                                            {{ transaction.hash|truncatechars:30 }}
-                                        </a>
-                                    </div>
-                                </div>
-                            </li>
-
-                        {% endfor %}
-                    </ul>
+                    <div id="transaction-ready-container" style="display: none;">
+                        <h1>Recent Transactions</h1>
+                    </div>
                 </div>
             </div>
         </div>
@@ -110,10 +49,26 @@
 
 {% block custom_scripts %}
     <script>
-        {% if message %}
-            $(document).ready(function () {
-                window.bundle.showMessageBox('{{ message }}', '{{ message_type|default:"info" }}')
+        $(document).ready(function () {
+
+            // fetch transactions and update UI
+            window.bundle.fetchDashboardTransactions(function (transactionsHtml) {
+
+                // append list of transactions
+                $('#transaction-ready-container').append(transactionsHtml);
+
+                // show in UI
+                $('#transactions-loading-container').fadeOut(200, function () {
+                    $('#transaction-ready-container').fadeIn();
+                });
+
+                window.bundle.initCollapsible();
             });
-        {% endif %}
+
+            {% if message %}
+                // show message
+                window.bundle.showMessageBox('{{ message }}', '{{ message_type|default:"info" }}');
+            {% endif %}
+        });
     </script>
 {% endblock %}
