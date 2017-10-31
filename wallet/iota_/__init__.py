@@ -61,6 +61,9 @@ def convert_bundles(bundles, user_addresses):
             transactions += [convert_transaction(transaction=t, user_addresses=user_addresses)
                              for t in bundle.transactions]
 
+    # filter ones with zero values
+    transactions = list(filter(lambda t: t.value != 0, transactions))
+
     # sort by date (recent transactions first)
     return sorted(transactions, key=lambda t: t.time, reverse=True)
 
