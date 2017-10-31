@@ -33,6 +33,16 @@ function getNewAddress() {
         .then(parseJSON)
 }
 
+
+function getDashboardTransactions() {
+    return fetch('/dashboard_transactions_ajax', {
+        method: 'GET',
+        credentials: 'same-origin',
+    }).then(checkStatus)
+        .then(logging)
+        .then(extractText)
+}
+
 // #####################################################################
 // ###################### Response Callbacks ###########################
 // #####################################################################
@@ -65,7 +75,11 @@ function checkStatus(response) {
 }
 
 function parseJSON(response) {
-    return response.json()
+    return response.json();
 }
 
-export {postSendToken, postLogin, getNewAddress}
+function extractText(response) {
+    return response.text();
+}
+
+export {postSendToken, postLogin, getNewAddress, getDashboardTransactions}
