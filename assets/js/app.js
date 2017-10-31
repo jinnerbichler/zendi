@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import '../img/iota-logo.png';
 import '../css/main.scss';
-import {postSendToken, postLogin, getNewAddress, getDashboardTransactions} from './api';
+import {postSendToken, postLogin, getNewAddress, getDashboardTransactions, postTriggerTransactionExecution} from './api';
 import 'materialize-css';
 import {showMessageBox, hideMessageBox} from "./common";
 
@@ -50,6 +50,14 @@ function fetchNewAddress(callback) {
         });
 }
 
+function triggerTransactionExecution() {
+    const url = new URL(window.location);
+    const params = new URLSearchParams(url.search);
+    postTriggerTransactionExecution(params).then((response) => {
+       console.log('Successfully executed transaction: ' + JSON.stringify(response))
+    });
+}
+
 function fetchDashboardTransactions(callback) {
     console.log('Fetching recent transactions...');
     getDashboardTransactions()
@@ -70,6 +78,7 @@ function initCollapsible() {
 const bundle = {};
 bundle.showMessageBox = showMessageBox;
 bundle.fetchNewAddress = fetchNewAddress;
+bundle.triggerTransactionExecution = triggerTransactionExecution;
 bundle.fetchDashboardTransactions = fetchDashboardTransactions;
 bundle.initCollapsible = initCollapsible;
 window.bundle = bundle;
