@@ -7,22 +7,18 @@ from django.contrib.auth.views import LoginView
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
 from nopassword.forms import AuthenticationForm
 from rest_framework.status import HTTP_401_UNAUTHORIZED
 
-from wallet import custom_redirect
+from wallet import server_redirect, ClientRedirectResponse, client_redirect
 from wallet.forms import SendTokensForm
 from wallet.iota_ import InsufficientBalanceException, iota_utils
 from wallet.templatetags.wallet_extras import iota_display_format_filter
 from wallet.user_utils import send_login_mail
 
 logger = logging.getLogger(__name__)
-
-
-class ClientRedirectResponse(JsonResponse):
-    def __init__(self, redirect_url, **kwargs):
-        super().__init__(data={'redirect_url': redirect_url}, **kwargs)
 
 
 @require_GET
@@ -52,35 +48,41 @@ def send_tokens_trigger(request):
     return redirect(index)
 
 
+@csrf_exempt  # this calls are executed manually
 @login_required
-@require_http_methods(["GET", " POST"])
+@require_http_methods(["GET", "POST"])
 def send_tokens_exec(request):
-    sender_mail = request.GET['sender_mail']
-    receiver_mail = request.GET['receiver_mail']
-    amount = int(request.GET['amount'])
-    message = request.GET['message']  # optional
+    if request.method == 'GET':
+        amount = int(request.GET['amount'])
+        context = {'amount_with_unit': iota_display_format_filter(amount), **request.GET}
+        return render(request, 'wallet/pages/send-tokens-exec.html', context)
 
-    # all computations should be performed before communicating with the Tangle.
+    elif request.method == 'POST':
 
-    # create message for user
-    context = {'amount_with_unit': iota_display_format_filter(amount), 'receiver': receiver_mail}
-    user_message = render_to_string('wallet/messages/tokens_sent.txt', context=context)
+        sender_mail = request.POST['sender_mail']
+        receiver_mail = request.POST['receiver_mail']
+        amount = int(request.POST['amount'])
+        message = request.POST['message']  # optional
 
-    # compute redirect url
-    response = custom_redirect(view=dashboard, user_message=user_message, message_type='info')
+        # all computations should be performed before communicating with the Tangle.
 
-    # check if authorised user matches sending mail
-    if sender_mail != request.user.email:
-        return HttpResponse('Invalid mail', status=HTTP_401_UNAUTHORIZED)
+        # create message for user
+        context = {'amount_with_unit': iota_display_format_filter(amount), 'receiver': receiver_mail}
+        user_message = render_to_string('wallet/messages/tokens_sent.txt', context=context)
+        response = client_redirect(view=dashboard, user_message=user_message, message_type='info')
 
-    try:
-        # send tokens
-        iota_utils.send_tokens(sender=sender_mail, receiver=receiver_mail, value=amount, message=message)
-    except InsufficientBalanceException:
-        user_message = render_to_string('wallet/messages/insufficient_balance.txt', context={})
-        response = custom_redirect(view=dashboard, user_message=user_message, message_type='error')
+        # check if authorised user matches sending mail
+        if sender_mail != request.user.email:
+            return HttpResponse('Invalid mail', status=HTTP_401_UNAUTHORIZED)
+        try:
+            # send tokens
+            # iota_utils.send_tokens(sender=sender_mail, receiver=receiver_mail, value=amount, message=message)
+            pass
+        except InsufficientBalanceException:
+            user_message = render_to_string('wallet/messages/insufficient_balance.txt', context={})
+            response = client_redirect(view=dashboard, user_message=user_message, message_type='error')
 
-    return response
+        return response
 
 
 @login_required

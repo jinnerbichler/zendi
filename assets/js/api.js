@@ -12,6 +12,18 @@ function postSendToken(form) {
         .then(clientSideRedirect)
 }
 
+function postTriggerTransactionExecution(params) {
+    return fetch('/send-tokens-exec', {
+        method: 'POST',
+        body: params,
+        credentials: 'same-origin',
+    }).then(logging)
+        .then(checkStatus)
+        .then(parseJSON)
+        .then(clientSideRedirect)
+}
+
+
 function postLogin(form, url) {
     return fetch(url, {
         method: 'POST',
@@ -41,9 +53,9 @@ function logging(response) {
     return response;
 }
 
-function clientSideRedirect(jsonObj) {
-    if ('redirect_url' in jsonObj) {
-        window.location.href = jsonObj['redirect_url'];
+function clientSideRedirect(response) {
+    if ('redirect_url' in response) {
+        window.location.href = response['redirect_url'];
         // dummy to stop execution until redirect
         return new Promise(function (resolve) {
             setTimeout(() => {
@@ -51,7 +63,7 @@ function clientSideRedirect(jsonObj) {
             }, 10000)
         });
     }
-    return jsonObj;
+    return response;
 }
 
 function checkStatus(response) {
@@ -68,4 +80,4 @@ function parseJSON(response) {
     return response.json()
 }
 
-export {postSendToken, postLogin, getNewAddress}
+export {postSendToken, postLogin, getNewAddress, postTriggerTransactionExecution}
