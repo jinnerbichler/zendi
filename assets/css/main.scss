@@ -1,13 +1,17 @@
 $output-bourbon-deprecation-warnings: false; // disable warning till v.5.0 is released.
 @import '../../node_modules/bourbon/app/assets/stylesheets/bourbon';
 
+// import Font Awesome
+$fa-font-path: '../../node_modules/font-awesome/fonts';
+@import '../../node_modules/font-awesome/scss/font-awesome';
+
 //import Materialize
 @import '../../node_modules/materialize-css/sass/components/color';
-$roboto-font-path: "../../node_modules/materialize-css/dist/fonts/roboto/";
+$roboto-font-path: '../../node_modules/materialize-css/dist/fonts/roboto/';
 $input-border: 1px solid white;
 $input-focus-color: white;
 $primary-color: white;
-$secondary-color: color("purple", "darken-4");
+$secondary-color: color('purple', 'darken-4');
 @import '../../node_modules/materialize-css/sass/materialize';
 
 // import components of Nas theme
