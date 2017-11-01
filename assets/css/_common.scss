@@ -19,6 +19,14 @@
   label {
     padding-left: 7px;
   }
+
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+  }
 }
 
 .btn-flat:hover {
@@ -67,5 +75,17 @@
   height: 1px;
   .indeterminate {
     background-color: lightcoral;
+  }
+}
+
+footer {
+  color: black;
+
+  a {
+    color: black;
+  }
+
+  i {
+    font-size: 1em !important;
   }
 }
