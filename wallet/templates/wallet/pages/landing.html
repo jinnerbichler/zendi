@@ -11,7 +11,7 @@
 
         <form id="send-form" action="/send-tokens" novalidate autocomplete="off" method="post">
             <div class="row">
-                <div class="col s10 l10 offset-l1">
+                <div class="col s12 l12">
 
                     {% csrf_token %}
 
@@ -39,24 +39,22 @@
                     {% endif %}
 
                     <div class="row">
-                        <div class="col s12 l12">
+                        <div class="col s8 l8">
                             <div class="input-field">
                                 <label for="{{ form.receiver_mail.id_for_label }}">Send to email</label>
                                 {{ form.receiver_mail }}
                                 {{ form.receiver_mail.errors }}
                             </div>
                         </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col s12 l10">
+                        <div class="col s2 l2">
                             <div class="input-field">
                                 <label for="{{ form.amount.id_for_label }}">Amount</label>
                                 {{ form.amount }}
                                 {{ form.amount.errors }}
                             </div>
                         </div>
-                        <div class="col s12 l2">
+                        <div class="col s2 l2">
                             <div class="input-field">
                                 {{ form.unit }}
                             </div>

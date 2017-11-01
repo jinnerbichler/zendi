@@ -1,1 +1,8 @@
-{% load i18n %}{% trans "Login with this url " %}{{ url }}.
+{% load i18n %}
+Hi,
+
+please use the following url to log in to Zėndi:
+{{ url }}
+
+All the best,
+ your Zėndi team
