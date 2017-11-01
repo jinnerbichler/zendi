@@ -58,11 +58,7 @@
                 </div>
                 <div class="col s12 l1">
                     <div class="input-field">
-                        <select>
-                            {% for unit, _ in iota_units %}
-                                <option value="{{ unit }}">{{ unit }}</option>
-                            {% endfor %}
-                        </select>
+                        {{ form.unit }}
                     </div>
                 </div>
             </div>

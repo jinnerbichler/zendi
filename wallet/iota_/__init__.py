@@ -29,6 +29,10 @@ def string2trytes_bytes(string):
     return string.encode('utf-8')
 
 
+def normalize_value(value, unit):
+    return int(value * STANDARD_UNITS[unit])
+
+
 def convert_transaction(transaction, user_addresses):
     from wallet.models import IotaAddress
     address = trytes2string(transaction.address)

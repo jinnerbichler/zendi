@@ -1,5 +1,4 @@
 import logging
-import operator
 from urllib.parse import urlencode
 
 from django.contrib.auth import logout as auth_logout
@@ -10,13 +9,12 @@ from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_http_methods
-from iota import STANDARD_UNITS
 from nopassword.forms import AuthenticationForm
 from rest_framework.status import HTTP_401_UNAUTHORIZED
 
 from wallet import ClientRedirectResponse, client_redirect
 from wallet.forms import SendTokensForm
-from wallet.iota_ import InsufficientBalanceException, iota_utils
+from wallet.iota_ import InsufficientBalanceException, iota_utils, normalize_value
 from wallet.templatetags.wallet_extras import iota_display_format_filter
 from wallet.user_utils import send_login_mail
 
@@ -27,8 +25,7 @@ logger = logging.getLogger(__name__)
 def index(request):
     initial_values = {'sender_mail': request.user.email} if request.user.is_authenticated else {}
     form = SendTokensForm(initial=initial_values)
-    context = {'form': form, 'iota_units': sorted(STANDARD_UNITS.items(), key=operator.itemgetter(1))}
-    return render(request, 'wallet/pages/index.html', context=context)
+    return render(request, 'wallet/pages/index.html', {'form': form})
 
 
 @require_http_methods(["GET", "POST"])
@@ -54,10 +51,10 @@ def send_tokens_trigger(request):
 @csrf_exempt  # this calls are executed manually
 @login_required
 @require_http_methods(["GET", "POST"])
-def send_tokens_exec_ajax(request):
+def send_tokens_exec(request):
     if request.method == 'GET':
-        amount = int(request.GET['amount'])
-        context = {'amount_with_unit': iota_display_format_filter(amount), **request.GET}
+        value = normalize_value(value=int(request.GET['amount']), unit=request.GET['unit'])
+        context = {'amount_with_unit': iota_display_format_filter(value=value), **request.GET}
         return render(request, 'wallet/pages/send-tokens-exec.html', context)
 
     elif request.method == 'POST':
@@ -65,12 +62,14 @@ def send_tokens_exec_ajax(request):
         sender_mail = request.POST['sender_mail']
         receiver_mail = request.POST['receiver_mail']
         amount = int(request.POST['amount'])
+        unit = request.POST['unit']
         message = request.POST['message']  # optional
 
         # all computations should be performed before communicating with the Tangle.
 
         # create message for user
-        context = {'amount_with_unit': iota_display_format_filter(amount), 'receiver': receiver_mail}
+        value = normalize_value(value=amount, unit=unit)
+        context = {'amount_with_unit': iota_display_format_filter(value=value), 'receiver': receiver_mail}
         user_message = render_to_string('wallet/messages/tokens_sent.txt', context=context)
         response = client_redirect(view=dashboard, user_message=user_message, message_type='info')
 
@@ -80,7 +79,7 @@ def send_tokens_exec_ajax(request):
         try:
             # send tokens
             iota_utils.send_tokens(request=request, sender=sender_mail, receiver=receiver_mail,
-                                   value=amount, message=message)
+                                   value=value, message=message)
         except InsufficientBalanceException:
             user_message = render_to_string('wallet/messages/insufficient_balance.txt', context={})
             response = client_redirect(view=dashboard, user_message=user_message, message_type='error')
