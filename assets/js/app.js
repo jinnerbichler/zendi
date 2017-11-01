@@ -5,6 +5,10 @@ import {postSendToken, postLogin, getNewAddress, getDashboardTransactions, postT
 import 'materialize-css';
 import {showMessageBox, hideMessageBox} from "./common";
 
+$(document).ready(function () {
+    $('select').material_select();
+});
+
 $('#send-form').submit(function (event) {
     event.preventDefault();
 

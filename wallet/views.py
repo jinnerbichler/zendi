@@ -1,4 +1,5 @@
 import logging
+import operator
 from urllib.parse import urlencode
 
 from django.contrib.auth import logout as auth_logout
@@ -8,11 +9,12 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_GET, require_http_methods, require_POST
+from django.views.decorators.http import require_GET, require_http_methods
+from iota import STANDARD_UNITS
 from nopassword.forms import AuthenticationForm
 from rest_framework.status import HTTP_401_UNAUTHORIZED
 
-from wallet import server_redirect, ClientRedirectResponse, client_redirect
+from wallet import ClientRedirectResponse, client_redirect
 from wallet.forms import SendTokensForm
 from wallet.iota_ import InsufficientBalanceException, iota_utils
 from wallet.templatetags.wallet_extras import iota_display_format_filter
@@ -25,7 +27,8 @@ logger = logging.getLogger(__name__)
 def index(request):
     initial_values = {'sender_mail': request.user.email} if request.user.is_authenticated else {}
     form = SendTokensForm(initial=initial_values)
-    return render(request, 'wallet/pages/index.html', {'form': form})
+    context = {'form': form, 'iota_units': sorted(STANDARD_UNITS.items(), key=operator.itemgetter(1))}
+    return render(request, 'wallet/pages/index.html', context=context)
 
 
 @require_http_methods(["GET", "POST"])

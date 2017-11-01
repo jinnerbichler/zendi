@@ -5,7 +5,7 @@
 {% block content %}
 
     <!--suppress HtmlUnknownTarget, XmlInvalidId -->
-    <div id="landing-page" class="triangle-content" >
+    <div id="landing-page" class="triangle-content">
 
         <h1>Exchange money with joy.</h1>
 
@@ -16,18 +16,24 @@
             {{ form.non_field_errors }}
             <div class="row">
 
-                {# Show sender email depending on authentication state #}
                 {% if user.is_authenticated %}
+                    {# ################################################################# #}
+                    {# ###### Show sender email for authenticated users ###### #}
+                    {# ################################################################# #}
                     {{ form.sender_mail.as_hidden }}
-                    <div class="col s12 l10">
+                    <div class="col s12 l9">
                         <div class="input-field">
                             <label for="{{ form.receiver_mail.id_for_label }}">Send to Email</label>
                             {{ form.receiver_mail }}
                             {{ form.receiver_mail.errors }}
                         </div>
                     </div>
+
                 {% else %}
-                    <div class="col s12 l5">
+                    {# ################################################################# #}
+                    {# ###### Show sender email depending for public users ###### #}
+                    {# ################################################################# #}
+                    <div class="col s12 l4">
                         <div class="input-field">
                             <label for="{{ form.sender_mail.id_for_label }}">Send from Email</label>
                             {{ form.sender_mail }}
@@ -45,9 +51,18 @@
 
                 <div class="col s12 l2">
                     <div class="input-field">
-                        <label for="{{ form.amount.id_for_label }}">Mi</label>
+                        <label for="{{ form.amount.id_for_label }}">Amount</label>
                         {{ form.amount }}
                         {{ form.amount.errors }}
+                    </div>
+                </div>
+                <div class="col s12 l1">
+                    <div class="input-field">
+                        <select>
+                            {% for unit, _ in iota_units %}
+                                <option value="{{ unit }}">{{ unit }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
             </div>

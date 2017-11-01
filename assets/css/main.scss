@@ -2,9 +2,12 @@ $output-bourbon-deprecation-warnings: false; // disable warning till v.5.0 is re
 @import '../../node_modules/bourbon/app/assets/stylesheets/bourbon';
 
 //import Materialize
+@import '../../node_modules/materialize-css/sass/components/color';
 $roboto-font-path: "../../node_modules/materialize-css/dist/fonts/roboto/";
 $input-border: 1px solid white;
 $input-focus-color: white;
+$primary-color: white;
+$secondary-color: color("purple", "darken-4");
 @import '../../node_modules/materialize-css/sass/materialize';
 
 // import components of Nas theme
