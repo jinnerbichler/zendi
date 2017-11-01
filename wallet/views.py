@@ -51,7 +51,7 @@ def send_tokens_trigger(request):
 @csrf_exempt  # this calls are executed manually
 @login_required
 @require_http_methods(["GET", "POST"])
-def send_tokens_exec(request):
+def send_tokens_exec_ajax(request):
     if request.method == 'GET':
         amount = int(request.GET['amount'])
         context = {'amount_with_unit': iota_display_format_filter(amount), **request.GET}
@@ -120,7 +120,8 @@ def dashboard(request):
 @login_required
 @require_GET
 def dashboard_transactions_ajax(request):
-    balance, transactions = iota_utils.get_account_data(request.user)
+    # balance, transactions = iota_utils.get_account_data(request.user)
+    transactions = []
     return render(request, 'wallet/components/transaction_list.html', {'transactions': transactions[:3]})
 
 
