@@ -30,7 +30,7 @@
                         <div class="row">
                             <div class="col s12 l12">
                                 <div class="input-field">
-                                    <label for="{{ form.sender_mail.id_for_label }}">Enter your email</label>
+                                    <label for="{{ form.sender_mail.id_for_label }}">Your email</label>
                                     {{ form.sender_mail }}
                                     {{ form.sender_mail.errors }}
                                 </div>
@@ -62,15 +62,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col s12">
-                            <div class="input-field">
-                                <label for="{{ form.message.id_for_label }}">Message (optional)</label>
-                                {{ form.message }}
-                                {{ form.message.errors }}
-                            </div>
-                        </div>
-                    </div>
+                    {#  Message field is hidden for now, due to simplicity reasons #}
+                    {{ form.message.as_hidden }}
+                    {#                    <div class="row">#}
+                    {#                        <div class="col s12">#}
+                    {#                            <div class="input-field">#}
+                    {#                                <label for="{{ form.message.id_for_label }}">Message (optional)</label>#}
+                    {#                                {{ form.message }}#}
+                    {#                                {{ form.message.errors }}#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {#                    </div>#}
                     <div class="row">
                         <div class="col s12 center">
                             <button class="btn btn-large btn-flat waves-effect waves-dark white-text"
