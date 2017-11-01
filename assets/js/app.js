@@ -1,9 +1,14 @@
 import $ from 'jquery';
-import '../img/iota-logo.png';
+import '../img/iota-logo-black.png';
+import '../img/iota-logo-white.png';
 import '../css/main.scss';
 import {postSendToken, postLogin, getNewAddress, getDashboardTransactions, postTriggerTransactionExecution} from './api';
 import 'materialize-css';
 import {showMessageBox, hideMessageBox} from "./common";
+
+$(document).ready(function () {
+    $('select').material_select();
+});
 
 $('#send-form').submit(function (event) {
     event.preventDefault();

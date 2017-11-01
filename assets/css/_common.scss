@@ -4,6 +4,23 @@
   }
 }
 
+.input-field {
+  color: $primary-color;
+
+  .select-wrapper span.caret {
+    color: white;
+  }
+
+  input {
+    padding: 0 0 7px 10px !important;
+    font-weight: 300;
+  }
+
+  label {
+    padding-left: 7px;
+  }
+}
+
 .btn-flat:hover {
   background-color: rgba(0, 0, 0, 0.1);
   box-shadow: none;
@@ -13,6 +30,10 @@
   .appendix {
     text-transform: none;
     font-weight: 100;
+  }
+  img {
+    height: 25px;
+    width: auto;
   }
 }
 
