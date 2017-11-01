@@ -6,6 +6,19 @@
 
 .input-field {
   color: $primary-color;
+
+  .select-wrapper span.caret {
+    color: white;
+  }
+
+  input {
+    padding: 0 0 7px 10px !important;
+    font-weight: 300;
+  }
+
+  label {
+    padding-left: 7px;
+  }
 }
 
 .btn-flat:hover {

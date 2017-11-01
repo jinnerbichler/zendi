@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 def index(request):
     initial_values = {'sender_mail': request.user.email} if request.user.is_authenticated else {}
     form = SendTokensForm(initial=initial_values)
-    return render(request, 'wallet/pages/index.html', {'form': form})
+    return render(request, 'wallet/pages/landing.html', {'form': form})
 
 
 @require_http_methods(["GET", "POST"])
