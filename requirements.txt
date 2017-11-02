@@ -4,3 +4,5 @@ psycopg2
 pyota==2.0.1
 django-extensions==1.9.6
 django-nopassword==3.0.2
+
+Fabric3

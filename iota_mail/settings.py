@@ -140,7 +140,7 @@ LOGGING = {
 }
 
 # Nopassword settings
-NOPASSWORD_LOGIN_CODE_TIMEOUT = 60*24*14  # in seconds
+NOPASSWORD_LOGIN_CODE_TIMEOUT = 60 * 24 * 14  # in seconds
 
 # User handling
 LOGIN_URL = '/login/'
@@ -152,3 +152,9 @@ EMAIL_PORT = '1025'
 
 # IOTA settings
 IOTA_NODE_URL = 'http://138.68.102.72:80/api/v1/commands'
+IOTA_ROUTES = {
+    'attachToTangle': 'http://localhost:8080/api/v1/commands'
+}
+IOTA_SANDBOCK_AUTH_TOKEN = '03f7571a-bb6c-4a5d-86eb-0fd73f02da78'
+IOTA_SANDBOX_URI = 'https://sandbox.iota.org/api/v1/'
+IOTA_DEFAULT_DEPTH = 3

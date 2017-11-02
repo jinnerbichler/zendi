@@ -7,16 +7,15 @@ from iota.crypto.types import Seed
 
 from wallet.iota_ import string2trytes_bytes, trytes2string
 
-AUTH_TOKEN = '03f7571a-bb6c-4a5d-86eb-0fd73f02da78'
-SANDBOX_URI = 'https://sandbox.iota.org/api/v1/'
-DEFAULT_DEPTH = 3
-
 logger = logging.getLogger(__name__)
 
 # create default adapter
 DEFAULT_ADAPTER = RoutingWrapper(settings.IOTA_NODE_URL)
-DEFAULT_ADAPTER.set_logger(logger)
-for a in DEFAULT_ADAPTER.routes.values():
+for command, url in settings.IOTA_ROUTES.items():
+    DEFAULT_ADAPTER.add_route(command=command, adapter=url)
+
+# set proper loggers
+for a in list(DEFAULT_ADAPTER.routes.values()) + [DEFAULT_ADAPTER]:
     a.set_logger(logger)
 
 
@@ -77,7 +76,7 @@ class IotaApi:
         transaction = ProposedTransaction(address=receiver_address, value=value, tag=tag, message=message)
 
         # trigger transfer
-        bundle = self.api.send_transfer(depth=DEFAULT_DEPTH,
+        bundle = self.api.send_transfer(depth=settings.IOTA_DEFAULT_DEPTH,
                                         transfers=[transaction],
                                         change_address=change_address)
         return bundle['bundle']

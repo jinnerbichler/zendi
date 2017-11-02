@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  iri:
+    image: iotaledger/iri:v1.4.1
+    ports:
+      - 8080:14265
+    volumes:
+      - ./iota.ini:/iri/iota.ini
+      - ./logback.xml:/iri/conf/logback.xml
+    entrypoint:
+      - "/usr/bin/java"
+      - "-XX:+DisableAttachMechanism"
+#      - "-Xmx8g"
+#      - "-Xms256m"
+      - "-Dlogback.configurationFile=/iri/conf/logback.xml"
+      - "-Djava.net.preferIPv4Stack=true"
+      - "-jar"
+      - "iri.jar"
+      - "--remote"
