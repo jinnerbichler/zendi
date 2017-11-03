@@ -76,28 +76,10 @@ class IotaApi:
         transaction = ProposedTransaction(address=receiver_address, value=value, tag=tag, message=message)
 
         # trigger transfer
+        logger.info('## STARTING PoW')
         bundle = self.api.send_transfer(depth=settings.IOTA_DEFAULT_DEPTH,
                                         transfers=[transaction],
                                         change_address=change_address)
-        return bundle['bundle']
+        logger.info('## FINISHED PoW')
 
-# if __name__ == '__main__':
-#     iota_api = IotaApi(seed=SEED)
-#
-#     print(iota_api.api.get_node_info())
-#
-#     inputs = iota_api.api.get_inputs()
-#
-#     print(inputs)
-#
-#     send_to = Address(
-#         b'FWAWQKLNAVEPOCDNKJUERBD9YKNWLZWQLVDOI99MDGCJOLYBFMSLVAUGFQVECFIULMFGCRURRMEWVFQDWKZAXZELOW')
-#     # transaction = ProposedTransaction(address=send_to,
-#     #                                   value=10,
-#     #                                   tag=Tag(b'ADAPT'),
-#     #                                   message=TryteString.from_string('Hello!'))
-#     # bundle = iota_api.api.send_transfer(depth=100, transfers=[transaction], inputs=inputs['inputs'])
-#     # print(bundle)
-#     print(iota_api.api.get_inputs())
-#
-#     print(iota_api.api.get_balances([send_to]))
+        return bundle['bundle']

@@ -151,9 +151,11 @@ EMAIL_HOST = 'localhost'
 EMAIL_PORT = '1025'
 
 # IOTA settings
-IOTA_NODE_URL = 'http://138.68.102.72:80/api/v1/commands'
+IOTA_NODE_URL = 'https://node.tangle.works:443/api/v1/commands'
+# IOTA_NODE_URL = 'http://iota.bitfinex.com:80/api/v1/commands'
+# IOTA_NODE_URL = 'http://138.68.102.72:80/api/v1/commands'
 IOTA_ROUTES = {
-    'attachToTangle': 'http://localhost:8080/api/v1/commands'
+    'attachToTangle': 'http://138.68.102.72:8080/api/v1/commands/'
 }
 IOTA_SANDBOCK_AUTH_TOKEN = '03f7571a-bb6c-4a5d-86eb-0fd73f02da78'
 IOTA_SANDBOX_URI = 'https://sandbox.iota.org/api/v1/'

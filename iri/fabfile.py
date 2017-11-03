@@ -8,6 +8,7 @@ env.hosts = ['iota_mail_1']
 def deploy():
     with cd('/srv/iri'):
         put('.', '.')
+        run('docker-compose pull')
         run('docker-compose up -d --force-recreate')
 
 

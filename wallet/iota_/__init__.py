@@ -53,7 +53,7 @@ def convert_transaction(transaction, user_addresses):
                        in_going=address in user_addresses)
 
 
-def convert_bundles(bundles, user_addresses):
+def convert_bundles(bundles, user_addresses, include_zero=True):
     transactions = []
     for bundle in bundles:
         # on transfer results in four transactions within a bundle (https://iota.readme.io/docs/bundles)
@@ -66,7 +66,8 @@ def convert_bundles(bundles, user_addresses):
                              for t in bundle.transactions]
 
     # filter ones with zero values
-    transactions = list(filter(lambda t: t.value != 0, transactions))
+    if not include_zero:
+        transactions = list(filter(lambda t: t.value != 0, transactions))
 
     # sort by date (recent transactions first)
     return sorted(transactions, key=lambda t: t.time, reverse=True)
