@@ -1,23 +1,32 @@
 version: '2'
-
 services:
 
-  db:
-    image: postgres:9.6.3
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=sendiDB
+#  nginx:
+#    image: nginx:1.13.6
+#    ports:
+#      - "8000:8000"
+#    volumes:
+#      - ./src:/src
+#      - ./config/nginx:/etc/nginx/conf.d
+#    depends_on:
+#      - web
 
   web:
     build: .
-    entrypoint: /bin/bash ./entrypoint.sh
+    entrypoint: bash -c "python manage.py migrate && gunicorn iota_mail.wsgi -b 0.0.0.0:8000"
     ports:
       - "8000:8000"
     environment:
-      - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    restart: on-failure
-    links:
-      - db:db
+      - DJANGO_SETTINGS_MODULE=iota_mail.settings-prod
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=changeme
+      - POSTGRES_DB_NAME=iota_mail_db
+    depends_on:
+      - db
+
+  db:
+    image: postgres:10.0
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=changeme
+      - POSTGRES_DB=iota_mail_db

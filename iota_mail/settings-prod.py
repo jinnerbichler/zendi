@@ -7,7 +7,7 @@ DEBUG = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB_NAME', 'sendiDB'),
+        'NAME': os.getenv('POSTGRES_DB_NAME', 'iota_mail_db'),
         'USER': os.getenv('POSTGRES_USER', 'root'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'changeme'),
         'HOST': os.getenv('POSTGRES_HOST', 'db'),
