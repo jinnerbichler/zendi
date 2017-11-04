@@ -5,7 +5,7 @@ services:
     image: nginx:1.13.6
     container_name: ningx
     ports:
-      - "8001:8001"
+      - "80:80"
     volumes:
       - ./infrastructure/nginx:/etc/nginx/conf.d:ro
       - static-files:/static

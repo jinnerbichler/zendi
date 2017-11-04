@@ -7,6 +7,7 @@ env.hosts = ['iota_mail_1']
 @task(default=True)
 def deploy():
     # build docker image
+    local('npm install')
     local('npm run build')
     local('docker build -t jinnerbichler/zendi .')
     local('docker push jinnerbichler/zendi')
