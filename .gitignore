@@ -181,3 +181,5 @@ db.sqlite3
 node_modules
 wallet/static/*
 static_root/
+config/
+infrastructure/jenkins/jenkins_home/

@@ -9,7 +9,7 @@ def deploy():
     with cd('/srv/iri'):
         put('.', '.')
         run('docker-compose pull')
-        run('docker-compose up -d --project-name=iri --force-recreate')
+        run('docker-compose --project-name iri up -d --force-recreate')
 
 
 @task

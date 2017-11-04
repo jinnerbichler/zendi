@@ -3,7 +3,7 @@ services:
 
   nginx:
     image: nginx:1.13.6
-    container_name: iota_mail_nginx
+    container_name: ningx
     ports:
       - "8001:8001"
     volumes:
@@ -11,6 +11,8 @@ services:
       - static-files:/static
     depends_on:
       - iota_mail_web
+    networks:
+      - nginx-backend
 
   iota_mail_web:
     build: .
@@ -26,6 +28,9 @@ services:
       - static-files:/static
     depends_on:
       - db
+    networks:
+      - db-backend
+      - nginx-backend
 
   db:
     image: postgres:10.0
@@ -34,6 +39,14 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=changeme
       - POSTGRES_DB=iota_mail_db
+    networks:
+      - db-backend
 
 volumes:
      static-files:
+
+networks:
+  db-backend:
+  nginx-backend:
+    external:
+      name: nginx-backend

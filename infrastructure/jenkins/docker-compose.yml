@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+  jenkins_master:
+    build: .
+    volumes:
+      - ./jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+#    environment:
+#      - JENKINS_OPTS="--prefix=/jenkins/"
+    ports:
+      - "8002:8080"
+      - "50000:50000"
+    networks:
+      - nginx-backend
+
+networks:
+  nginx-backend:
+    external:
+      name: nginx-backend
