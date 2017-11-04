@@ -15,7 +15,8 @@ services:
       - nginx-backend
 
   iota_mail_web:
-    build: .
+    image: jinnerbichler/zendi
+#    build: .
     container_name: iota_mail_web
     entrypoint: bash -c "python manage.py migrate && gunicorn iota_mail.wsgi -b 0.0.0.0:8000"
     ports:

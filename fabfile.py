@@ -6,6 +6,10 @@ env.hosts = ['iota_mail_1']
 
 @task(default=True)
 def deploy():
+
+    local('docker build -t jinnerbichler/zendi .')
+    local('docker push jinnerbichler/zendi')
+
     run('mkdir -p /srv/iota_mail/')
     with cd('/srv/iota_mail'):
         run('git pull origin master')
