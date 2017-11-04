@@ -6,7 +6,8 @@ env.hosts = ['iota_mail_1']
 
 @task(default=True)
 def deploy():
-
+    # build docker image
+    local('npm run build')
     local('docker build -t jinnerbichler/zendi .')
     local('docker push jinnerbichler/zendi')
 
@@ -19,7 +20,8 @@ def deploy():
 @task
 def logs():
     with cd('/srv/iota_mail'):
-        run('docker-compose logs -f')
+        run('docker-compose --project-name iota_mail logs -f')
+
 
 @task
 def run_local():
