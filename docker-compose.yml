@@ -1,32 +1,39 @@
 version: '2'
 services:
 
-#  nginx:
-#    image: nginx:1.13.6
-#    ports:
-#      - "8000:8000"
-#    volumes:
-#      - ./src:/src
-#      - ./config/nginx:/etc/nginx/conf.d
-#    depends_on:
-#      - web
+  nginx:
+    image: nginx:1.13.6
+    container_name: iota_mail_nginx
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./infrastructure/nginx:/etc/nginx/conf.d:ro
+      - static-files:/static
+    depends_on:
+      - iota_mail_web
 
-  web:
+  iota_mail_web:
     build: .
+    container_name: iota_mail_web
     entrypoint: bash -c "python manage.py migrate && gunicorn iota_mail.wsgi -b 0.0.0.0:8000"
     ports:
       - "8000:8000"
     environment:
-      - DJANGO_SETTINGS_MODULE=iota_mail.settings-prod
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=changeme
       - POSTGRES_DB_NAME=iota_mail_db
+    volumes:
+      - static-files:/static
     depends_on:
       - db
 
   db:
     image: postgres:10.0
+    container_name: iota_mail_db
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=changeme
       - POSTGRES_DB=iota_mail_db
+
+volumes:
+     static-files:

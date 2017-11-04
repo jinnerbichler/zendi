@@ -17,6 +17,8 @@ DATABASES = {
 
 ALLOWED_HOSTS = ['*']
 
+STATIC_ROOT = os.getenv('STATIC_ROOT', '/static')
+
 # Googles SMTP server
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587

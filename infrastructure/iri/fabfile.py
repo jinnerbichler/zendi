@@ -1,4 +1,4 @@
-from fabric.api import local, run, env, task, hide, put, cd
+from fabric.api import run, env, task, put, cd, local
 
 env.use_ssh_config = True
 env.hosts = ['iota_mail_1']
@@ -9,10 +9,15 @@ def deploy():
     with cd('/srv/iri'):
         put('.', '.')
         run('docker-compose pull')
-        run('docker-compose up -d --force-recreate')
+        run('docker-compose up -d --project-name=iri --force-recreate')
 
 
 @task
 def logs():
     with cd('/srv/iri'):
         run('docker-compose logs -f')
+
+
+@task
+def run_local():
+    local('docker-compose --project-name iri up -d --force-recreate')

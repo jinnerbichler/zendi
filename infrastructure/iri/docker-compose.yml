@@ -3,6 +3,7 @@ version: '3'
 services:
   iri:
     image: iotaledger/iri:v1.4.1
+    container_name: iota_mail_iri_node
     ports:
       - 8080:14265
     volumes:
