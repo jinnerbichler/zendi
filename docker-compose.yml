@@ -23,11 +23,11 @@ services:
       - "8000:8000"
     environment:
       - DJANGO_SETTINGS_MODULE=iota_mail.settings-prod
+      - STATIC_ROOT=/static
+      - EMAIL_HOST_PASSWORD=''
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=changeme
       - POSTGRES_DB_NAME=iota_mail_db
-      - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
-      - STATIC_ROOT=/static
 
     volumes:
       - static-files:/static
