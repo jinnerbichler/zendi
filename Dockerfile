@@ -6,7 +6,4 @@ ENV PYTHONPATH .
 ENV DJANGO_SETTINGS_MODULE iota_mail.settings-prod
 ENV STATIC_ROOT /static
 
-# collect static failed (e.g. can be be used by nginx)
-RUN python manage.py collectstatic --noinput
-
 ENTRYPOINT ["python", "manage.py"]

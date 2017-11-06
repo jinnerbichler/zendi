@@ -18,7 +18,7 @@ services:
     image: jinnerbichler/zendi
 #    build: .
     container_name: iota_mail_web
-    entrypoint: bash -c "python manage.py migrate && gunicorn iota_mail.wsgi -b 0.0.0.0:8000"
+    entrypoint: bash -c "python manage.py collectstatic --noinput && python manage.py migrate && gunicorn iota_mail.wsgi -b 0.0.0.0:8000"
     ports:
       - "8000:8000"
     environment:
