@@ -17,9 +17,11 @@ def deploy():
     run('mkdir -p /srv/iota_mail/')
     with cd('/srv/iota_mail'):
         run('git pull origin master')
-        with shell_env(XXX=os.getenv('EMAIL_HOST_PASSWORD')):
-            run('echo "EMAIL_HOST_PASSWORD=$XXX" >> .env')
-            run('docker-compose --project-name iota_mail up -d --force-recreate --no-deps iota_mail_web')
+
+        run('echo "EMAIL_HOST_PASSWORD={}" > .env'.format(os.getenv('EMAIL_HOST_PASSWORD')))
+        run('cat .env')
+        # run('docker-compose --project-name iota_mail up -d --force-recreate --no-deps iota_mail_web')
+        run('docker-compose --project-name iota_mail config')
 
 
 
