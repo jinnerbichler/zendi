@@ -16,7 +16,7 @@ from wallet import ClientRedirectResponse, client_redirect
 from wallet.forms import SendTokensForm
 from wallet.iota_ import InsufficientBalanceException, iota_utils, normalize_value
 from wallet.templatetags.wallet_extras import iota_display_format_filter
-from wallet.user_utils import send_login_mail
+from wallet.user_utils import send_login_mail, get_user_safe
 
 logger = logging.getLogger(__name__)
 
@@ -129,13 +129,17 @@ def dashboard_transactions_ajax(request):
 
 def login(request):
     if request.method == 'POST':
+        # create new user if necessary #ToDo adapt invitation mail)
         form = AuthenticationForm(data=request.POST)
+        _ = get_user_safe(email=request.POST['username'])
         if form.is_valid():
             next_url = request.GET.get('next', default='/dashboard')
             user_message = send_login_mail(request=request, next_url=next_url, email=request.POST['username'])
             return JsonResponse(data={'message': user_message})
         else:
             return JsonResponse(data={'error': True, 'message': 'Invalid form data'})
+
+
 
     login_view = LoginView.as_view(authentication_form=AuthenticationForm,
                                    template_name='wallet/pages/login.html')

@@ -1,9 +1,6 @@
 FROM python:3.6-onbuild
 MAINTAINER Johannes Innerbichler <j.innerbichler@gmail.com>
 
-# update dependencies
-RUN apt-get update && apt-get install -y gcc
-
 # setup proper configuration
 ENV PYTHONPATH .
 ENV DJANGO_SETTINGS_MODULE iota_mail.settings-prod

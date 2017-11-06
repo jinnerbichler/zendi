@@ -1,4 +1,6 @@
+import os
 from fabric.api import run, env, task, put, cd, local
+from fabric.context_managers import shell_env
 
 env.use_ssh_config = True
 env.hosts = ['iota_mail_1']
@@ -15,7 +17,8 @@ def deploy():
     run('mkdir -p /srv/iota_mail/')
     with cd('/srv/iota_mail'):
         run('git pull origin master')
-        run('docker-compose --project-name iota_mail up -d --force-recreate')
+        with shell_env(EMAIL_HOST_PASSWORD=os.getenv('EMAIL_HOST_PASSWORD')):
+            run('docker-compose --project-name iota_mail up -d --force-recreate --no-deps iota_mail_web')
 
 
 @task

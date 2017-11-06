@@ -179,7 +179,7 @@ ENV/
 
 db.sqlite3
 node_modules
-wallet/static/*
+.secrets.sh
 static_root/
-config/
 infrastructure/jenkins/jenkins_home/
+wallet/static/
