@@ -17,8 +17,6 @@ DATABASES = {
 
 ALLOWED_HOSTS = ['*']
 
-STATIC_ROOT = os.getenv('STATIC_ROOT', '/static')
-
 # Googles SMTP server
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -27,3 +25,6 @@ EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'noreploy@zendi.com'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+if not EMAIL_HOST_PASSWORD:
+    raise Exception('Invalid config')

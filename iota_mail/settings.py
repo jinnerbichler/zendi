@@ -101,6 +101,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.getenv('STATIC_ROOT', './static_root/')
 
 LOGGING = {
     'version': 1,
@@ -160,5 +161,3 @@ IOTA_ROUTES = {
 IOTA_SANDBOCK_AUTH_TOKEN = '03f7571a-bb6c-4a5d-86eb-0fd73f02da78'
 IOTA_SANDBOX_URI = 'https://sandbox.iota.org/api/v1/'
 IOTA_DEFAULT_DEPTH = 3
-
-STATIC_ROOT = './static_root'
