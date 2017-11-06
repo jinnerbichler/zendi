@@ -2,12 +2,12 @@ version: '3'
 services:
 
   nginx:
-    image: nginx:1.13.6
+    build: ./infrastructure/nginx/
     container_name: ningx
     ports:
       - "80:80"
     volumes:
-      - ./infrastructure/nginx:/etc/nginx/conf.d:ro
+#      - ./infrastructure/nginx/:/etc/nginx/conf.d/:ro
       - static-files:/static
     depends_on:
       - iota_mail_web
@@ -15,8 +15,8 @@ services:
       - nginx-backend
 
   iota_mail_web:
-    image: jinnerbichler/zendi
-#    build: .
+#    image: jinnerbichler/zendi
+    build: .
     container_name: iota_mail_web
     entrypoint: bash -c "python manage.py collectstatic --noinput && python manage.py migrate && gunicorn iota_mail.wsgi -b 0.0.0.0:8000"
     ports:
@@ -24,7 +24,7 @@ services:
     environment:
       - DJANGO_SETTINGS_MODULE=iota_mail.settings-prod
       - STATIC_ROOT=/static
-      - EMAIL_HOST_PASSWORD=
+      - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=changeme
       - POSTGRES_DB_NAME=iota_mail_db
