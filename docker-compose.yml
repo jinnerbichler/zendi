@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
 
   nginx:
@@ -25,7 +25,7 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=changeme
       - POSTGRES_DB_NAME=iota_mail_db
-      - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
+      - EMAIL_HOST_PASSWORD=${XXX}
     volumes:
       - static-files:/static
     depends_on:
