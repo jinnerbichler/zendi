@@ -6,10 +6,12 @@ def deploy():
     # build docker image
     local('npm install')
     local('npm run build')
-    # local('docker build -t jinnerbichler/zendi .')
-    # local('docker push jinnerbichler/zendi')
 
     local('docker-compose --project-name iota_mail up -d --build --force-recreate --no-deps iota_mail_web')
+
+
+def update_nginx():
+    local('docker-compose --project-name iota_mail up -d --build --force-recreate --no-deps nginx')
 
 
 @task

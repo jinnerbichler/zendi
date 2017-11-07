@@ -7,7 +7,6 @@ services:
     ports:
       - "80:80"
     volumes:
-#      - ./infrastructure/nginx/:/etc/nginx/conf.d/:ro
       - static-files:/static
     depends_on:
       - iota_mail_web
@@ -15,7 +14,6 @@ services:
       - nginx-backend
 
   iota_mail_web:
-#    image: jinnerbichler/zendi
     build: .
     container_name: iota_mail_web
     entrypoint: bash -c "python manage.py collectstatic --noinput && python manage.py migrate && gunicorn iota_mail.wsgi -b 0.0.0.0:8000"

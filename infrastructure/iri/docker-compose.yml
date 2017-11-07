@@ -19,3 +19,9 @@ services:
       - "-jar"
       - "iri.jar"
       - "--remote"
+    networks:
+      - nginx-backend
+networks:
+  nginx-backend:
+    external:
+      name: nginx-backend

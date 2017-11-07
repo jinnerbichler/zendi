@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'jk%)*05yip=9su+l=7mh6h_@-kyq9==bm6gfpw^#0%wyz!)@(q'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'jk%)*05yip=9su+l=7mh6h_@-kyq9==bm6gfpw^#0%wyz!)@(q')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -156,7 +156,7 @@ IOTA_NODE_URL = 'https://node.tangle.works:443/api/v1/commands'
 # IOTA_NODE_URL = 'http://iota.bitfinex.com:80/api/v1/commands'
 # IOTA_NODE_URL = 'http://138.68.102.72:80/api/v1/commands'
 IOTA_ROUTES = {
-    'attachToTangle': 'http://138.197.13.214:8080/api/v1/commands/'
+    'attachToTangle': 'http://zendi.duckdns.org/iri/api/v1/commands/'
 }
 IOTA_SANDBOCK_AUTH_TOKEN = '03f7571a-bb6c-4a5d-86eb-0fd73f02da78'
 IOTA_SANDBOX_URI = 'https://sandbox.iota.org/api/v1/'
