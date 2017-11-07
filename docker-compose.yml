@@ -3,7 +3,7 @@ services:
 
   nginx:
     build: ./infrastructure/nginx/
-    container_name: ningx
+    container_name: nginx
     ports:
       - "80:80"
     volumes:
