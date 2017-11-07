@@ -22,7 +22,7 @@ class EmailBackend(NoPasswordBackend):
         from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'root@example.com')
 
         context = {'url': login_url(code=code, secure=secure, host=host), 'code': code}
-        text_content = render_to_string('wallet/email/login_email.txt', context)
+        text_content = render_to_string('wallet/emails/login_email.txt', context)
         # html_content = render_to_string('wallet/email/login_email.html', context)
 
         msg = EmailMultiAlternatives('Zėndi Login', text_content, from_email, to_email)

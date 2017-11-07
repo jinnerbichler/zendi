@@ -81,7 +81,7 @@ def send_token_received_email(request, sender, receiver, amount, is_new, message
                'is_new': is_new,
                'amount': iota_display_format_filter(amount),
                'message': message}
-    text_content = render_to_string('wallet/email/tokens_received.txt', context)
+    text_content = render_to_string('wallet/emails/tokens_received.txt', context)
     # html_content = render_to_string('wallet/email/login_email.html', context)
 
     # send mail
