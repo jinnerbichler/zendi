@@ -33,11 +33,25 @@ $board-bg-color: white;
         font-size: 27px;
       }
 
+      .card-content {
+        padding: 18px;
+      }
+
+      .progress {
+        margin: 0;
+        background-color: transparent;
+
+        .indeterminate {
+          background-color: gray;
+        }
+      }
+
       p {
         font-size: 30px;
       }
 
       .user-mail {
+        margin-top: 3px;
         font-size: 10px;
       }
     }

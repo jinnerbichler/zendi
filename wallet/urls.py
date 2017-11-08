@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^deposit', views.deposit, name='deposit'),
     url(r'^dashboard_transactions_ajax', views.dashboard_transactions_ajax, name='dashboard_transactions'),
     url(r'^dashboard', views.dashboard, name='dashboard'),
+    url(r'^balance', views.balance, name='balance'),
     url(r'^logout', views.logout, name='logout'),
     url(r'^login', views.login, name='login'),
     url(r'^new_address', views.new_address, name='new_address')

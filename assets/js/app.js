@@ -2,7 +2,14 @@ import $ from 'jquery';
 import '../img/iota-logo-black.png';
 import '../img/iota-logo-white.png';
 import '../css/main.scss';
-import {postSendToken, postLogin, getNewAddress, getDashboardTransactions, postTriggerTransactionExecution} from './api';
+import {
+    postSendToken,
+    postLogin,
+    getNewAddress,
+    getDashboardTransactions,
+    postTriggerTransactionExecution,
+    getBalance
+} from './api';
 import 'materialize-css';
 import {showMessageBox, hideMessageBox} from "./common";
 
@@ -59,7 +66,7 @@ function triggerTransactionExecution() {
     const url = new URL(window.location);
     const params = new URLSearchParams(url.search);
     postTriggerTransactionExecution(params).then((response) => {
-       console.log('Successfully executed transaction: ' + JSON.stringify(response))
+        console.log('Successfully executed transaction: ' + JSON.stringify(response))
     });
 }
 
@@ -72,7 +79,17 @@ function fetchDashboardTransactions(callback) {
         .catch((error) => {
             // ToDO: Handle this case
         });
+}
 
+function fetchBalance(callback) {
+    console.log('Fetching users balance...');
+    getBalance()
+        .then((transactionsHtml) => {
+            callback(transactionsHtml);
+        })
+        .catch((error) => {
+            // ToDO: Handle this case
+        });
 }
 
 function initCollapsible() {
@@ -85,6 +102,7 @@ bundle.showMessageBox = showMessageBox;
 bundle.fetchNewAddress = fetchNewAddress;
 bundle.triggerTransactionExecution = triggerTransactionExecution;
 bundle.fetchDashboardTransactions = fetchDashboardTransactions;
+bundle.fetchBalance = fetchBalance;
 bundle.initCollapsible = initCollapsible;
 window.bundle = bundle;
 

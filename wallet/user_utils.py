@@ -24,6 +24,7 @@ def get_user_safe(email):
         pass
 
     user = User.objects.create_user(username=email, email=email, password='')
+    # ToDo Maybe send invitation mail
     return True, user
 
 
