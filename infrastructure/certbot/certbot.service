@@ -1,0 +1,7 @@
+[Unit]
+Description=Renew Let's Encrypt certificates
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/certbot renew --agree-tos

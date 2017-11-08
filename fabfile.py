@@ -8,10 +8,13 @@ def deploy():
     local('npm run build')
 
     local('docker-compose --project-name iota_mail up -d --build --force-recreate --no-deps iota_mail_web')
+    local('docker-compose --project-name iota_mail logs -f iota_mail_web')
 
 
+@task
 def update_nginx():
     local('docker-compose --project-name iota_mail up -d --build --force-recreate --no-deps nginx')
+    local('docker-compose --project-name iota_mail logs -f nginx')
 
 
 @task

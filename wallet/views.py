@@ -109,8 +109,8 @@ def new_address(request):
 @login_required
 @require_GET
 def dashboard(request):
-    # balance = iota_utils.get_balance(request.user)
-    balance = 40345
+    balance = iota_utils.get_balance(request.user)
+    # balance = 40345
     user_message = request.GET.get('user_message', default=None)
     message_type = request.GET.get('message_type', default=None)  # either 'info' or 'error'
     return render(request, 'wallet/pages/dashboard.html', {'logo_appendix': 'Dashboard',
@@ -124,7 +124,7 @@ def dashboard(request):
 def dashboard_transactions_ajax(request):
     balance, transactions = iota_utils.get_account_data(request.user)
     # transactions = []
-    return render(request, 'wallet/components/transaction_list.html', {'transactions': transactions[:3]})
+    return render(request, 'wallet/components/transaction_list.html', {'transactions': transactions[:6]})
 
 
 def login(request):
@@ -138,8 +138,6 @@ def login(request):
             return JsonResponse(data={'message': user_message})
         else:
             return JsonResponse(data={'error': True, 'message': 'Invalid form data'})
-
-
 
     login_view = LoginView.as_view(authentication_form=AuthenticationForm,
                                    template_name='wallet/pages/login.html')

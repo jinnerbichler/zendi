@@ -3,11 +3,13 @@ services:
 
   nginx:
     build: ./infrastructure/nginx/
-    container_name: ningx
+    container_name: nginx
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - static-files:/static
+      - /etc/letsencrypt/:/etc/letsencrypt/
     depends_on:
       - iota_mail_web
     networks:
@@ -16,7 +18,7 @@ services:
   iota_mail_web:
     build: .
     container_name: iota_mail_web
-    entrypoint: bash -c "python manage.py collectstatic --noinput && python manage.py migrate && gunicorn iota_mail.wsgi -b 0.0.0.0:8000"
+    entrypoint: bash -c "python manage.py collectstatic --noinput && python manage.py migrate && gunicorn iota_mail.wsgi -b 0.0.0.0:8000 --timeout 900 --graceful-timeout 900 --log-level info"
     ports:
       - "8000:8000"
     environment:
@@ -26,7 +28,6 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=changeme
       - POSTGRES_DB_NAME=iota_mail_db
-
     volumes:
       - static-files:/static
     depends_on:
