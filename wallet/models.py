@@ -23,6 +23,11 @@ class IotaAddress(models.Model):
         unique_together = (('user', 'address'))
 
 
+class IotaBalance(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    balance = models.PositiveIntegerField(default=0)
+
+
 class IotaExecutedTransaction(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_transactions')
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_transactions')
@@ -46,7 +51,8 @@ class IotaExecutedTransaction(models.Model):
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     """
-    Created seed for user.
+    Created init fields for user.
     """
     if created:
         IotaSeed.objects.create(user=instance, seed=new_seed())
+        IotaBalance.objects.create(user=instance, balance=0)

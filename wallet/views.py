@@ -15,6 +15,7 @@ from rest_framework.status import HTTP_401_UNAUTHORIZED
 from wallet import ClientRedirectResponse, client_redirect
 from wallet.forms import SendTokensForm
 from wallet.iota_ import InsufficientBalanceException, iota_utils, normalize_value
+from wallet.models import IotaBalance
 from wallet.templatetags.wallet_extras import iota_display_format_filter
 from wallet.user_utils import send_login_mail, get_user_safe
 
@@ -109,14 +110,20 @@ def new_address(request):
 @login_required
 @require_GET
 def dashboard(request):
-    balance = iota_utils.get_balance(request.user)
-    # balance = 40345
+    balance = IotaBalance.objects.get_or_create(user=request.user)[0].balance
     user_message = request.GET.get('user_message', default=None)
     message_type = request.GET.get('message_type', default=None)  # either 'info' or 'error'
     return render(request, 'wallet/pages/dashboard.html', {'logo_appendix': 'Dashboard',
                                                            'balance': balance,
                                                            'message': user_message,
                                                            'message_type': message_type})
+
+
+@login_required
+@require_GET
+def balance(request):
+    balance = iota_utils.get_balance(request.user)
+    return JsonResponse(data={'balance': balance, 'formatted': iota_display_format_filter(balance)})
 
 
 @login_required
@@ -129,9 +136,11 @@ def dashboard_transactions_ajax(request):
 
 def login(request):
     if request.method == 'POST':
-        # create new user if necessary #ToDo adapt invitation mail)
+
+        # create new user if necessary
+        get_user_safe(email=request.POST['username'])
+
         form = AuthenticationForm(data=request.POST)
-        _ = get_user_safe(email=request.POST['username'])
         if form.is_valid():
             next_url = request.GET.get('next', default='/dashboard')
             user_message = send_login_mail(request=request, next_url=next_url, email=request.POST['username'])

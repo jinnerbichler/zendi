@@ -55,6 +55,15 @@ function getDashboardTransactions() {
         .then(extractText)
 }
 
+function getBalance() {
+    return fetch('/balance', {
+        method: 'GET',
+        credentials: 'same-origin',
+    }).then(checkStatus)
+        .then(logging)
+        .then(parseJSON)
+}
+
 // #####################################################################
 // ###################### Response Callbacks ###########################
 // #####################################################################
@@ -94,4 +103,11 @@ function extractText(response) {
     return response.text();
 }
 
-export {postSendToken, postLogin, getNewAddress, getDashboardTransactions, postTriggerTransactionExecution}
+export {
+    postSendToken,
+    postLogin,
+    getNewAddress,
+    getDashboardTransactions,
+    postTriggerTransactionExecution,
+    getBalance
+}
