@@ -2,6 +2,8 @@
 
 ## Certificate Creation
 
+Steps for initial setup can be found on [https://certbot.eff.org/#ubuntuxenial-other](https://certbot.eff.org/#ubuntuxenial-other).
+
 Created certificate can be found at ``/etc/letsencrypt/live/``.
 
 ## Certificate Renewal
