@@ -55,7 +55,7 @@
 
             // fetch balance
             window.bundle.fetchBalance(function (balanceJson) {
-                console.log('fetched balance ' + balanceJson);
+                console.log('fetched balance ' + JSON.stringify(balanceJson));
                 $('.user-balance').text(balanceJson['formatted']);
                 $('#balance-card').find('.progress').hide();
             });

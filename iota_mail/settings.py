@@ -152,8 +152,8 @@ EMAIL_HOST = 'localhost'
 EMAIL_PORT = '1025'
 
 # IOTA settings
-# IOTA_NODE_URL = 'https://node.tangle.works:443/api/v1/commands'
-IOTA_NODE_URL = 'http://iota.bitfinex.com:80/api/v1/commands'
+IOTA_NODE_URL = 'https://node.tangle.works:443/api/v1/commands'
+# IOTA_NODE_URL = 'http://iota.bitfinex.com:80/api/v1/commands'
 # IOTA_NODE_URL = 'http://138.68.102.72:80/api/v1/commands'
 IOTA_ROUTES = {
     'attachToTangle': 'https://zendi.duckdns.org/iri/api/v1/commands/'
