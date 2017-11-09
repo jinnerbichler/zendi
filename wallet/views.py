@@ -130,7 +130,6 @@ def balance(request):
 @require_GET
 def dashboard_transactions_ajax(request):
     balance, transactions = iota_utils.get_account_data(request.user)
-    # transactions = []
     return render(request, 'wallet/components/transaction_list.html', {'transactions': transactions[:6]})
 
 

@@ -24,7 +24,7 @@ class IotaAddress(models.Model):
 
 
 class IotaBalance(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     balance = models.PositiveIntegerField(default=0)
 
 

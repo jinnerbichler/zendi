@@ -76,10 +76,10 @@ class IotaApi:
         transaction = ProposedTransaction(address=receiver_address, value=value, tag=tag, message=message)
 
         # trigger transfer
-        logger.info('## STARTING PoW')
+        logger.info('########################## STARTING PoW ###########################################')
         bundle = self.api.send_transfer(depth=settings.IOTA_DEFAULT_DEPTH,
                                         transfers=[transaction],
                                         change_address=change_address)
-        logger.info('## FINISHED PoW')
+        logger.info('########################## FINISHED PoW ###########################################')
 
         return bundle['bundle']

@@ -60,8 +60,8 @@ function getBalance() {
         method: 'GET',
         credentials: 'same-origin',
     }).then(checkStatus)
-        .then(logging)
         .then(parseJSON)
+        .then(logging)
 }
 
 // #####################################################################

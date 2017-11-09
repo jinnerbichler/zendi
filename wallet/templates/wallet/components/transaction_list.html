@@ -10,21 +10,30 @@
                 <div class="collapsible-header row">
                     <div class="col s1 icon">
                         <i class="material-icons">
-                            {% if transaction.value == 0 %}
+                            {% if transaction.direction == 'neutral' %}
                                 remove
-                            {% elif transaction.in_going %}
+                            {% elif transaction.direction == 'in_going' %}
                                 call_received
-                            {% else %}
+                            {% elif transaction.direction == 'out_going' %}
                                 call_made
                             {% endif %}
                         </i>
                     </div>
                     <div class="col s4">
                     <span>
-                        {% if transaction.email %}
-                            {{ transaction.email }}
+                        {# display proper address or mail based on direction of transaction #}
+                        {% if transaction.direction == 'in_going' %}
+                            {% if transaction.sender_mail %}
+                                {{ transaction.sender_mail }}
+                            {% else %}
+                                {{ transaction.sender_address|truncatechars:20 }}
+                            {% endif %}
                         {% else %}
-                            {{ transaction.address|truncatechars:20 }}
+                            {% if transaction.receiver_mail %}
+                                {{ transaction.receiver_mail }}
+                            {% else %}
+                                {{ transaction.receiver_address|truncatechars:20 }}
+                            {% endif %}
                         {% endif %}
                     </span>
                     </div>
@@ -41,18 +50,26 @@
                 </div>
                 <div class="collapsible-body row" style="display: none;">
                     <div class="col s4 ">
-                        {% if transaction.in_going %}
+                        {% if transaction.direction == 'in_going' %}
                             From address:&nbsp;
+                            <br>
+                            <a href="{{ transaction.sender_address|iota_hash_info_url }}">
+                                {{ transaction.sender_address|truncatechars:30 }}
+                            </a>
+                            <br>
+                            {% if transaction.sender_mail %}
+                                <span>({{ transaction.sender_mail }})</span>
+                            {% endif %}
                         {% else %}
                             To address:&nbsp;
-                        {% endif %}
-                        <br>
-                        <a href="{{ transaction.address|iota_hash_info_url }}">
-                            {{ transaction.address|truncatechars:30 }}
-                        </a>
-                        <br>
-                        {% if transaction.email %}
-                            <span>({{ transaction.email }})</span>
+                            <br>
+                            <a href="{{ transaction.receiver_address|iota_hash_info_url }}">
+                                {{ transaction.receiver_address|truncatechars:30 }}
+                            </a>
+                            <br>
+                            {% if transaction.receiver_mail %}
+                                <span>({{ transaction.receiver_mail }})</span>
+                            {% endif %}
                         {% endif %}
 
                     </div>

@@ -10,7 +10,7 @@ from pytz import UTC
 from wallet import user_utils
 from wallet.iota_ import InsufficientBalanceException, trytes2string, convert_bundles
 from wallet.iota_.iota_api import IotaApi
-from wallet.models import IotaAddress, IotaExecutedTransaction
+from wallet.models import IotaAddress, IotaExecutedTransaction, IotaBalance
 from wallet.user_utils import get_user_safe
 
 logger = logging.getLogger(__name__)
@@ -47,6 +47,7 @@ def get_new_address(user, api=None):
 @api_resolver
 def get_balance(user, api=None):
     balance = api.get_account_balance()
+    IotaBalance.objects.update_or_create(user=user, balance=balance)
     logger.info('Fetched balance for user %s (balance: %i)', user, balance)
     return balance
 
@@ -60,6 +61,13 @@ def get_account_data(user, api=None):
     # convert account data
     balance = account_data['balance']
     transactions = convert_bundles(bundles=account_data['bundles'], user_addresses=account_data['addresses'])
+
+    # update user addresses
+    fetched_addresses = {trytes2string(t) for t in account_data['addresses']}
+    stored_addresses = set(IotaAddress.objects.filter(user=user))
+    new_addresses = fetched_addresses - stored_addresses
+    for new_address in new_addresses:
+        IotaAddress.objects.create(user=user, address=new_address)
 
     logger.info('Fetched data for user %s (#transactions: %i, balance: %i)', user, len(transactions), balance)
 
