@@ -28,23 +28,32 @@ class IotaBalance(models.Model):
     balance = models.PositiveIntegerField(default=0)
 
 
-class IotaExecutedTransaction(models.Model):
+class IotaTransaction(models.Model):
+    IN_GOING = 'in_going'
+    OUT_GOING = 'out_going'
+    NEUTRAL = 'neutral'
+    DIRECTION_CHOICES = (
+        (IN_GOING, IN_GOING),
+        (OUT_GOING, OUT_GOING),
+        (NEUTRAL, NEUTRAL))
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner')
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_transactions')
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_transactions')
+    sender_address = models.TextField()
     receiver_address = models.TextField()
     bundle_hash = models.TextField()
     transaction_hash = models.TextField()
     value = models.BigIntegerField()
     execution_time = models.DateTimeField()
-    message = models.TextField(default='')
+    is_confirmed = models.BooleanField(default=False)
+    direction = models.CharField(choices=DIRECTION_CHOICES, max_length=10)
 
     def __repr__(self):
         return '<IotaExecutedTransaction \n\tsender={sender}\n\treceiver={receiver}\n\t' \
                'receiver_addr={receiver_address}\n\tamount={amount}\n\tmessage={message}\n\t' \
                'bundle_hash={bundle_hash}\n\ttransaction_hash={transaction_hash}\n\t' \
-               'execution_time={execution_time}>'.format(sender=self.sender,
-                                                         receiver=self.receiver,
-                                                         **self.__dict__)
+               'execution_time={execution_time}\n\tdirection={direction}owner={owner}>' \
+            .format(sender=self.sender, receiver=self.receiver, **self.__dict__)
 
 
 # noinspection PyUnusedLocal, PyUnresolvedReferences

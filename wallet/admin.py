@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from wallet.models import IotaSeed, IotaAddress, IotaExecutedTransaction, IotaBalance
+from wallet.models import IotaSeed, IotaAddress, IotaTransaction, IotaBalance
 
 
 class IotaSeedAdmin(admin.ModelAdmin):
@@ -22,4 +22,4 @@ class IotaExecutedTransactionAdmin(admin.ModelAdmin):
 admin.site.register(IotaSeed, IotaSeedAdmin)
 admin.site.register(IotaAddress, IotaAddressAdmin)
 admin.site.register(IotaBalance, IotaBalanceAdmin)
-admin.site.register(IotaExecutedTransaction, IotaExecutedTransactionAdmin)
+admin.site.register(IotaTransaction, IotaExecutedTransactionAdmin)
