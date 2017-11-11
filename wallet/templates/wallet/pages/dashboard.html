@@ -32,16 +32,14 @@
                     </div>
                 </div>
                 <div class="row recent-transactions">
+                    <h1>Recent Transactions</h1>
 
-                    <div id="transactions-loading-container">
-                        <h1>Loading recent Transactions</h1>
-                        <div class="progress col s8 offset-s2">
-                            <div class="indeterminate"></div>
-                        </div>
+                    <div id="transaction-ready-container">
+                        {% include 'wallet/components/transaction_list.html' with transactions=transactions %}
                     </div>
 
-                    <div id="transaction-ready-container" style="display: none;">
-                        <h1>Recent Transactions</h1>
+                    <div class="progress transactions-update">
+                        <div class="indeterminate"></div>
                     </div>
                 </div>
             </div>
@@ -64,12 +62,10 @@
             window.bundle.fetchDashboardTransactions(function (transactionsHtml) {
 
                 // append list of transactions
-                $('#transaction-ready-container').append(transactionsHtml);
+                $('#transaction-ready-container').html(transactionsHtml);
 
                 // show in UI
-                $('#transactions-loading-container').fadeOut(200, function () {
-                    $('#transaction-ready-container').fadeIn();
-                });
+                $('.transactions-update').fadeOut(200);
 
                 window.bundle.initCollapsible();
             });
