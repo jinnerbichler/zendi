@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from wallet.models import IotaSeed, IotaAddress, IotaExecutedTransaction, IotaBalance
+from wallet.models import IotaSeed, IotaAddress, IotaTransaction, IotaBalance
 
 
 class IotaSeedAdmin(admin.ModelAdmin):
@@ -8,18 +8,18 @@ class IotaSeedAdmin(admin.ModelAdmin):
 
 
 class IotaAddressAdmin(admin.ModelAdmin):
-    list_display = ('user', 'address', 'attached')
+    list_display = ('user', 'address')
 
 
 class IotaBalanceAdmin(admin.ModelAdmin):
     list_display = ('user', 'balance')
 
 
-class IotaExecutedTransactionAdmin(admin.ModelAdmin):
-    list_display = ('sender', 'receiver', 'execution_time', 'transaction_hash', 'value', 'message')
+class IotaTransactionAdmin(admin.ModelAdmin):
+    list_display = ('owner', 'sender', 'receiver', 'execution_time', 'value', 'direction', 'is_confirmed')
 
 
 admin.site.register(IotaSeed, IotaSeedAdmin)
 admin.site.register(IotaAddress, IotaAddressAdmin)
 admin.site.register(IotaBalance, IotaBalanceAdmin)
-admin.site.register(IotaExecutedTransaction, IotaExecutedTransactionAdmin)
+admin.site.register(IotaTransaction, IotaTransactionAdmin)

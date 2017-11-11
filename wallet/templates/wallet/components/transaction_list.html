@@ -23,21 +23,21 @@
                     <span>
                         {# display proper address or mail based on direction of transaction #}
                         {% if transaction.direction == 'in_going' %}
-                            {% if transaction.sender_mail %}
-                                {{ transaction.sender_mail }}
+                            {% if transaction.sender %}
+                                {{ transaction.sender.email }}
                             {% else %}
                                 {{ transaction.sender_address|truncatechars:20 }}
                             {% endif %}
                         {% else %}
-                            {% if transaction.receiver_mail %}
-                                {{ transaction.receiver_mail }}
+                            {% if transaction.receiver %}
+                                {{ transaction.receiver.email }}
                             {% else %}
                                 {{ transaction.receiver_address|truncatechars:20 }}
                             {% endif %}
                         {% endif %}
                     </span>
                     </div>
-                    <div class="col s3">{{ transaction.time }}</div>
+                    <div class="col s3">{{ transaction.execution_time }}</div>
                     <div class="col s2">{{ transaction.value|iota_display_format }}</div>
                     <div class="col s2 left-align">
                         {% if transaction.is_confirmed %}
@@ -53,36 +53,36 @@
                         {% if transaction.direction == 'in_going' %}
                             From address:&nbsp;
                             <br>
-                            <a href="{{ transaction.sender_address|iota_hash_info_url }}">
+                            <a href="{{ transaction.sender_address|iota_hash_info_url }}" target="_blank">
                                 {{ transaction.sender_address|truncatechars:30 }}
                             </a>
                             <br>
-                            {% if transaction.sender_mail %}
-                                <span>({{ transaction.sender_mail }})</span>
+                            {% if transaction.sender %}
+                                <span>({{ transaction.sender.email }})</span>
                             {% endif %}
                         {% else %}
-                            To address:&nbsp;
+                            To address:
                             <br>
-                            <a href="{{ transaction.receiver_address|iota_hash_info_url }}">
+                            <a href="{{ transaction.receiver_address|iota_hash_info_url }}" target="_blank">
                                 {{ transaction.receiver_address|truncatechars:30 }}
                             </a>
                             <br>
-                            {% if transaction.receiver_mail %}
-                                <span>({{ transaction.receiver_mail }})</span>
+                            {% if transaction.receiver %}
+                                <span>({{ transaction.receiver.email }})</span>
                             {% endif %}
                         {% endif %}
 
                     </div>
                     <div class="col s4 ">
                         Bundle:<br>
-                        <a href="{{ transaction.bundle_hash|iota_hash_info_url }}">
+                        <a href="{{ transaction.bundle_hash|iota_hash_info_url }}" target="_blank">
                             {{ transaction.bundle_hash|truncatechars:30 }}
                         </a>
                     </div>
                     <div class="col s4">
                         Transaction:<br>
-                        <a href="{{ transaction.hash|iota_hash_info_url }}">
-                            {{ transaction.hash|truncatechars:30 }}
+                        <a href="{{ transaction.transaction_hash|iota_hash_info_url }}" target="_blank">
+                            {{ transaction.transaction_hash|truncatechars:30 }}
                         </a>
                     </div>
                 </div>

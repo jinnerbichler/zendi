@@ -66,6 +66,17 @@ $board-bg-color: white;
         font-weight: 300;
       }
 
+      .transactions-update {
+        left: 40%;
+        width: 20%;
+        margin: 0;
+        background: transparent;
+
+        .indeterminate {
+          background-color: white;
+        }
+      }
+
       .transactions {
         @extend .z-depth-0;
         background: transparent;

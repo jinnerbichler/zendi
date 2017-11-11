@@ -1,21 +1,17 @@
-import collections
-import logging
 import functools
+import logging
 import time
 from datetime import datetime
 
 from django.utils.timezone import make_aware
-from pytz import UTC
 
 from wallet import user_utils
-from wallet.iota_ import InsufficientBalanceException, trytes2string, convert_bundles
+from wallet.iota_ import InsufficientBalanceException, trytes2string
 from wallet.iota_.iota_api import IotaApi
-from wallet.models import IotaAddress, IotaExecutedTransaction, IotaBalance
+from wallet.models import IotaAddress, IotaTransaction, IotaBalance
 from wallet.user_utils import get_user_safe
 
 logger = logging.getLogger(__name__)
-
-Transaction = collections.namedtuple('Transaction', 'bundle_hash is_confirmed address email time hash value')
 
 
 def api_resolver(func):
@@ -47,7 +43,9 @@ def get_new_address(user, api=None):
 @api_resolver
 def get_balance(user, api=None):
     balance = api.get_account_balance()
-    IotaBalance.objects.update_or_create(user=user, balance=balance)
+    stored_balance, _ = IotaBalance.objects.get_or_create(user=user)
+    stored_balance.balance = balance
+    stored_balance.save()
     logger.info('Fetched balance for user %s (balance: %i)', user, balance)
     return balance
 
@@ -60,37 +58,45 @@ def get_account_data(user, api=None):
 
     # convert account data
     balance = account_data['balance']
-    transactions = convert_bundles(bundles=account_data['bundles'], user_addresses=account_data['addresses'])
+    addresses = account_data['addresses']
+    bundles = account_data['bundles']
+    updated_transactions = update_bundles(bundles=bundles, user_addresses=addresses, owner=user)
 
-    # update user addresses
-    fetched_addresses = {trytes2string(t) for t in account_data['addresses']}
+    # update addresses of user
+    fetched_addresses = {IotaAddress(user=user, address=trytes2string(a)) for a in addresses}
     stored_addresses = set(IotaAddress.objects.filter(user=user))
-    new_addresses = fetched_addresses - stored_addresses
-    for new_address in new_addresses:
-        IotaAddress.objects.create(user=user, address=new_address)
+    for new_address in fetched_addresses - stored_addresses:
+        new_address.save()
 
-    logger.info('Fetched data for user %s (#transactions: %i, balance: %i)', user, len(transactions), balance)
+    logger.info('Fetched data for user %s (#updated transactions: %i, balance: %i)',
+                user, len(updated_transactions), balance)
 
+    # get update transactions from database
+    transactions = get_cached_transactions(user=user)
     return balance, transactions
 
 
+def get_cached_transactions(user):
+    return list(IotaTransaction.objects.filter(owner=user).order_by('-execution_time'))[:4]
+
+
 # noinspection PyBroadException
-def send_tokens(request, sender, receiver, value, message=None):
+def send_tokens(request, sender_mail, receiver_mail, value, message=None):
     # get proper users
-    _, sending_user = get_user_safe(email=sender)
-    is_new, receiving_user = get_user_safe(email=receiver)
+    _, sender = get_user_safe(email=sender_mail)
+    is_new, receiver = get_user_safe(email=receiver_mail)
 
     # check balance
-    api = IotaApi(seed=sending_user.iotaseed.seed)
+    api = IotaApi(seed=sender.iotaseed.seed)
     balance = api.get_account_balance()
     if balance < value:
-        raise InsufficientBalanceException(user=str(sending_user), proposed_amount=value, balance=balance)
+        raise InsufficientBalanceException(user=str(sender), proposed_amount=value, balance=balance)
 
-    change_address = get_new_address(sending_user)
-    receiving_address = get_new_address(receiving_user)
+    change_address = get_new_address(sender)
+    receiving_address = get_new_address(receiver)
 
     logger.info('Sending %i IOTA from %s to %s (address: %s, new: %s)',
-                value, sending_user, receiving_user, receiving_address, is_new)
+                value, sender, receiver, receiving_address, is_new)
 
     try:
         # send transaction
@@ -107,25 +113,111 @@ def send_tokens(request, sender, receiver, value, message=None):
         transaction = bundle.transactions[0]
         assert trytes2string(transaction.address) == receiving_address
 
-        # save successfully executed transaction
-        execution_time = make_aware(datetime.fromtimestamp(transaction.timestamp), timezone=UTC)
-        IotaExecutedTransaction.objects.get_or_create(sender=sending_user,
-                                                      receiver=receiving_user,
-                                                      receiver_address=receiving_address,
-                                                      bundle_hash=trytes2string(bundle.hash),
-                                                      transaction_hash=trytes2string(transaction.hash),
-                                                      value=value,
-                                                      execution_time=execution_time,
-                                                      message=message)
+        # save successfully executed transaction twice (for sender and receiver)
+        sender_transaction = extract_transaction(transaction=transaction, bundle=bundle, owner=sender)
+        sender_transaction.direction = IotaTransaction.OUT_GOING if value else IotaTransaction.NEUTRAL
+        sender_transaction.is_confirmed = False
+        sender_transaction.save()
+        receiver_transaction = extract_transaction(transaction=transaction, bundle=bundle, owner=receiver)
+        receiver_transaction.direction = IotaTransaction.IN_GOING if value else IotaTransaction.NEUTRAL
+        receiver_transaction.is_confirmed = False
+        receiver_transaction.save()
+
+        # ToDo: Check receiver in the case of zero value
+
         # inform receiver via mail
         user_utils.send_token_received_email(request=request,
-                                             sender=sending_user,
-                                             receiver=receiving_user,
+                                             sender=sender,
+                                             receiver=receiver,
                                              is_new=is_new,
                                              amount=value,
                                              message=message)
         return bundle
     except Exception as e:
         logger.exception('Error while transferring %i IOTA from %s to %s (address %s, new:%s)',
-                         value, sending_user, receiving_user, receiving_address, is_new)
+                         value, sender, receiver, receiving_address, is_new)
         raise e
+
+
+def user_for_address(address):
+    from wallet.models import IotaAddress
+    try:
+        # check if email is attached to address
+        user = IotaAddress.objects.get(address=address).user
+        logger.debug('Found attached user %s for address %s', user, address)
+    except IotaAddress.DoesNotExist:
+        user = None
+    return user
+
+
+def extract_transaction(transaction, bundle, owner, user_addresses=None):
+    if not user_addresses:
+        user_addresses = []
+
+    receiver_address = trytes2string(bundle.transactions[0].address)
+    receiver = user_for_address(receiver_address)
+
+    # try to find sender (e.g. if value no zero)
+    sender, sender_address = (receiver, receiver_address)
+    if len(bundle.transactions) >= 4:
+        # assumption: change address is known address of sender
+        sender_address = trytes2string(bundle.transactions[3].address)
+        sender = user_for_address(sender_address)
+
+    # determine direction of transaction
+    direction = IotaTransaction.OUT_GOING
+    if transaction.value == 0:
+        direction = IotaTransaction.NEUTRAL
+    elif receiver_address in [trytes2string(a) for a in user_addresses]:
+        direction = IotaTransaction.IN_GOING
+
+    return IotaTransaction(owner=owner,
+                           sender=sender,
+                           receiver=receiver,
+                           sender_address=sender_address,
+                           receiver_address=receiver_address,
+                           bundle_hash=trytes2string(transaction.bundle_hash),
+                           transaction_hash=trytes2string(transaction.hash),
+                           value=transaction.value,
+                           execution_time=make_aware(datetime.fromtimestamp(transaction.timestamp)),
+                           is_confirmed=transaction.is_confirmed,
+                           direction=direction)
+
+
+def update_bundles(bundles, user_addresses, owner):
+    fetched_transactions = {}
+    for bundle in bundles:
+        # on transfer results in four transactions within a bundle (https://iota.readme.io/docs/bundles)
+        # actual movement of IOTA is stored in first transaction
+        if len(bundle.transactions) >= 3:
+            extracted_transaction = extract_transaction(transaction=bundle.transactions[0],
+                                                        user_addresses=user_addresses,
+                                                        bundle=bundle,
+                                                        owner=owner)
+            fetched_transactions[extracted_transaction.transaction_hash] = extracted_transaction
+        else:
+            for t in bundle.transactions:
+                extracted_transaction = extract_transaction(transaction=t,
+                                                            user_addresses=user_addresses,
+                                                            bundle=bundle,
+                                                            owner=owner)
+                fetched_transactions[extracted_transaction.transaction_hash] = extracted_transaction
+
+    # determine and store new/changed transactions
+    new_or_changed_transactions = []
+    already_stored = {t.transaction_hash: t for t in IotaTransaction.objects.filter(owner=owner)}
+    for transaction_hash, extracted_transaction in fetched_transactions.items():
+
+        # check if new
+        if transaction_hash not in already_stored:
+            extracted_transaction.save()
+            new_or_changed_transactions.append(extracted_transaction)
+
+        # check if state has changed and update in database
+        elif already_stored[transaction_hash].is_confirmed != extracted_transaction.is_confirmed:
+            old_transaction = already_stored[transaction_hash]
+            old_transaction.is_confirmed = extracted_transaction.is_confirmed
+            old_transaction.save()
+            new_or_changed_transactions.append(old_transaction)
+
+    return new_or_changed_transactions
