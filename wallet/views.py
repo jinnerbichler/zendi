@@ -35,13 +35,17 @@ def send_tokens_trigger(request):
         form = SendTokensForm(request.POST)
         if form.is_valid():
 
+            receiver_mail = form.cleaned_data['receiver_mail']
+            if receiver_mail == request.user.email:
+                return JsonResponse(data={'error': True, 'message': 'Cannot send to yourself'})
+
             # check if user is already authenticated
             exec_url = '/send-tokens-exec?{}'.format(urlencode(form.cleaned_data))
             if request.user.is_authenticated:
                 return ClientRedirectResponse(redirect_url=exec_url)
 
-            email = form.cleaned_data['sender_mail']
-            user_message = send_login_mail(request=request, next_url=exec_url, email=email)
+            sender_mail = form.cleaned_data['sender_mail']
+            user_message = send_login_mail(request=request, next_url=exec_url, email=sender_mail)
             return JsonResponse(data={'message': user_message})
         else:
             return JsonResponse(data={'error': True, 'message': 'Invalid data'})

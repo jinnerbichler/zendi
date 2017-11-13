@@ -71,9 +71,6 @@ def send_token_received_email(request, sender, receiver, amount, is_new, message
     login_code.next = '/dashboard'
     login_code.save()
 
-    to_email = [receiver.email]
-    from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'root@example.com')
-
     # generate email body
     url_for_login = login_url(code=login_code, secure=request.is_secure(), host=request.get_host())
     context = {'login_url': url_for_login,
@@ -86,6 +83,8 @@ def send_token_received_email(request, sender, receiver, amount, is_new, message
     # html_content = render_to_string('wallet/email/login_email.html', context)
 
     # send mail
+    to_email = [receiver.email]
+    from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'root@example.com')
     subject = 'Welcome to Zėndi' if is_new else 'Payment received from {}'.format(sender.email)
     msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
     # msg.attach_alternative(html_content, 'text/html')

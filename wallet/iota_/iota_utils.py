@@ -140,7 +140,6 @@ def send_tokens(request, sender_mail, receiver_mail, value, message=None):
 
 
 def user_for_address(address):
-    from wallet.models import IotaAddress
     try:
         # check if email is attached to address
         user = IotaAddress.objects.get(address=address).user
