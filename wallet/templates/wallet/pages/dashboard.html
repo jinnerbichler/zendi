@@ -21,8 +21,8 @@
                         <div class="card-content center-align">
                             <span class="card-title">Balance</span>
                             <p class="user-balance">{{ balance|iota_display_format }}</p>
-                            <div class="progress">
-                                <div class="indeterminate"></div>
+                            <div class="updating">
+                                updating
                             </div>
                             <p class="user-mail">{{ request.user.email }}</p>
                         </div>
@@ -55,7 +55,7 @@
             window.bundle.fetchBalance(function (balanceJson) {
                 console.log('fetched balance ' + JSON.stringify(balanceJson));
                 $('.user-balance').text(balanceJson['formatted']);
-                $('#balance-card').find('.progress').hide();
+                $('#balance-card').find('.updating').hide();
             });
 
             // fetch transactions and update UI

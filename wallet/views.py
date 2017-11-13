@@ -44,7 +44,7 @@ def send_tokens_trigger(request):
             user_message = send_login_mail(request=request, next_url=exec_url, email=email)
             return JsonResponse(data={'message': user_message})
         else:
-            return JsonResponse(data={'error': True, 'message': 'Invalid form data'})
+            return JsonResponse(data={'error': True, 'message': 'Invalid data'})
 
     return redirect(index)
 

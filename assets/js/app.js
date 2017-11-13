@@ -27,7 +27,9 @@ $('#send-form').submit(function (event) {
         .then((jsonResponse) => {
             const messageType = 'error' in jsonResponse ? 'error' : 'info';
             showMessageBox(jsonResponse['message'], messageType);
-            form.reset();
+
+            if ('error' in jsonResponse === false)
+                form.reset();
         })
         .catch((error) => {
             showMessageBox(`Error ${error}`, 'error');

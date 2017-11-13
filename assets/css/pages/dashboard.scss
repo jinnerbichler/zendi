@@ -37,13 +37,10 @@ $board-bg-color: white;
         padding: 18px;
       }
 
-      .progress {
-        margin: 0;
-        background-color: transparent;
-
-        .indeterminate {
-          background-color: gray;
-        }
+      .updating {
+        font-size: 8px;
+        line-height: 8px;
+        color: grey;
       }
 
       p {

@@ -1,5 +1,6 @@
 import operator
 
+from decimal import Decimal
 from django import forms
 from iota import STANDARD_UNITS
 
@@ -9,6 +10,6 @@ IOTA_UNIT_CHOICES = [(unit, unit) for unit, _ in sorted(STANDARD_UNITS.items(), 
 class SendTokensForm(forms.Form):
     sender_mail = forms.EmailField(label='sender_mail')
     receiver_mail = forms.EmailField(label='receiver_mail')
-    amount = forms.DecimalField(label='amount')
+    amount = forms.DecimalField(label='amount', min_value=Decimal('0.000001'))
     unit = forms.ChoiceField(choices=IOTA_UNIT_CHOICES, initial='Mi')
     message = forms.CharField(label='message', required=False, max_length=100)
