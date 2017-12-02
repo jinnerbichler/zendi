@@ -52,7 +52,10 @@ def get_balance(user, api=None):
 
 @api_resolver
 def get_account_data(user, api=None):
-    account_data = api.get_account_data(inclusion_states=True)
+
+    num_addresses = IotaAddress.objects.filter(user=user).count()
+    start_index = max(0, num_addresses - 4)  # decrease by number, which might be used in bundle
+    account_data = api.get_account_data(inclusion_states=True, start=start_index)
 
     logger.debug('Requesting user data for user %s', user)
 
@@ -70,6 +73,8 @@ def get_account_data(user, api=None):
 
     logger.info('Fetched data for user %s (#updated transactions: %i, balance: %i)',
                 user, len(updated_transactions), balance)
+
+    # ToDo: update unconfirmed transactions
 
     # get update transactions from database
     transactions = get_cached_transactions(user=user)
@@ -117,10 +122,14 @@ def send_tokens(request, sender_mail, receiver_mail, value, message=None):
         sender_transaction = extract_transaction(transaction=transaction, bundle=bundle, owner=sender)
         sender_transaction.direction = IotaTransaction.OUT_GOING if value else IotaTransaction.NEUTRAL
         sender_transaction.is_confirmed = False
+        sender_transaction.sender = sender
+        sender_transaction.receiver = receiver
         sender_transaction.save()
         receiver_transaction = extract_transaction(transaction=transaction, bundle=bundle, owner=receiver)
         receiver_transaction.direction = IotaTransaction.IN_GOING if value else IotaTransaction.NEUTRAL
         receiver_transaction.is_confirmed = False
+        receiver_transaction.sender = sender
+        receiver_transaction.receiver = receiver
         receiver_transaction.save()
 
         # ToDo: Check receiver in the case of zero value
@@ -157,7 +166,7 @@ def extract_transaction(transaction, bundle, owner, user_addresses=None):
     receiver = user_for_address(receiver_address)
 
     # try to find sender (e.g. if value no zero)
-    sender, sender_address = (receiver, receiver_address)
+    sender, sender_address = (None, None)
     if len(bundle.transactions) >= 4:
         # assumption: change address is known address of sender
         sender_address = trytes2string(bundle.transactions[3].address)

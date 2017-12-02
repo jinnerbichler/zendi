@@ -74,7 +74,11 @@ function logging(response) {
 
 function clientSideRedirect(response) {
     if ('redirect_url' in response) {
-        window.location.href = response['redirect_url'];
+        let new_url = response['redirect_url'];
+        if ('replace' in response && response['replace'] )
+            window.location.replace(new_url);
+        else
+            window.location.href = new_url;
         // dummy to stop execution until redirect
         return new Promise(function (resolve) {
             setTimeout(() => {

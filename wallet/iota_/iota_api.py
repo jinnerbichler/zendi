@@ -58,8 +58,8 @@ class IotaApi:
     def get_transfers(self, inclusion_states=False):
         return self.api.get_transfers(inclusion_states=inclusion_states)['bundles']
 
-    def get_account_data(self, inclusion_states=False):
-        return self.api.get_account_data(inclusion_states=inclusion_states)
+    def get_account_data(self, inclusion_states=False, start=0):
+        return self.api.get_account_data(start=start, inclusion_states=inclusion_states)
 
     def get_transactions_for_addresses(self, addresses):
         return self.api.find_transactions(addresses=addresses)

@@ -76,7 +76,8 @@ def send_tokens_exec(request):
         value = normalize_value(value=amount, unit=unit)
         context = {'amount_with_unit': iota_display_format_filter(value=value), 'receiver': receiver_mail}
         user_message = render_to_string('wallet/messages/tokens_sent.txt', context=context)
-        response = client_redirect(view=dashboard, user_message=user_message, message_type='info')
+        response = client_redirect(view=dashboard, replace=True,
+                                   user_message=user_message, message_type='info')
 
         # check if authorised user matches sending mail
         if sender_mail != request.user.email:
@@ -87,7 +88,8 @@ def send_tokens_exec(request):
                                    value=value, message=message)
         except InsufficientBalanceException:
             user_message = render_to_string('wallet/messages/insufficient_balance.txt', context={})
-            response = client_redirect(view=dashboard, user_message=user_message, message_type='error')
+            response = client_redirect(view=dashboard, replace=True,
+                                       user_message=user_message, message_type='error')
 
         return response
 

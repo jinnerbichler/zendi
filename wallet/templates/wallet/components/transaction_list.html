@@ -24,13 +24,13 @@
                         {# display proper address or mail based on direction of transaction #}
                         {% if transaction.direction == 'in_going' %}
                             {% if transaction.sender %}
-                                {{ transaction.sender.email }}
+                                {{ transaction.sender.email|truncatechars:25 }}
                             {% else %}
                                 {{ transaction.sender_address|truncatechars:20 }}
                             {% endif %}
                         {% else %}
                             {% if transaction.receiver %}
-                                {{ transaction.receiver.email }}
+                                {{ transaction.receiver.email|truncatechars:25 }}
                             {% else %}
                                 {{ transaction.receiver_address|truncatechars:20 }}
                             {% endif %}

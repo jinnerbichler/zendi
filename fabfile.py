@@ -1,5 +1,6 @@
 from fabric.api import task, local
 
+# !set docker-machine to deployment VM first!
 
 @task(default=True)
 def deploy():

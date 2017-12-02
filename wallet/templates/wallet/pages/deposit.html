@@ -25,6 +25,8 @@
 
 {% block custom_scripts %}
     <script>
+
+        console.log('Fetching address...');
         window.bundle.fetchNewAddress(function (newAddress) {
             // show new address container
             $('#ready-container').find('.address').text(newAddress);

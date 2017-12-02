@@ -1,11 +1,10 @@
-version: '3'
+version: '2'
 
 services:
   iri:
-    image: iotaledger/iri:v1.4.1.2
-    container_name: iota_mail_iri_node
+    image: iotaledger/iri:v1.4.1
     ports:
-      - 14265:14265
+      - 8050:14265
     volumes:
       - ./iota.ini:/iri/iota.ini
       - ./logback.xml:/iri/conf/logback.xml
@@ -19,9 +18,3 @@ services:
       - "-jar"
       - "iri.jar"
       - "--remote"
-    networks:
-      - nginx-backend
-networks:
-  nginx-backend:
-    external:
-      name: nginx-backend

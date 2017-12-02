@@ -24,5 +24,6 @@
 {% block custom_scripts %}
     <script>
         window.bundle.triggerTransactionExecution();
+        window.history.replaceState( {} , 'Dashboard', '/');
     </script>
 {% endblock %}
