@@ -43,10 +43,11 @@ class IotaApi:
     def get_new_address(self):
         """
         Fetch new address from IRI (deterministically)
-        :return: String representation of new address
+        :return: tuple: address -> str, address_with_check_sum --> str
         """
         response = self.api.get_new_addresses(count=None)
-        return trytes2string(response['addresses'][0])
+        return (trytes2string(response['addresses'][0]),
+                trytes2string(response['addresses'][0].with_valid_checksum()))
 
     def get_address_balance(self, address):
         address = Address(string2trytes_bytes(address))

@@ -24,20 +24,21 @@ def api_resolver(func):
 
 
 @api_resolver
-def get_new_address(user, api=None):
+def get_new_address(user, with_checksum=False, api=None):
     """
     Creates a new IOTA address, which is not attached to the tangle.
     :param user: user object containing seed
+    :param with_checksum: append checksum to returned address
     :param api: IOTA api object (should be resolved by decorator)
     :return: new address in the IOTA network (not attached to the Tangle)
     """
     # create and store new address
-    new_address = api.get_new_address()
+    new_address, new_address_witch_checksum = api.get_new_address()
     IotaAddress.objects.update_or_create(user=user, address=new_address)
 
-    logger.info('Generated address %s for user %s', new_address, user)
+    logger.info('Generated address %s (cs:{}) for user %s', new_address, with_checksum, user)
 
-    return new_address
+    return new_address_witch_checksum if with_checksum else new_address
 
 
 @api_resolver
@@ -52,9 +53,9 @@ def get_balance(user, api=None):
 
 @api_resolver
 def get_account_data(user, api=None):
-
     num_addresses = IotaAddress.objects.filter(user=user).count()
-    start_index = max(0, num_addresses - 4)  # decrease by number, which might be used in bundle
+    # start_index = max(0, num_addresses - 4)  # decrease by number, which might be used in bundle
+    start_index = 0
     account_data = api.get_account_data(inclusion_states=True, start=start_index)
 
     logger.debug('Requesting user data for user %s', user)

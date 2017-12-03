@@ -156,7 +156,11 @@ EMAIL_PORT = '1025'
 # IOTA_NODE_URL = 'http://iota.bitfinex.com:80/api/v1/commands'
 # IOTA_NODE_URL = 'http://wallets.iotamexico.com:80/api/v1/commands'
 # IOTA_NODE_URL = 'http://service.iotasupport.com:14265/api/v1/commands'
-IOTA_NODE_URL = 'http://node01.iotatoken.nl:14265'
+# IOTA_NODE_URL = 'http://node01.iotatoken.nl:14265'
+# IOTA_NODE_URL = 'http://node02.iotatoken.nl:14265'
+# IOTA_NODE_URL = 'http://node03.iotatoken.nl:15265'
+IOTA_NODE_URL = 'http://node04.iotatoken.nl:14265'
+# IOTA_NODE_URL = 'http://node05.iotatoken.nl:16265'
 IOTA_ROUTES = {
     'attachToTangle': 'https://zendi.duckdns.org/iri/api/v1/commands/'
 }

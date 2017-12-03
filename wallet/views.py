@@ -36,7 +36,7 @@ def send_tokens_trigger(request):
         if form.is_valid():
 
             receiver_mail = form.cleaned_data['receiver_mail']
-            if receiver_mail == request.user.email:
+            if request.user.is_authenticated and receiver_mail == request.user.email:
                 return JsonResponse(data={'error': True, 'message': 'Cannot send to yourself'})
 
             # check if user is already authenticated
@@ -109,7 +109,7 @@ def deposit(request):
 @login_required
 @require_GET
 def new_address(request):
-    generated_address = iota_utils.get_new_address(request.user)
+    generated_address = iota_utils.get_new_address(request.user, with_checksum=True)
     return JsonResponse(data={'address': generated_address})
 
 
