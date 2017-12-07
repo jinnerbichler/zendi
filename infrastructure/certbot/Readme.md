@@ -2,7 +2,25 @@
 
 ## Certificate Creation
 
-Steps for initial setup can be found on [https://certbot.eff.org/#ubuntuxenial-other](https://certbot.eff.org/#ubuntuxenial-other).
+Steps for initial setup can be found on [https://certbot.eff.org/#ubuntuxenial-other](https://certbot.eff.org/#ubuntuxenial-other). `certonly` was chosen.
+
+### Short steps
+
+#### Installation
+
+```
+sudo apt-get update
+sudo apt-get install software-properties-common
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt-get update
+sudo apt-get install certbot
+```
+
+#### Cert Generation
+
+```
+sudo certbot certonly --standalone -d zendi.duckdns.org
+```
 
 Created certificate can be found at ``/etc/letsencrypt/live/``.
 
@@ -13,7 +31,7 @@ The proper files are placed at
 
 ```
 /etc/systemd/system/certbot.service
-/etc/systemd/system/certbot.service
+/etc/systemd/system/certbot.timer
 ```
 
 and can also be found in this repository.
@@ -22,6 +40,11 @@ and can also be found in this repository.
 
 Hooks were installed at ``/etc/letsencrypt/renewal-hooks/pre`` and ``/etc/letsencrypt/renewal-hooks/pre``, 
 which starts and stops the nginx container before (and after) a certificate is renewed.
+To install the hooks run:
+
+```
+fab deploy
+```
 
 ### Email notifications
 

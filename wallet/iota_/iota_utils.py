@@ -36,7 +36,7 @@ def get_new_address(user, with_checksum=False, api=None):
     new_address, new_address_witch_checksum = api.get_new_address()
     IotaAddress.objects.update_or_create(user=user, address=new_address)
 
-    logger.info('Generated address %s (cs:{}) for user %s', new_address, with_checksum, user)
+    logger.info('Generated address %s for user %s', new_address, user)
 
     return new_address_witch_checksum if with_checksum else new_address
 

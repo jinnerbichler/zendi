@@ -4,11 +4,15 @@ services:
   iri:
     image: iotaledger/iri:v1.4.1.2
     container_name: iota_mail_iri_node
+    restart: always
     ports:
-      - 14265:14265
+      - "14265:14265"
+      - "14777:14777/udp"
+      - "15777:15777"
     volumes:
       - ./iota.ini:/iri/iota.ini
       - ./logback.xml:/iri/conf/logback.xml
+      - ./mainnet_db:/iri/mainnet_db
     entrypoint:
       - "/usr/bin/java"
       - "-XX:+DisableAttachMechanism"
@@ -21,6 +25,25 @@ services:
       - "--remote"
     networks:
       - nginx-backend
+
+  iri-dashboard:
+    image: jinnerbichler/iri-dashboard:latest
+    container_name: dashboard
+    restart: always
+    ports:
+        - "8081:80"
+    volumes:
+      - /root/
+    depends_on:
+      - iri
+    entrypoint:
+       - iota-pm
+       - "--iri=http://iri:14265"
+       - "--port=0.0.0.0:80"
+       - "--refresh=10"
+    networks:
+      - nginx-backend
+
 networks:
   nginx-backend:
     external:

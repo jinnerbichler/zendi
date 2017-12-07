@@ -16,13 +16,27 @@ def deploy():
 @task
 def deploy_vm():
     with cd('/data/misc/'):
-        put('.', '.')
+        put('./docker-compose-vm.yml', '.')
+        put('iota.ini', '.')
+        put('logback.xml', '.')
         sudo('docker-compose -f docker-compose-vm.yml pull')
         sudo('docker-compose -f docker-compose-vm.yml up -d --force-recreate')
 
 
 @task
-def logs():
+def stop():
+    with cd('/srv/iri'):
+        run('docker-compose --project-name iri stop')
+
+
+@task
+def logs_tail():
+    with cd('/srv/iri'):
+        run('docker-compose logs -f --tail 100')
+
+
+@task
+def logs_all():
     with cd('/srv/iri'):
         run('docker-compose logs -f')
 

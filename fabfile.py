@@ -1,7 +1,10 @@
 from fabric.api import task, local
 
 
+##############################################
 # !set docker-machine to deployment VM first!
+#############################################
+
 
 @task(default=True)
 def deploy():
@@ -17,6 +20,12 @@ def deploy():
 def update_nginx():
     local('docker-compose --project-name iota_mail up -d --build --force-recreate --no-deps nginx')
     local('docker-compose --project-name iota_mail logs -f nginx')
+
+
+@task
+def init():
+    # local('docker network create nginx-backend')
+    local('docker-compose --project-name iota_mail up -d --build --force-recreate')
 
 
 @task

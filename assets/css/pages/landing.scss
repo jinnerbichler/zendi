@@ -14,6 +14,21 @@
     top: 50%;
     width: 50%;
     text-align: center;
+
+    .exchange {
+      color: $primary-color;
+      margin-top: 30px;
+    }
+
+    .fiat-amount {
+      color: $primary-color;
+      font-size: 1.0em;
+
+      input {
+        font-size: 1.5em;
+        border-bottom: 0;
+      }
+    }
   }
 
   input {

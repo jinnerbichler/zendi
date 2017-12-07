@@ -159,10 +159,12 @@ EMAIL_PORT = '1025'
 # IOTA_NODE_URL = 'http://node01.iotatoken.nl:14265'
 # IOTA_NODE_URL = 'http://node02.iotatoken.nl:14265'
 # IOTA_NODE_URL = 'http://node03.iotatoken.nl:15265'
-IOTA_NODE_URL = 'http://node04.iotatoken.nl:14265'
-# IOTA_NODE_URL = 'http://node05.iotatoken.nl:16265'
+# IOTA_NODE_URL = 'http://node04.iotatoken.nl:14265'
+# IOTA_NODE_URL = 'https://zendi.duckdns.org/iota_node/'
+IOTA_NODE_URL = 'http://iri:14265/api/v1/commands'
 IOTA_ROUTES = {
-    'attachToTangle': 'https://zendi.duckdns.org/iri/api/v1/commands/'
+    'attachToTangle': 'http://iri:14265/api/v1/commands',
+    'broadcastTransactions': 'https://nodes.iota.cafe:443',
 }
 IOTA_SANDBOCK_AUTH_TOKEN = '03f7571a-bb6c-4a5d-86eb-0fd73f02da78'
 IOTA_SANDBOX_URI = 'https://sandbox.iota.org/api/v1/'
