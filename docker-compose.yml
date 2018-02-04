@@ -11,23 +11,18 @@ services:
       - static-files:/static
       - /etc/letsencrypt/:/etc/letsencrypt/
     depends_on:
-      - iota_mail_web
+      - zendi_web
     networks:
       - nginx-backend
 
-  iota_mail_web:
+  zendi_web:
     build: .
-    container_name: iota_mail_web
-    entrypoint: bash -c "python manage.py collectstatic --noinput && python manage.py migrate && gunicorn iota_mail.wsgi -b 0.0.0.0:8000 --timeout 900 --graceful-timeout 900 --log-level info --workers=4"
+    container_name: zendi_web
+    entrypoint: bash -c "python manage.py collectstatic --noinput && python manage.py migrate && gunicorn zendi.wsgi -b 0.0.0.0:8000 --timeout 900 --graceful-timeout 900 --log-level info --workers=4"
     ports:
       - "8000:8000"
-    environment:
-      - DJANGO_SETTINGS_MODULE=iota_mail.settings-prod
-      - STATIC_ROOT=/static
-      - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=changeme
-      - POSTGRES_DB_NAME=iota_mail_db
+    env_file:
+      - env
     volumes:
       - static-files:/static
     depends_on:
@@ -38,16 +33,21 @@ services:
 
   db:
     image: postgres:10.0
-    container_name: iota_mail_db
+    container_name: zendi_db
     environment:
       - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=changeme
-      - POSTGRES_DB=iota_mail_db
+      - POSTGRES_PASSWORD=5bdb16d98d8b42cdbbeee0de824441f1
+      - POSTGRES_DB=zendi_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
     networks:
       - db-backend
 
 volumes:
-     static-files:
+   static-files:
+   pgdata:
 
 networks:
   db-backend:

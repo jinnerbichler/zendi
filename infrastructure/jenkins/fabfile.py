@@ -1,7 +1,7 @@
 from fabric.api import run, env, task, put, cd
 
 env.use_ssh_config = True
-env.hosts = ['iota_mail_1']
+env.hosts = ['zendi_1']
 
 
 @task(default=True)

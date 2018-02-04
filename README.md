@@ -1,1 +1,1 @@
-# iota_mail
+# zendi

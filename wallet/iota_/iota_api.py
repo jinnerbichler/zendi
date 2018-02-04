@@ -1,7 +1,7 @@
 import logging
 
 from django.conf import settings
-from iota import Iota, ProposedTransaction, Address, TryteString
+from iota import Iota, ProposedTransaction, Address, TryteString, Tag
 from iota.adapter.wrappers import RoutingWrapper
 from iota.crypto.types import Seed
 
@@ -40,12 +40,15 @@ class IotaApi:
         self.api = Iota(adapter=adapter, seed=seed)
         self.api.adapter.set_logger(logger)
 
-    def get_new_address(self):
+    def get_node_info(self):
+        return self.api.get_node_info()
+
+    def get_new_address(self, start=0):
         """
         Fetch new address from IRI (deterministically)
         :return: tuple: address -> str, address_with_check_sum --> str
         """
-        response = self.api.get_new_addresses(count=None)
+        response = self.api.get_new_addresses(index=start, count=None)
         return (trytes2string(response['addresses'][0]),
                 trytes2string(response['addresses'][0].with_valid_checksum()))
 
@@ -55,6 +58,15 @@ class IotaApi:
 
     def get_account_balance(self):
         return self.api.get_inputs()['totalBalance']
+
+    def get_bundles(self, transaction):
+        return self.api.get_bundles(transaction=transaction)
+
+    def replay_bundle(self, transaction):
+        return self.api.replay_bundle(transaction=transaction, depth=settings.IOTA_DEFAULT_DEPTH)
+
+    def get_inclusion_states(self, transactions, milestone):
+        return self.api.get_inclusion_states(transactions=transactions, tips=[milestone])['states']
 
     def get_transfers(self, inclusion_states=False):
         return self.api.get_transfers(inclusion_states=inclusion_states)['bundles']
@@ -72,6 +84,8 @@ class IotaApi:
         # convert addresses
         receiver_address = Address(string2trytes_bytes(receiver_address))
         change_address = Address(string2trytes_bytes(change_address))
+
+        tag = Tag(b'ZENDI') if not tag else tag
 
         # construct transaction
         transaction = ProposedTransaction(address=receiver_address, value=value, tag=tag, message=message)

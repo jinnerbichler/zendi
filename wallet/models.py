@@ -27,6 +27,9 @@ class IotaAddress(models.Model):
     def __hash__(self):
         return hash((self.address, self.user))
 
+    def __str__(self):
+        return self.address
+
 
 class IotaBalance(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -34,15 +37,6 @@ class IotaBalance(models.Model):
 
 
 class IotaTransaction(models.Model):
-    # direction values
-    IN_GOING = 'in_going'
-    OUT_GOING = 'out_going'
-    NEUTRAL = 'neutral'
-    DIRECTION_CHOICES = (
-        (IN_GOING, IN_GOING),
-        (OUT_GOING, OUT_GOING),
-        (NEUTRAL, NEUTRAL))
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owned_transactions')
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_transactions',
                                blank=True, null=True)
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_transactions',
@@ -50,29 +44,28 @@ class IotaTransaction(models.Model):
     sender_address = models.TextField()
     receiver_address = models.TextField()
     bundle_hash = models.TextField()
-    transaction_hash = models.TextField()
     value = models.BigIntegerField()
-    execution_time = models.DateTimeField()
+    attachment_time = models.DateTimeField()
     is_confirmed = models.BooleanField(default=False)
-    direction = models.CharField(choices=DIRECTION_CHOICES, max_length=10)
+    replay_count = models.BigIntegerField(default=0)
+    tail_transaction_hash = models.TextField(default='')
 
     def __eq__(self, other):
-        return isinstance(other, self.__class__) \
-               and self.owner == other.owner \
-               and self.transaction_hash == other.transaction_hash
+        return isinstance(other, self.__class__) and self.tail_transaction_hash == other.tail_transaction_hash
 
     def __hash__(self):
-        return hash((self.owner, self.transaction_hash))
+        return hash((self.tail_transaction_hash))
 
     def __repr__(self):
-        return '<IotaExecutedTransaction \n\tsender={sender}\n\treceiver={receiver}\n\t' \
-               'receiver_addr={receiver_address}\n\tamount={amount}\n\tmessage={message}\n\t' \
-               'bundle_hash={bundle_hash}\n\ttransaction_hash={transaction_hash}\n\t' \
-               'execution_time={execution_time}\n\tdirection={direction}owner={owner}>' \
-            .format(sender=self.sender, receiver=self.receiver, **self.__dict__)
+        return '<IotaExecutedTransaction\n\t' \
+               'receiver_addr={receiver_address}\n\tvalue={value}\n\treplay_count={replay_count}\n\t' \
+               'bundle_hash={bundle_hash}\n\t' \
+               'sender={sender}\n\treceiver={receiver}\n\ttail_transaction_hash={tail_transaction_hash}\n\t' \
+               'attachment_time={attachment_time}>' \
+            .format(**self.__dict__)
 
     class Meta:
-        unique_together = (('owner', 'transaction_hash'))
+        unique_together = (('bundle_hash', 'tail_transaction_hash'))
 
 
 # noinspection PyUnusedLocal, PyUnresolvedReferences
