@@ -1,0 +1,79 @@
+{% extends "web/components/base.html" %}
+{% load static %}
+{% load wallet_extras %}
+
+{% block content %}
+
+    <!--suppress HtmlUnknownTarget, XmlInvalidId -->
+    <div id="dashboard" class="triangle-content">
+
+        {# message box #}
+        <div class="row">
+            <div class="col s6 offset-s3">
+                {% include 'web/components/message_box.html' %}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s8 offset-s2 content">
+                <div class="row">
+                    <div class="col s4 offset-s4 card horizontal" id="balance-card">
+                        <div class="card-content center-align">
+                            <span class="card-title">Balance</span>
+                            <p class="user-balance">{{ balance|iota_display_format }}</p>
+                            <div class="updating">
+                                updating...
+                            </div>
+                            <p class="user-mail">{{ request.user.email }}</p>
+                        </div>
+                        <div class="card-image">
+                            <img src="{% static 'wallet/img/iota-logo-black.png' %}" alt="IOTA Logo">
+                        </div>
+                    </div>
+                </div>
+                <div class="row recent-transactions">
+                    <h1>Recent Transactions</h1>
+
+                    <div id="transaction-ready-container">
+                        {% include 'web/components/transaction_list.html' with transactions=transactions %}
+                    </div>
+
+                    <div class="progress transactions-update">
+                        <div class="indeterminate"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block custom_scripts %}
+    <script>
+        $(document).ready(function () {
+
+            // fetch balance
+            window.bundle.fetchBalance(function (balanceJson) {
+                console.log('fetched balance ' + JSON.stringify(balanceJson));
+                $('.user-balance').text(balanceJson['formatted']);
+                $('#balance-card').find('.updating').hide();
+            });
+
+            // fetch transactions and update UI
+            window.bundle.fetchDashboardTransactions(function (transactionsHtml) {
+
+                // append list of transactions
+                $('#transaction-ready-container').html(transactionsHtml);
+
+                // show in UI
+                $('.transactions-update').fadeOut(200);
+
+                window.bundle.initCollapsible();
+            });
+
+            {% if message %}
+                // show message
+                window.bundle.showMessageBox('{{ message }}', '{{ message_type|default:"info" }}');
+            {% endif %}
+        });
+    </script>
+{% endblock %}
