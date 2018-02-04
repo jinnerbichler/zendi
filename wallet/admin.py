@@ -16,7 +16,7 @@ class IotaBalanceAdmin(admin.ModelAdmin):
 
 
 class IotaTransactionAdmin(admin.ModelAdmin):
-    list_display = ('owner', 'sender', 'receiver', 'execution_time', 'value', 'direction', 'is_confirmed')
+    list_display = ('sender', 'receiver', 'bundle_hash', 'attachment_time', 'value', 'is_confirmed')
 
 
 admin.site.register(IotaSeed, IotaSeedAdmin)

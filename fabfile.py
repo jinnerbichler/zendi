@@ -12,27 +12,34 @@ def deploy():
     local('npm install')
     local('npm run build')
 
-    local('docker-compose --project-name iota_mail up -d --build --force-recreate --no-deps iota_mail_web')
-    local('docker-compose --project-name iota_mail logs -f iota_mail_web')
+    local('docker-compose --project-name zendi up -d --build --force-recreate --no-deps zendi_web')
+    local('docker-compose --project-name zendi logs -f zendi_web')
+
+
+@task
+def deploy_replayer():
+    local(
+        'docker-compose --project-name zendi up -d --build --force-recreate --no-deps zendi_replayer')
+    local('docker-compose --project-name zendi logs -f zendi_replayer')
 
 
 @task
 def update_nginx():
-    local('docker-compose --project-name iota_mail up -d --build --force-recreate --no-deps nginx')
-    local('docker-compose --project-name iota_mail logs -f nginx')
+    local('docker-compose --project-name zendi up -d --build --force-recreate --no-deps nginx')
+    local('docker-compose --project-name zendi logs -f nginx')
 
 
 @task
 def init():
     # local('docker network create nginx-backend')
-    local('docker-compose --project-name iota_mail up -d --build --force-recreate')
+    local('docker-compose --project-name zendi up -d --build --force-recreate')
 
 
 @task
 def logs():
-    local('docker-compose --project-name iota_mail logs -f')
+    local('docker-compose --project-name zendi logs -f')
 
 
 @task
 def run_local():
-    local('docker-compose --project-name iota_mail up --force-recreate')
+    local('docker-compose --project-name zendi up --force-recreate')

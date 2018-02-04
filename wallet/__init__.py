@@ -4,6 +4,8 @@ from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 
+default_app_config = 'wallet.apps.WalletConfig'
+
 
 class ClientRedirectResponse(JsonResponse):
     def __init__(self, redirect_url, replace=False, **kwargs):

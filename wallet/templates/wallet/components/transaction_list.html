@@ -10,34 +10,34 @@
                 <div class="collapsible-header row">
                     <div class="col s1 icon">
                         <i class="material-icons">
-                            {% if transaction.direction == 'neutral' %}
-                                remove
-                            {% elif transaction.direction == 'in_going' %}
-                                call_received
-                            {% elif transaction.direction == 'out_going' %}
+                            {% if transaction.sender == request.user %}
                                 call_made
+                            {% elif transaction.receiver == request.user %}
+                                call_received
+                            {% else %}
+                                remove
                             {% endif %}
                         </i>
                     </div>
                     <div class="col s4">
                     <span>
                         {# display proper address or mail based on direction of transaction #}
-                        {% if transaction.direction == 'in_going' %}
-                            {% if transaction.sender %}
-                                {{ transaction.sender.email|truncatechars:25 }}
-                            {% else %}
-                                {{ transaction.sender_address|truncatechars:20 }}
-                            {% endif %}
-                        {% else %}
+                        {% if transaction.sender == request.user %}
                             {% if transaction.receiver %}
-                                {{ transaction.receiver.email|truncatechars:25 }}
+                                {{ transaction.receiver.email|truncatechars:35 }}
                             {% else %}
                                 {{ transaction.receiver_address|truncatechars:20 }}
+                            {% endif %}
+                        {% else %}
+                            {% if transaction.sender %}
+                                {{ transaction.sender.email|truncatechars:35 }}
+                            {% else %}
+                                {{ transaction.sender_address|truncatechars:20 }}
                             {% endif %}
                         {% endif %}
                     </span>
                     </div>
-                    <div class="col s3">{{ transaction.execution_time }}</div>
+                    <div class="col s3">{{ transaction.attachment_time }}</div>
                     <div class="col s2">{{ transaction.value|iota_display_format }}</div>
                     <div class="col s2 left-align">
                         {% if transaction.is_confirmed %}
@@ -50,8 +50,8 @@
                 </div>
                 <div class="collapsible-body row" style="display: none;">
                     <div class="col s4 ">
-                        {% if transaction.direction == 'in_going' %}
-                            From address:&nbsp;
+                        {% if transaction.receiver == request.user %}
+                            From address:
                             <br>
                             <a href="{{ transaction.sender_address|iota_hash_info_url }}" target="_blank">
                                 {{ transaction.sender_address|truncatechars:30 }}
@@ -79,11 +79,15 @@
                             {{ transaction.bundle_hash|truncatechars:30 }}
                         </a>
                     </div>
+{#                    <div class="col s2">#}
+{#                        Transaction:<br>#}
+{#                        <a href="{{ transaction.transaction_hash|iota_hash_info_url }}" target="_blank">#}
+{#                            {{ transaction.transaction_hash|truncatechars:10 }}#}
+{#                        </a>#}
+{#                    </div>#}
                     <div class="col s4">
-                        Transaction:<br>
-                        <a href="{{ transaction.transaction_hash|iota_hash_info_url }}" target="_blank">
-                            {{ transaction.transaction_hash|truncatechars:30 }}
-                        </a>
+                        Replay Count:<br>
+                        {{ transaction.replay_count }}
                     </div>
                 </div>
             </li>

@@ -2,8 +2,8 @@ version: '3'
 
 services:
   iri:
-    image: iotaledger/iri:v1.4.1.2
-    container_name: iota_mail_iri_node
+    image: iotaledger/iri:v1.4.1.4
+    container_name: iri_node
     restart: always
     ports:
       - "14265:14265"
@@ -28,7 +28,7 @@ services:
 
   iri-dashboard:
     image: jinnerbichler/iri-dashboard:latest
-    container_name: dashboard
+    container_name: iri_dashboard
     restart: always
     ports:
         - "8081:80"

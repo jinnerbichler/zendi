@@ -1,5 +1,5 @@
 """
-WSGI config for iota_mail project.
+WSGI config for zendi project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "iota_mail.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "zendi.settings")
 
 application = get_wsgi_application()
