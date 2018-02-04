@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'nopassword',
     'django_extensions',
-    'wallet'
+    'iotaclient',
+    'web'
 ]
 
 MIDDLEWARE = [
@@ -82,7 +83,7 @@ DATABASES = {
     }
 }
 
-AUTHENTICATION_BACKENDS = ('wallet.auth_backend.EmailBackend', 'django.contrib.auth.backends.ModelBackend')
+AUTHENTICATION_BACKENDS = ('web.auth_backend.EmailBackend', 'django.contrib.auth.backends.ModelBackend')
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
