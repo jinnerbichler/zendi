@@ -17,13 +17,6 @@ def deploy():
 
 
 @task
-def deploy_replayer():
-    local(
-        'docker-compose --project-name zendi up -d --build --force-recreate --no-deps zendi_replayer')
-    local('docker-compose --project-name zendi logs -f zendi_replayer')
-
-
-@task
 def update_nginx():
     local('docker-compose --project-name zendi up -d --build --force-recreate --no-deps nginx')
     local('docker-compose --project-name zendi logs -f nginx')
