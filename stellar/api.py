@@ -109,8 +109,6 @@ def get_transactions(user, cached=False):
                 transaction.amount = payment['amount']
                 transaction.asset_type = payment['asset_type']
 
-                # ToDo: handle memo
-
             try:
                 # saving transaction
                 transaction.save()
