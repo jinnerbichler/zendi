@@ -11555,8 +11555,8 @@ footer {
     #dashboard .content #balance-card {
       background: rgba(255, 255, 255, 0.9); }
       #dashboard .content #balance-card .card-image {
-        max-width: 20%;
-        margin: 40px 0 0 50px; }
+        max-width: 25%;
+        margin: 30px 0 0 30px; }
       #dashboard .content #balance-card .card-title {
         font-size: 27px; }
       #dashboard .content #balance-card .card-content {
@@ -11567,7 +11567,7 @@ footer {
         line-height: 8px;
         color: grey; }
       #dashboard .content #balance-card p {
-        font-size: 30px; }
+        font-size: 27px; }
       #dashboard .content #balance-card .user-mail {
         margin-top: 3px;
         font-size: 10px; }

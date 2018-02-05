@@ -17,7 +17,7 @@ const providePlugin = new wepback.ProvidePlugin({
     jQuery: 'jquery',
     Materialize: 'materialize-css',
 });
-const cleanPlugin = new CleanWebpackPlugin(['wallet/static/wallet']);
+const cleanPlugin = new CleanWebpackPlugin(['web/static/wallet']);
 const copyFilesPlugin = new CopyWebpackPlugin([{
     // copy all favicon data
     from: 'assets/img/favicons',
@@ -34,11 +34,11 @@ const copyFilesPlugin = new CopyWebpackPlugin([{
 module.exports = {
     entry: ['whatwg-fetch', './assets/js/app.js'],
     output: {
-        path: path.resolve(__dirname, 'wallet/static/wallet'),
+        path: path.resolve(__dirname, 'web/static/web'),
         filename: 'bundle.js',
         libraryTarget: 'var',
         library: 'EntryPoint'
-        // publicPath: '/wallet/static/wallet'
+        // publicPath: '/web/static/web'
         // libraryTarget: 'var',
         // library: 'Bundle'
     },

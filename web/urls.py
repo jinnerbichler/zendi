@@ -12,5 +12,5 @@ urlpatterns = [
     url(r'^balance', views.balance, name='balance'),
     url(r'^logout', views.logout, name='logout'),
     url(r'^login', views.login, name='login'),
-    url(r'^new_address', views.new_address, name='new_address')
+    url(r'^new_address', views.deposit_address, name='new_address')
 ]

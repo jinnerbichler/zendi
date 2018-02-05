@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import '../img/iota-logo-black.png';
-import '../img/iota-logo-white.png';
+import '../img/stellar-rocket-300.png'
+
 import '../css/main.scss';
 import {
     postSendToken,
