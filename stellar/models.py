@@ -40,5 +40,8 @@ class StellarTransaction(models.Model):
                'type={type}>' \
             .format(**self.__dict__)
 
+    def __str__(self):
+        return self.__repr__()
+
     class Meta:
         unique_together = (('identifier', 'sender', 'receiver'))
