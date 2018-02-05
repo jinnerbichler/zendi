@@ -19,5 +19,5 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^accounts/', include('nopassword.urls', namespace="nopassword")),
     url(r'^zendi_admin/', admin.site.urls),
-    url(r'', include('web.urls'), name='wallet'),
+    url(r'', include('web.urls'), name='web'),
 ]

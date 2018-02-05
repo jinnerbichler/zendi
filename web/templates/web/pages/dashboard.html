@@ -20,14 +20,14 @@
                     <div class="col s4 offset-s4 card horizontal" id="balance-card">
                         <div class="card-content center-align">
                             <span class="card-title">Balance</span>
-                            <p class="user-balance">{{ balance|iota_display_format }}</p>
+                            <p class="user-balance">{{ balance|stellar_display_format }}</p>
                             <div class="updating">
                                 updating...
                             </div>
                             <p class="user-mail">{{ request.user.email }}</p>
                         </div>
                         <div class="card-image">
-                            <img src="{% static 'wallet/img/iota-logo-black.png' %}" alt="IOTA Logo">
+                            <img src="{% static 'web/img/stellar-rocket-300.png' %}" alt="Stellar Lumen Logo">
                         </div>
                     </div>
                 </div>

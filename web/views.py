@@ -1,6 +1,7 @@
 import logging
 from urllib.parse import urlencode
 
+from django.conf import settings
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
@@ -14,11 +15,10 @@ from rest_framework.status import HTTP_401_UNAUTHORIZED
 
 from web import ClientRedirectResponse, client_redirect
 from web.forms import SendTokensForm
-from iotaclient.iota_ import InsufficientBalanceException, normalize_value
-from iotaclient.iota_ import iota_utils
-from iotaclient.models import IotaBalance
-from web.templatetags.wallet_extras import iota_display_format_filter
-from web.user_utils import send_login_mail, get_user_safe
+from web.templatetags.wallet_extras import stellar_display_format_filter
+from web.user_utils import send_login_mail, get_user_safe, send_token_received_email
+
+from stellar import api as stellar
 
 logger = logging.getLogger(__name__)
 
@@ -59,23 +59,21 @@ def send_tokens_trigger(request):
 @require_http_methods(["GET", "POST"])
 def send_tokens_exec(request):
     if request.method == 'GET':
-        value = normalize_value(value=int(request.GET['amount']), unit=request.GET['unit'])
-        context = {'amount_with_unit': iota_display_format_filter(value=value), **request.GET}
+        value = int(request.GET['amount'])
+        context = {'amount_with_unit': stellar_display_format_filter(value=value), **request.GET}
         return render(request, 'web/pages/send-tokens-exec.html', context)
 
     elif request.method == 'POST':
 
         sender_mail = request.POST['sender_mail']
         receiver_mail = request.POST['receiver_mail']
-        amount = int(request.POST['amount'])
-        unit = request.POST['unit']
+        amount = float(request.POST['amount'])
         message = request.POST['message']  # optional
 
         # all computations should be performed before communicating with the Tangle.
 
         # create message for user
-        value = normalize_value(value=amount, unit=unit)
-        context = {'amount_with_unit': iota_display_format_filter(value=value), 'receiver': receiver_mail}
+        context = {'amount_with_unit': stellar_display_format_filter(value=amount), 'receiver': receiver_mail}
         user_message = render_to_string('web/messages/tokens_sent.txt', context=context)
         response = client_redirect(view=dashboard, replace=True,
                                    user_message=user_message, message_type='info')
@@ -84,12 +82,22 @@ def send_tokens_exec(request):
         if sender_mail != request.user.email:
             return HttpResponse('Invalid mail', status=HTTP_401_UNAUTHORIZED)
         try:
-            #############
+            #######################
             # sending tokens
-            #############
-            iota_utils.send_tokens(request=request, sender_mail=sender_mail, receiver_mail=receiver_mail,
-                                   value=value, message=message)
-        except InsufficientBalanceException:
+            #######################
+            # get proper users
+            _, sender = get_user_safe(email=sender_mail)
+            is_new, receiver = get_user_safe(email=receiver_mail)
+
+            stellar.transfer_lumen(from_user=sender, to_user=receiver, amount=amount)
+            # iota_utils.send_tokens(request=request, sender_mail=sender_mail, receiver_mail=receiver_mail,
+            #                        value=amount, message=message)
+
+            # inform receiver via mail
+            send_token_received_email(request=request, sender=sender, receiver=receiver,
+                                      is_new=is_new, amount=amount, message=message)
+
+        except stellar.InsufficientBalanceException:
             user_message = render_to_string('web/messages/insufficient_balance.txt', context={})
             response = client_redirect(view=dashboard, replace=True,
                                        user_message=user_message, message_type='error')
@@ -106,41 +114,41 @@ def withdraw(request):
 @login_required
 @require_GET
 def deposit(request):
-    return render(request, 'web/pages/deposit.html')
+    return render(request, 'web/pages/deposit.html', {'disabled': settings.STELLAR_TESTNET})
 
 
 @login_required
 @require_GET
-def new_address(request):
-    generated_address = iota_utils.get_new_address(request.user, with_checksum=True)
+def deposit_address(request):
+    generated_address = stellar.get_deposit_address(request.user)
     return JsonResponse(data={'address': generated_address})
 
 
 @login_required
 @require_GET
 def dashboard(request):
-    balance = IotaBalance.objects.get_or_create(user=request.user)[0].balance
-    transactions = iota_utils.get_cached_transactions(request.user)[:4]
+    balance = stellar.get_balance(request.user, cached=True)
+    transactions = stellar.get_transactions(request.user, cached=True)
     user_message = request.GET.get('user_message', default=None)
     message_type = request.GET.get('message_type', default=None)  # either 'info' or 'error'
     return render(request, 'web/pages/dashboard.html', {'logo_appendix': 'Dashboard',
-                                                           'balance': balance,
-                                                           'transactions': transactions,
-                                                           'message': user_message,
-                                                           'message_type': message_type})
+                                                        'balance': balance,
+                                                        'transactions': transactions,
+                                                        'message': user_message,
+                                                        'message_type': message_type})
 
 
 @login_required
 @require_GET
 def balance(request):
-    balance = iota_utils.get_balance(request.user)
-    return JsonResponse(data={'balance': balance, 'formatted': iota_display_format_filter(balance)})
+    balance = stellar.get_balance(request.user)
+    return JsonResponse(data={'balance': balance, 'formatted': stellar_display_format_filter(balance)})
 
 
 @login_required
 @require_GET
 def dashboard_transactions_ajax(request):
-    transactions = iota_utils.get_account_data(request.user)
+    transactions = stellar.get_transactions(request.user)
     return render(request, 'web/components/transaction_list.html', {'transactions': transactions[:6]})
 
 

@@ -37,15 +37,10 @@
                         {% endif %}
                     </span>
                     </div>
-                    <div class="col s3">{{ transaction.attachment_time }}</div>
-                    <div class="col s2">{{ transaction.value|iota_display_format }}</div>
+                    <div class="col s3">{{ transaction.created_at }}</div>
+                    <div class="col s2">{{ transaction.amount|stellar_display_format }}</div>
                     <div class="col s2 left-align">
-                        {% if transaction.is_confirmed %}
-                            <span class="new badge green"
-                                  data-badge-caption="">Complete</span>
-                        {% else %}
-                            <span class="new badge blue" data-badge-caption="">Unconfirmed</span>
-                        {% endif %}
+                        <span class="new badge green" data-badge-caption="">Complete</span>
                     </div>
                 </div>
                 <div class="collapsible-body row" style="display: none;">
@@ -53,7 +48,8 @@
                         {% if transaction.receiver == request.user %}
                             From address:
                             <br>
-                            <a href="{{ transaction.sender_address|iota_hash_info_url }}" target="_blank">
+                            <a href="{{ transaction.sender_address|stellar_address_info_url }}"
+                               target="_blank">
                                 {{ transaction.sender_address|truncatechars:30 }}
                             </a>
                             <br>
@@ -63,7 +59,8 @@
                         {% else %}
                             To address:
                             <br>
-                            <a href="{{ transaction.receiver_address|iota_hash_info_url }}" target="_blank">
+                            <a href="{{ transaction.receiver_address|stellar_address_info_url }}"
+                               target="_blank">
                                 {{ transaction.receiver_address|truncatechars:30 }}
                             </a>
                             <br>
@@ -74,20 +71,15 @@
 
                     </div>
                     <div class="col s4 ">
-                        Bundle:<br>
-                        <a href="{{ transaction.bundle_hash|iota_hash_info_url }}" target="_blank">
-                            {{ transaction.bundle_hash|truncatechars:30 }}
+                        Transaction:<br>
+                        <a href="{{ transaction.transaction_hash|stellar_transaction_info_url }}"
+                           target="_blank">
+                            {{ transaction.transaction_hash|truncatechars:30 }}
                         </a>
                     </div>
-{#                    <div class="col s2">#}
-{#                        Transaction:<br>#}
-{#                        <a href="{{ transaction.transaction_hash|iota_hash_info_url }}" target="_blank">#}
-{#                            {{ transaction.transaction_hash|truncatechars:10 }}#}
-{#                        </a>#}
-{#                    </div>#}
                     <div class="col s4">
-                        Replay Count:<br>
-                        {{ transaction.replay_count }}
+                        Type:<br>
+                        {{ transaction.type | stellar_type_format }}
                     </div>
                 </div>
             </li>

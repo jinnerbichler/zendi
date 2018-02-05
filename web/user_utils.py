@@ -8,8 +8,6 @@ from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from nopassword.utils import get_username, get_username_field
 
-from web.templatetags.wallet_extras import iota_display_format_filter
-
 logger = logging.getLogger(__name__)
 
 
@@ -77,7 +75,8 @@ def send_token_received_email(request, sender, receiver, amount, is_new, message
                'code': login_code,
                'from_email': sender.email,
                'is_new': is_new,
-               'amount': iota_display_format_filter(amount),
+               # 'amount': iota_display_format_filter(amount),
+               'amount': amount,
                'message': message}
     text_content = render_to_string('web/emails/tokens_received.txt', context)
     # html_content = render_to_string('wallet/email/login_email.html', context)

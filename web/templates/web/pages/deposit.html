@@ -15,8 +15,12 @@
                 </div>
             </div>
             <div id="ready-container" style="display: none;">
-                <p>Please sent IOTA to the following address in order to play with them on Zėndi.</p>
-                <p class="address">{{ deposit_address }}</p>
+                {% if disabled %}
+                    <p>Deposits are currently disabled.</p>
+                {% else %}
+                    <p>Please sent Lumen to the following address in order to play with them on Zėndi.</p>
+                    <p class="address">{{ deposit_address }}</p>
+                {% endif %}
             </div>
         </div>
     </div>

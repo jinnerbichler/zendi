@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'nopassword',
     'django_extensions',
+    'stellar',
     'iotaclient',
     'web'
 ]
@@ -123,7 +124,7 @@ LOGGING = {
         }
     },
     'loggers': {
-        'wallet': {
+        'web': {
             'handlers': ['console'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
             'propagate': False
@@ -152,7 +153,9 @@ LOGIN_REDIRECT_URL = '/dashboard/'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = '1025'
 
+###############################
 # IOTA settings
+###############################
 # IOTA_NODE_URL = 'https://node.tangle.works:443/api/v1/commands'
 # IOTA_NODE_URL = 'http://iota.bitfinex.com:80/api/v1/commands'
 # IOTA_NODE_URL = 'http://wallets.iotamexico.com:80/api/v1/commands'
@@ -173,3 +176,8 @@ IOTA_SANDBOX_URI = 'https://sandbox.iota.org/api/v1/'
 IOTA_DEFAULT_DEPTH = 3
 IOTA_REPLAY_INTERVAL = 60 * 30  # in seconds
 IOTA_REPLAY_MAX_COUNT = 5  # max number of replays for a single transaction
+
+#############################
+# Stellar Lumen settings
+#############################
+STELLAR_TESTNET = os.getenv('STELLAR_TESTNET', True)
