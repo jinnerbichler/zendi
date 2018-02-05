@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'nopassword',
     'django_extensions',
     'stellar',
-    'iotaclient',
     'web'
 ]
 
@@ -152,30 +151,6 @@ LOGIN_REDIRECT_URL = '/dashboard/'
 # SMTP credentials (local debug server)
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = '1025'
-
-###############################
-# IOTA settings
-###############################
-# IOTA_NODE_URL = 'https://node.tangle.works:443/api/v1/commands'
-# IOTA_NODE_URL = 'http://iota.bitfinex.com:80/api/v1/commands'
-# IOTA_NODE_URL = 'http://wallets.iotamexico.com:80/api/v1/commands'
-# IOTA_NODE_URL = 'http://service.iotasupport.com:14265/api/v1/commands'
-# IOTA_NODE_URL = 'http://node01.iotatoken.nl:14265'
-# IOTA_NODE_URL = 'http://node02.iotatoken.nl:14265'
-# IOTA_NODE_URL = 'http://node03.iotatoken.nl:15265'
-# IOTA_NODE_URL = 'http://node04.iotatoken.nl:14265'
-# IOTA_NODE_URL = 'https://zendi.duckdns.org/iota_node/'
-IOTA_NODE_URL = 'http://iota-node.duckdns.org:14265/api/v1/commands'
-# IOTA_NODE_URL = 'https://nodes.iota.cafe:443'
-IOTA_ROUTES = {
-    'attachToTangle': 'http://iota-node.duckdns.org:14265/api/v1/commands',
-    'broadcastTransactions': 'https://nodes.iota.cafe:443',
-}
-IOTA_SANDBOCK_AUTH_TOKEN = '03f7571a-bb6c-4a5d-86eb-0fd73f02da78'
-IOTA_SANDBOX_URI = 'https://sandbox.iota.org/api/v1/'
-IOTA_DEFAULT_DEPTH = 3
-IOTA_REPLAY_INTERVAL = 60 * 30  # in seconds
-IOTA_REPLAY_MAX_COUNT = 5  # max number of replays for a single transaction
 
 #############################
 # Stellar Lumen settings
