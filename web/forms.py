@@ -1,8 +1,5 @@
-import operator
-
 from decimal import Decimal
 from django import forms
-from iota import STANDARD_UNITS
 
 
 class SendTokensForm(forms.Form):

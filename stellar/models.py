@@ -36,8 +36,8 @@ class StellarTransaction(models.Model):
 
     def __repr__(self):
         return '<StellarTransaction\n\t' \
-               'from_address={from_address}\n\tto_address={to_address}\n\tamount={amount}\n\t' \
-               'type={type}>' \
+               'sender_address={sender_address}\n\treceiver_address={receiver_address}' \
+               '\n\tamount={amount}\n\ttype={type}>' \
             .format(**self.__dict__)
 
     def __str__(self):

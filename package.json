@@ -1,7 +1,7 @@
 {
-  "name": "Iota-Mail-Payments",
+  "name": "Zendi-Mail-Payments",
   "version": "1.0.0",
-  "description": "Payment services with IOTA tokens.",
+  "description": "Payment services with crytp tokens.",
   "main": "index.js",
   "scripts": {
     "build:prod": "webpack -p",
@@ -13,7 +13,7 @@
     "url": "https://github.com/jinnerbichler/zendi.git"
   },
   "keywords": [
-    "IOTA"
+    "Zendi"
   ],
   "author": "Johannes Innerbichler",
   "license": "ISC",
@@ -35,7 +35,6 @@
   },
   "dependencies": {
     "font-awesome": "^4.7.0",
-    "iota.lib.js": "^0.4.3",
     "jquery": "^3.2.1",
     "materialize-css": "^0.100.2",
     "materialize-loader": "^2.0.2",
