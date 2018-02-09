@@ -5,7 +5,7 @@ Hello,
 {% endif %}
 you just received {{ amount }} from {{ from_email }}.
 
-Follow the link in order to play with your newly earned IOTAs:
+Follow the link in order to play with your newly earned Lumens:
 {{ login_url }}
 {% if message %}
 The user attached the following message:
