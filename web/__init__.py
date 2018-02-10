@@ -1,5 +1,6 @@
 from urllib.parse import urlencode
 
+from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -22,3 +23,7 @@ def server_redirect(view, **kwargs):
 
 def client_redirect(view, replace=False, **kwargs):
     return ClientRedirectResponse(redirect_url=custom_uri(view=view, **kwargs), replace=replace)
+
+
+def paginate(obj_list, page, per_page):
+    return Paginator(obj_list, per_page=per_page).page(page)

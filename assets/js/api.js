@@ -46,8 +46,8 @@ function getNewAddress() {
 }
 
 
-function getDashboardTransactions() {
-    return fetch('/dashboard_transactions_ajax', {
+function getDashboardTransactions(page, cached) {
+    return fetch(`/dashboard_transactions_ajax?page=${page}&cached=${cached}`, {
         method: 'GET',
         credentials: 'same-origin',
     }).then(checkStatus)
