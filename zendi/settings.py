@@ -153,4 +153,5 @@ LOGIN_REDIRECT_URL = '/dashboard/'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = '1025'
 
+DEV_MODE = True
 DEMO_MODE = os.getenv('DEMO_MODE', 'false') == 'true'
