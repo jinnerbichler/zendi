@@ -11600,7 +11600,8 @@ footer {
         #dashboard .content .recent-transactions .transactions .collapsible-header {
           background: transparent; }
         #dashboard .content .recent-transactions .transactions.collapsible {
-          border: 0; }
+          border: 0;
+          margin: 0.5rem 0 0 0; }
         #dashboard .content .recent-transactions .transactions .transaction .collapsible-body {
           padding: 2rem 1rem 2rem 1rem; }
         #dashboard .content .recent-transactions .transactions .transaction a {

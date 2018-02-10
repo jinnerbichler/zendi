@@ -1,5 +1,6 @@
 import logging
 from typing import List, Optional
+from urllib.parse import urlparse, parse_qs
 
 import requests
 from django.conf import settings
@@ -72,49 +73,7 @@ def get_transactions(user, cached=False):
     address = _get_address(user.stellaraccount.address)
 
     # fetch payments
-    payments = address.payments()
-    for payment in payments['_embedded']['records']:
-
-        # only check relevant payments
-        if payment['type'] in ['create_account', 'payment']:
-
-            # set common attributes
-            transaction = StellarTransaction()
-            transaction.identifier = payment['id']
-            transaction.type = payment['type']
-            transaction.transaction_hash = payment['transaction_hash']
-            transaction.created_at = parse_datetime(payment['created_at'])
-            transaction.type_i = payment['type_i']
-            transaction.source_account = payment['source_account']
-
-            # handle payment for creating the account
-            if payment['type'] == 'create_account':
-                transaction.sender = _user_for_address(address=payment['funder'])
-                transaction.receiver = _user_for_address(address=payment['account'])
-                transaction.sender_address = payment['funder']
-                transaction.receiver_address = payment['account']
-                transaction.amount = payment['starting_balance']
-                transaction.asset_type = 'native'
-
-            # handle payment for sending / receiving tokens
-            elif payment['type'] == 'payment':
-
-                # ToDo: handle only native tokens
-                # ToDo: add support for pagination
-
-                transaction.sender = _user_for_address(address=payment['from'])
-                transaction.receiver = _user_for_address(address=payment['to'])
-                transaction.sender_address = payment['from']
-                transaction.receiver_address = payment['to']
-                transaction.amount = payment['amount']
-                transaction.asset_type = payment['asset_type']
-
-            try:
-                # saving transaction
-                transaction.save()
-                logger.info('Saved new transaction {}'.format(transaction))
-            except IntegrityError:
-                pass
+    _update_payments(address=address)
 
     return _get_cached_transactions(user=user)
 
@@ -150,6 +109,67 @@ def _get_address(public_key):
     address = Address(address=public_key, network=network)
     address.get()
     return address
+
+
+def _update_payments(address):
+    # type: (Address) -> None
+
+    cursor = None
+    while True:
+        payments = address.payments(cursor=cursor, order='desc', limit='10')
+        records = payments['_embedded']['records']
+
+        # determine cursor of next page
+        next_link = payments['_links']['next']['href']
+        new_cursor = parse_qs(urlparse(next_link).query)['cursor'][0]
+
+        # check if last page was fetched
+        if new_cursor == cursor:
+            break
+        cursor = new_cursor
+
+        # store new records
+        for payment in records:
+
+            # only check relevant payments
+            if payment['type'] in ['create_account', 'payment']:
+
+                # set common attributes
+                transaction = StellarTransaction()
+                transaction.identifier = payment['id']
+                transaction.type = payment['type']
+                transaction.transaction_hash = payment['transaction_hash']
+                transaction.created_at = parse_datetime(payment['created_at'])
+                transaction.type_i = payment['type_i']
+                transaction.source_account = payment['source_account']
+
+                # handle payment for creating the account
+                if payment['type'] == 'create_account':
+                    transaction.sender = _user_for_address(address=payment['funder'])
+                    transaction.receiver = _user_for_address(address=payment['account'])
+                    transaction.sender_address = payment['funder']
+                    transaction.receiver_address = payment['account']
+                    transaction.amount = payment['starting_balance']
+                    transaction.asset_type = 'native'
+
+                # handle payment for sending / receiving tokens
+                elif payment['type'] == 'payment':
+
+                    # ToDo: handle only native tokens
+
+                    transaction.sender = _user_for_address(address=payment['from'])
+                    transaction.receiver = _user_for_address(address=payment['to'])
+                    transaction.sender_address = payment['from']
+                    transaction.receiver_address = payment['to']
+                    transaction.amount = payment['amount']
+                    transaction.asset_type = payment['asset_type']
+
+                try:
+                    # saving transaction
+                    transaction.save()
+                    logger.info('Saved new transaction {}'.format(transaction))
+                except IntegrityError:
+                    pass
 
 
 def _user_for_address(address):
