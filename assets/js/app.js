@@ -8,6 +8,7 @@ import {
     getDepositAddress,
     getDashboardTransactions,
     postTriggerTransactionExecution,
+    postTriggerWithdrawExecution,
     getBalance
 } from './api';
 import 'materialize-css';
@@ -43,6 +44,26 @@ $('#login-form').submit(function (event) {
 
     const form = this;
     postLogin(form, event.target.baseURI)
+        .then((jsonResponse) => {
+            const messageType = 'error' in jsonResponse ? 'error' : 'info';
+            showMessageBox(jsonResponse['message'], messageType);
+            form.focus();
+        })
+        .catch((error) => {
+            showMessageBox(`Error ${error}`, 'error');
+        });
+});
+
+$('#withdraw-form').submit(function (event) {
+    event.preventDefault();
+
+    const form = this;
+
+    hideMessageBox();
+    $('#send-tokens').hide();
+    $('.progress').show();
+
+    postTriggerWithdrawExecution(form)
         .then((jsonResponse) => {
             const messageType = 'error' in jsonResponse ? 'error' : 'info';
             showMessageBox(jsonResponse['message'], messageType);
@@ -98,6 +119,27 @@ function initCollapsible() {
     $('.collapsible').collapsible();
 }
 
+
+function initPriceConversion() {
+
+    function updateFiat(price_usd) {
+        const stellar_amount = Number($('#id_amount').val());
+        const usd_value = stellar_amount * price_usd;
+        $('#fiat_amount').val(Math.round(usd_value * 100) / 100 + ' USD');
+    }
+
+    $.getJSON('https://api.coinmarketcap.com/v1/ticker/stellar/', function (json_ticker) {
+
+        const price_usd = json_ticker[0].price_usd;
+        console.log('Fetched Lumen ticker price: ' + price_usd + ' USD/XLM');
+
+        $('#id_amount').on('input propertychange paste', function () {
+            updateFiat(price_usd);
+        });
+    });
+}
+
+
 // global exports
 const bundle = {};
 bundle.showMessageBox = showMessageBox;
@@ -106,5 +148,6 @@ bundle.triggerTransactionExecution = triggerTransactionExecution;
 bundle.fetchDashboardTransactions = fetchDashboardTransactions;
 bundle.fetchBalance = fetchBalance;
 bundle.initCollapsible = initCollapsible;
+bundle.initPriceConversion = initPriceConversion;
 window.bundle = bundle;
 

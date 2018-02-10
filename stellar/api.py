@@ -78,16 +78,14 @@ def get_transactions(user, cached=False):
     return _get_cached_transactions(user=user)
 
 
-def transfer_lumen(from_user, to_user, amount, memo=None):
-    # type: (User, User, float, Optional[str]) -> None
+def transfer_lumen(sender, to_address, amount, memo=None):
+    # type: (User, str, float, Optional[str]) -> None
 
     # ToDo: check remaining lumen of sending account (fee + base reserve)
     # (take base reserve https://www.stellar.org/developers/guides/concepts/fees.html)
 
-    logger.info('Transferring XLM from {} to {}'.format(from_user, to_user))
-
-    builder = Builder(secret=from_user.stellaraccount.seed, network=network)
-    builder.append_payment_op(to_user.stellaraccount.address, str(amount), 'XLM')
+    builder = Builder(secret=sender.stellaraccount.seed, network=network)
+    builder.append_payment_op(to_address, str(amount), 'XLM')
     if memo:
         builder.add_text_memo(memo)  # string length <= 28 bytes
 

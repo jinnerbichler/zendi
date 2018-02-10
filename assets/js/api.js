@@ -35,6 +35,16 @@ function postLogin(form, url) {
         .then(clientSideRedirect)
 }
 
+function postTriggerWithdrawExecution(form) {
+    return fetch('/withdraw', {
+        method: 'POST',
+        body: new FormData(form),
+        credentials: 'same-origin',
+    }).then(logging)
+        .then(checkStatus)
+        .then(parseJSON)
+        .then(clientSideRedirect)
+}
 
 function getDepositAddress() {
     return fetch('/new_address', {
@@ -75,7 +85,7 @@ function logging(response) {
 function clientSideRedirect(response) {
     if ('redirect_url' in response) {
         let new_url = response['redirect_url'];
-        if ('replace' in response && response['replace'] )
+        if ('replace' in response && response['replace'])
             window.location.replace(new_url);
         else
             window.location.href = new_url;
@@ -113,5 +123,6 @@ export {
     getDepositAddress,
     getDashboardTransactions,
     postTriggerTransactionExecution,
+    postTriggerWithdrawExecution,
     getBalance
 }

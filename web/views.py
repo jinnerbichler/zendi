@@ -72,8 +72,6 @@ def send_tokens_exec(request):
         amount = float(request.POST['amount'])
         message = request.POST['message']  # optional
 
-        # all computations should be performed before communicating with the Tangle.
-
         # create message for user
         context = {'amount_with_unit': stellar_display_format_filter(value=amount), 'receiver': receiver_mail}
         user_message = render_to_string('web/messages/tokens_sent.txt', context=context)
@@ -87,13 +85,11 @@ def send_tokens_exec(request):
             #######################
             # sending tokens
             #######################
-            # get proper users
             _, sender = get_user_safe(email=sender_mail)
             is_new, receiver = get_user_safe(email=receiver_mail)
 
-            stellar.transfer_lumen(from_user=sender, to_user=receiver, amount=amount)
-            # iota_utils.send_tokens(request=request, sender_mail=sender_mail, receiver_mail=receiver_mail,
-            #                        value=amount, message=message)
+            logger.info('Transferring {} XLM from {} to {}'.format(amount, sender, receiver))
+            stellar.transfer_lumen(sender=sender, to_address=receiver.stellaraccount.address, amount=amount)
 
             # inform receiver via mail
             send_token_received_email(request=request, sender=sender, receiver=receiver,
@@ -108,9 +104,22 @@ def send_tokens_exec(request):
 
 
 @login_required
-@require_GET
+@require_http_methods(["GET", "POST"])
 def withdraw(request):
-    return render(request, 'web/pages/withdraw.html')
+    if request.method == 'GET':
+        return render(request, 'web/pages/withdraw.html')
+    elif request.method == 'POST':
+        sender = request.user
+        address = request.POST['address']
+        amount = request.POST['amount']
+
+        logger.info('Withdrawing {} to {} (sender:{})'.format(amount, address, sender))
+        try:
+            stellar.transfer_lumen(sender=sender, to_address=address, amount=amount)
+            return client_redirect(view=dashboard, replace=True,
+                                   user_message='Withdrawal successful.', message_type='info')
+        except Exception as ex:
+            return JsonResponse(data={'error': True, 'message': str(ex)})
 
 
 @login_required
