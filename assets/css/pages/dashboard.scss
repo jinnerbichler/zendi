@@ -78,6 +78,7 @@ $board-bg-color: white;
       .transactions {
         @extend .z-depth-0;
         background: transparent;
+        min-height: 400px;
 
         li:last-child .row {
           border-bottom: 0; // remove last border at the bottom
@@ -114,6 +115,10 @@ $board-bg-color: white;
         .row {
           margin-bottom: 0;
         }
+      }
+
+      .pagination {
+        margin-top: 0;
       }
     }
 

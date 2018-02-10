@@ -92,3 +92,18 @@ footer {
     font-size: 1em !important;
   }
 }
+
+.pagination {
+  text-align: center;
+  li {
+
+    a {
+      color: white !important;
+    }
+
+    &.active {
+      background-color: rgba(0, 0, 0, 0.1);
+      box-shadow: none;
+    }
+  }
+}

@@ -11514,6 +11514,14 @@ footer {
   footer i {
     font-size: 1em !important; }
 
+.pagination {
+  text-align: center; }
+  .pagination li a {
+    color: white !important; }
+  .pagination li.active {
+    background-color: rgba(0, 0, 0, 0.1);
+    box-shadow: none; }
+
 #landing-page h1 {
   top: 30%;
   font-size: 4.5em; }
@@ -11585,7 +11593,8 @@ footer {
         #dashboard .content .recent-transactions .transactions-update .indeterminate {
           background-color: white; }
       #dashboard .content .recent-transactions .transactions {
-        background: transparent; }
+        background: transparent;
+        min-height: 400px; }
         #dashboard .content .recent-transactions .transactions li:last-child .row {
           border-bottom: 0; }
         #dashboard .content .recent-transactions .transactions .collapsible-header {
@@ -11602,6 +11611,8 @@ footer {
             padding-left: 0; }
         #dashboard .content .recent-transactions .transactions .row {
           margin-bottom: 0; }
+      #dashboard .content .recent-transactions .pagination {
+        margin-top: 0; }
     #dashboard .content .no-transactions {
       text-align: center; }
 

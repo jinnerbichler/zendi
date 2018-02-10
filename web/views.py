@@ -13,7 +13,7 @@ from django.views.decorators.http import require_GET, require_http_methods
 from nopassword.forms import AuthenticationForm
 from rest_framework.status import HTTP_401_UNAUTHORIZED
 
-from web import ClientRedirectResponse, client_redirect
+from web import ClientRedirectResponse, client_redirect, paginate
 from web.forms import SendTokensForm
 from web.templatetags.wallet_extras import stellar_display_format_filter
 from web.user_utils import send_login_mail, get_user_safe, send_token_received_email
@@ -21,6 +21,8 @@ from web.user_utils import send_login_mail, get_user_safe, send_token_received_e
 from stellar import api as stellar
 
 logger = logging.getLogger(__name__)
+
+TRANSACTIONS_PER_PAGE = 5
 
 
 @require_GET
@@ -129,6 +131,7 @@ def deposit_address(request):
 def dashboard(request):
     balance = stellar.get_balance(request.user, cached=True)
     transactions = stellar.get_transactions(request.user, cached=True)
+    transactions = paginate(transactions, per_page=TRANSACTIONS_PER_PAGE, page=1)
     user_message = request.GET.get('user_message', default=None)
     message_type = request.GET.get('message_type', default=None)  # either 'info' or 'error'
     return render(request, 'web/pages/dashboard.html', {'logo_appendix': 'Dashboard',
@@ -148,8 +151,11 @@ def balance(request):
 @login_required
 @require_GET
 def dashboard_transactions_ajax(request):
-    transactions = stellar.get_transactions(request.user)
-    return render(request, 'web/components/transaction_list.html', {'transactions': transactions[:6]})
+    page = request.GET.get('page', default=1)
+    cached = request.GET.get('cached', default='false') == 'true'
+    transactions = stellar.get_transactions(request.user, cached=cached)
+    transactions = paginate(transactions, per_page=TRANSACTIONS_PER_PAGE, page=page)
+    return render(request, 'web/components/transaction_list.html', {'transactions': transactions})
 
 
 def login(request):

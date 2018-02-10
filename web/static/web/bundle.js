@@ -20061,9 +20061,9 @@ function triggerTransactionExecution() {
     });
 }
 
-function fetchDashboardTransactions(callback) {
-    console.log('Fetching recent transactions...');
-    (0, _api.getDashboardTransactions)().then(function (transactionsHtml) {
+function fetchDashboardTransactions(page, cached, callback) {
+    console.log('Fetching recent transactions (page=' + page + ')...');
+    (0, _api.getDashboardTransactions)(page, cached).then(function (transactionsHtml) {
         callback(transactionsHtml);
     }).catch(function (error) {
         // ToDO: Handle this case
@@ -20602,8 +20602,8 @@ function getNewAddress() {
     }).then(checkStatus).then(logging).then(parseJSON);
 }
 
-function getDashboardTransactions() {
-    return fetch('/dashboard_transactions_ajax', {
+function getDashboardTransactions(page, cached) {
+    return fetch('/dashboard_transactions_ajax?page=' + page + '&cached=' + cached, {
         method: 'GET',
         credentials: 'same-origin'
     }).then(checkStatus).then(logging).then(extractText);

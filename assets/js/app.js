@@ -72,9 +72,9 @@ function triggerTransactionExecution() {
     });
 }
 
-function fetchDashboardTransactions(callback) {
-    console.log('Fetching recent transactions...');
-    getDashboardTransactions()
+function fetchDashboardTransactions(page, cached, callback) {
+    console.log(`Fetching recent transactions (page=${page})...`);
+    getDashboardTransactions(page, cached)
         .then((transactionsHtml) => {
             callback(transactionsHtml);
         })

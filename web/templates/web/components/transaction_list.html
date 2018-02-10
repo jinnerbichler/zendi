@@ -85,9 +85,59 @@
             </li>
 
         {% endfor %}
+
     {% else %}
         <div class="no-transactions">
             <p>No transactions found</p>
         </div>
     {% endif %}
 </ul>
+
+{% if transactions.paginator.num_pages > 1 %}
+    <ul class="pagination">
+
+        {# PREVIOUS BUTTON #}
+        {% if transactions.has_previous %}
+            <li class="waves-effect">
+                <a href="#!"
+                   onclick='return window.updateTransactionPage({{ transactions.previous_page_number }}, true)'>
+                    <i class="material-icons">chevron_left</i>
+                </a>
+            </li>
+        {% else %}
+            <li class="disabled">
+                <a href="#!">
+                    <i class="material-icons">chevron_left</i>
+                </a>
+            </li>
+        {% endif %}
+
+        {# PAGES #}
+        {% for page in transactions.paginator.page_range %}
+            {% if page == transactions.number %}
+                <li class="{{ "active" }}"><a
+                        onclick='return window.updateTransactionPage({{ page }}, true)'
+                        href="#!">{{ page }}</a></li>
+            {% else %}
+                <li class="waves-effect"><a onclick='return window.updateTransactionPage({{ page }}, true)'
+                                            href="#!">{{ page }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {# NEXT BUTTON #}
+        {% if transactions.has_next %}
+            <li class="waves-effect">
+                <a href="#!"
+                   onclick='return window.updateTransactionPage({{ transactions.next_page_number }}, true)'>
+                    <i class="material-icons">chevron_right</i>
+                </a>
+            </li>
+        {% else %}
+            <li class="disabled">
+                <a href="#!">
+                    <i class="material-icons">chevron_right</i>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+{% endif %}

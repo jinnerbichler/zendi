@@ -20,7 +20,7 @@
                     <div class="col s4 offset-s4 card horizontal" id="balance-card">
                         <div class="card-content center-align">
                             <span class="card-title">Balance</span>
-                            <p class="user-balance">{{ balance|stellar_display_format }}</p>
+                            <p class="user-balance">{{ balance | stellar_display_format }}</p>
                             <div class="updating">
                                 updating...
                             </div>
@@ -58,17 +58,27 @@
                 $('#balance-card').find('.updating').hide();
             });
 
-            // fetch transactions and update UI
-            window.bundle.fetchDashboardTransactions(function (transactionsHtml) {
+            const progessIndicator = $('.transactions-update');
+            window.updateTransactionPage = function (page, cached) {
 
-                // append list of transactions
-                $('#transaction-ready-container').html(transactionsHtml);
+                progessIndicator.fadeIn(200);
 
-                // show in UI
-                $('.transactions-update').fadeOut(200);
+                // fetch transactions and update UI
+                window.bundle.fetchDashboardTransactions(page, cached, function (transactionsHtml) {
 
-                window.bundle.initCollapsible();
-            });
+                    // append list of transactions
+                    $('#transaction-ready-container').html(transactionsHtml);
+
+                    // show in UI
+                    progessIndicator.fadeOut(200);
+
+                    window.bundle.initCollapsible();
+                });
+
+                return false;
+            };
+
+            window.updateTransactionPage(1, false);
 
             {% if message %}
                 // show message
