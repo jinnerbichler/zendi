@@ -81,7 +81,7 @@ def get_transactions(user, cached=False):
 def transfer_lumen(from_user, to_user, amount, memo=None):
     # type: (User, User, float, Optional[str]) -> None
 
-    # ToDo: check remaining lumen of seeding account (fee + base reserve)
+    # ToDo: check remaining lumen of sending account (fee + base reserve)
     # (take base reserve https://www.stellar.org/developers/guides/concepts/fees.html)
 
     logger.info('Transferring XLM from {} to {}'.format(from_user, to_user))
@@ -154,15 +154,17 @@ def _update_payments(address):
 
                 # handle payment for sending / receiving tokens
                 elif payment['type'] == 'payment':
-
-                    # ToDo: handle only native tokens
-
                     transaction.sender = _user_for_address(address=payment['from'])
                     transaction.receiver = _user_for_address(address=payment['to'])
                     transaction.sender_address = payment['from']
                     transaction.receiver_address = payment['to']
                     transaction.amount = payment['amount']
                     transaction.asset_type = payment['asset_type']
+
+                # handle only native tokens
+                if transaction.asset_type != 'native':
+                    logger.info('Skipping asset {}'.format(transaction.asset_type))
+                    continue
 
                 try:
                     # saving transaction
