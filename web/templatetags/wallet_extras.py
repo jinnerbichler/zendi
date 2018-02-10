@@ -20,7 +20,7 @@ def stellar_type_format_filter(value):
 @register.filter(name='stellar_transaction_info_url')
 def stellar_transaction_info_url_filter(value):
     base_url = 'https://stellarchain.io/tx/{}'
-    if settings.STELLAR_TESTNET:
+    if settings.DEMO_MODE:
         base_url = 'http://testnet.stellarchain.io/tx/{}'
 
     return base_url.format(value)
@@ -29,7 +29,7 @@ def stellar_transaction_info_url_filter(value):
 @register.filter(name='stellar_address_info_url')
 def stellar_address_info_url_filter(value):
     base_url = 'https://stellarchain.io/address/{}'
-    if settings.STELLAR_TESTNET:
+    if settings.DEMO_MODE:
         base_url = 'http://testnet.stellarchain.io/address/{}'
 
     return base_url.format(value)

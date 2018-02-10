@@ -23,6 +23,8 @@ services:
       - "8000:8000"
     env_file:
       - env
+    environment:
+      - "DEMO_MODE=true"
     volumes:
       - static-files:/static
     depends_on:

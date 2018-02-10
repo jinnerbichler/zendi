@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, Http404
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
@@ -116,7 +116,7 @@ def withdraw(request):
 @login_required
 @require_GET
 def deposit(request):
-    return render(request, 'web/pages/deposit.html', {'disabled': settings.STELLAR_TESTNET})
+    return render(request, 'web/pages/deposit.html', {'disabled': False})
 
 
 @login_required
@@ -180,3 +180,7 @@ def login(request):
 def logout(request):
     auth_logout(request)
     return redirect('/')
+
+
+def template_settings(request):
+    return {'DEMO_MODE': settings.DEMO_MODE}

@@ -5,6 +5,14 @@
 {% block content %}
 
     <div id="deposit-page" class="triangle-content">
+
+        {# message box #}
+        <div class="row">
+            <div class="col s6 offset-s3">
+                {% include 'web/components/message_box.html' %}
+            </div>
+        </div>
+
         <h1>Deposit.</h1>
 
         <div class="address-container">
@@ -31,7 +39,13 @@
     <script>
 
         console.log('Fetching address...');
-        window.bundle.fetchNewAddress(function (newAddress) {
+        window.bundle.fetchDepositAddress(function (newAddress, error) {
+
+            if (error != null) {
+                window.bundle.showMessageBox('Error while fetching address', 'error');
+                return
+            }
+
             // show new address container
             $('#ready-container').find('.address').text(newAddress);
             $('#loading-container').hide(400, function () {

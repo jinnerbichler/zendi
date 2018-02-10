@@ -5,7 +5,7 @@ import '../css/main.scss';
 import {
     postSendToken,
     postLogin,
-    getNewAddress,
+    getDepositAddress,
     getDashboardTransactions,
     postTriggerTransactionExecution,
     getBalance
@@ -53,14 +53,14 @@ $('#login-form').submit(function (event) {
         });
 });
 
-function fetchNewAddress(callback) {
-    getNewAddress()
+function fetchDepositAddress(callback) {
+    getDepositAddress()
         .then((jsonResponse) => {
             const newAddress = jsonResponse['address'];
-            callback(newAddress);
+            callback(newAddress, null);
         })
         .catch((error) => {
-            // ToDO: Handle this case
+            callback(null, error);
         });
 }
 
@@ -76,10 +76,10 @@ function fetchDashboardTransactions(page, cached, callback) {
     console.log(`Fetching recent transactions (page=${page})...`);
     getDashboardTransactions(page, cached)
         .then((transactionsHtml) => {
-            callback(transactionsHtml);
+            callback(transactionsHtml, null);
         })
         .catch((error) => {
-            // ToDO: Handle this case
+            callback(null, error);
         });
 }
 
@@ -87,10 +87,10 @@ function fetchBalance(callback) {
     console.log('Fetching users balance...');
     getBalance()
         .then((transactionsHtml) => {
-            callback(transactionsHtml);
+            callback(transactionsHtml, null);
         })
         .catch((error) => {
-            // ToDO: Handle this case
+            callback(null, error);
         });
 }
 
@@ -101,7 +101,7 @@ function initCollapsible() {
 // global exports
 const bundle = {};
 bundle.showMessageBox = showMessageBox;
-bundle.fetchNewAddress = fetchNewAddress;
+bundle.fetchDepositAddress = fetchDepositAddress;
 bundle.triggerTransactionExecution = triggerTransactionExecution;
 bundle.fetchDashboardTransactions = fetchDashboardTransactions;
 bundle.fetchBalance = fetchBalance;

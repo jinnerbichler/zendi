@@ -20044,12 +20044,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     });
 });
 
-function fetchNewAddress(callback) {
-    (0, _api.getNewAddress)().then(function (jsonResponse) {
+function fetchDepositAddress(callback) {
+    (0, _api.getDepositAddress)().then(function (jsonResponse) {
         var newAddress = jsonResponse['address'];
-        callback(newAddress);
+        callback(newAddress, null);
     }).catch(function (error) {
-        // ToDO: Handle this case
+        callback(null, error);
     });
 }
 
@@ -20064,18 +20064,18 @@ function triggerTransactionExecution() {
 function fetchDashboardTransactions(page, cached, callback) {
     console.log('Fetching recent transactions (page=' + page + ')...');
     (0, _api.getDashboardTransactions)(page, cached).then(function (transactionsHtml) {
-        callback(transactionsHtml);
+        callback(transactionsHtml, null);
     }).catch(function (error) {
-        // ToDO: Handle this case
+        callback(null, error);
     });
 }
 
 function fetchBalance(callback) {
     console.log('Fetching users balance...');
     (0, _api.getBalance)().then(function (transactionsHtml) {
-        callback(transactionsHtml);
+        callback(transactionsHtml, null);
     }).catch(function (error) {
-        // ToDO: Handle this case
+        callback(null, error);
     });
 }
 
@@ -20086,7 +20086,7 @@ function initCollapsible() {
 // global exports
 var bundle = {};
 bundle.showMessageBox = _common.showMessageBox;
-bundle.fetchNewAddress = fetchNewAddress;
+bundle.fetchDepositAddress = fetchDepositAddress;
 bundle.triggerTransactionExecution = triggerTransactionExecution;
 bundle.fetchDashboardTransactions = fetchDashboardTransactions;
 bundle.fetchBalance = fetchBalance;
@@ -20595,7 +20595,7 @@ function postLogin(form, url) {
     }).then(checkStatus).then(logging).then(parseJSON).then(clientSideRedirect);
 }
 
-function getNewAddress() {
+function getDepositAddress() {
     return fetch('/new_address', {
         method: 'GET',
         credentials: 'same-origin'
@@ -20658,7 +20658,7 @@ function extractText(response) {
 
 exports.postSendToken = postSendToken;
 exports.postLogin = postLogin;
-exports.getNewAddress = getNewAddress;
+exports.getDepositAddress = getDepositAddress;
 exports.getDashboardTransactions = getDashboardTransactions;
 exports.postTriggerTransactionExecution = postTriggerTransactionExecution;
 exports.getBalance = getBalance;
