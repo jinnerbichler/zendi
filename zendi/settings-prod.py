@@ -28,3 +28,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 if not EMAIL_HOST_PASSWORD:
     raise Exception('Invalid config')
+
+DEV_MODE = False

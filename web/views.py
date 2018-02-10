@@ -192,4 +192,7 @@ def logout(request):
 
 
 def template_settings(request):
-    return {'DEMO_MODE': settings.DEMO_MODE}
+    return {
+        'DEMO_MODE': settings.DEMO_MODE,
+        'DEV_MODE': settings.DEV_MODE
+    }

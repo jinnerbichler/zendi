@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import '../img/stellar-rocket-300.png'
+import '../img/logo_white.png'
 
 import '../css/main.scss';
 import {
