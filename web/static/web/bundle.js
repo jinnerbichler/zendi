@@ -20044,6 +20044,24 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     });
 });
 
+(0, _jquery2.default)('#withdraw-form').submit(function (event) {
+    event.preventDefault();
+
+    var form = this;
+
+    (0, _common.hideMessageBox)();
+    (0, _jquery2.default)('#send-tokens').hide();
+    (0, _jquery2.default)('.progress').show();
+
+    (0, _api.postTriggerWithdrawExecution)(form).then(function (jsonResponse) {
+        var messageType = 'error' in jsonResponse ? 'error' : 'info';
+        (0, _common.showMessageBox)(jsonResponse['message'], messageType);
+        form.focus();
+    }).catch(function (error) {
+        (0, _common.showMessageBox)('Error ' + error, 'error');
+    });
+});
+
 function fetchDepositAddress(callback) {
     (0, _api.getDepositAddress)().then(function (jsonResponse) {
         var newAddress = jsonResponse['address'];
@@ -20083,6 +20101,25 @@ function initCollapsible() {
     (0, _jquery2.default)('.collapsible').collapsible();
 }
 
+function initPriceConversion() {
+
+    function updateFiat(price_usd) {
+        var stellar_amount = Number((0, _jquery2.default)('#id_amount').val());
+        var usd_value = stellar_amount * price_usd;
+        (0, _jquery2.default)('#fiat_amount').val(Math.round(usd_value * 100) / 100 + ' USD');
+    }
+
+    _jquery2.default.getJSON('https://api.coinmarketcap.com/v1/ticker/stellar/', function (json_ticker) {
+
+        var price_usd = json_ticker[0].price_usd;
+        console.log('Fetched Lumen ticker price: ' + price_usd + ' USD/XLM');
+
+        (0, _jquery2.default)('#id_amount').on('input propertychange paste', function () {
+            updateFiat(price_usd);
+        });
+    });
+}
+
 // global exports
 var bundle = {};
 bundle.showMessageBox = _common.showMessageBox;
@@ -20091,6 +20128,7 @@ bundle.triggerTransactionExecution = triggerTransactionExecution;
 bundle.fetchDashboardTransactions = fetchDashboardTransactions;
 bundle.fetchBalance = fetchBalance;
 bundle.initCollapsible = initCollapsible;
+bundle.initPriceConversion = initPriceConversion;
 window.bundle = bundle;
 
 /***/ }),
@@ -20595,6 +20633,14 @@ function postLogin(form, url) {
     }).then(checkStatus).then(logging).then(parseJSON).then(clientSideRedirect);
 }
 
+function postTriggerWithdrawExecution(form) {
+    return fetch('/withdraw', {
+        method: 'POST',
+        body: new FormData(form),
+        credentials: 'same-origin'
+    }).then(logging).then(checkStatus).then(parseJSON).then(clientSideRedirect);
+}
+
 function getDepositAddress() {
     return fetch('/new_address', {
         method: 'GET',
@@ -20661,6 +20707,7 @@ exports.postLogin = postLogin;
 exports.getDepositAddress = getDepositAddress;
 exports.getDashboardTransactions = getDashboardTransactions;
 exports.postTriggerTransactionExecution = postTriggerTransactionExecution;
+exports.postTriggerWithdrawExecution = postTriggerWithdrawExecution;
 exports.getBalance = getBalance;
 
 /***/ }),

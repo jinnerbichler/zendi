@@ -11653,6 +11653,36 @@ footer {
   top: 60px;
   right: 80px; }
 
+#withdraw-page h1 {
+  width: 80%; }
+
+#withdraw-page #withdraw-form {
+  position: absolute;
+  left: 25%;
+  top: 40%;
+  width: 50%;
+  text-align: center; }
+  #withdraw-page #withdraw-form .input-field input {
+    font-size: 2.5em;
+    font-weight: 300; }
+  #withdraw-page #withdraw-form .exchange {
+    color: white;
+    margin-top: 30px; }
+  #withdraw-page #withdraw-form .fiat-amount {
+    color: white;
+    font-size: 1.0em; }
+    #withdraw-page #withdraw-form .fiat-amount input {
+      font-size: 1.5em;
+      border-bottom: 0; }
+
+#withdraw-page .progress {
+  left: 40%;
+  width: 20%;
+  margin: 0;
+  background: transparent; }
+  #withdraw-page .progress .indeterminate {
+    background-color: white; }
+
 #login-page h1 {
   width: 100%; }
 
