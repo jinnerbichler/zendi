@@ -11489,7 +11489,7 @@ textarea.materialize-textarea.invalid {
 #message-box {
   margin-top: 20px;
   background-color: #2196F3;
-  opacity: 0.95; }
+  opacity: 0.90; }
   #message-box .close {
     cursor: pointer; }
   #message-box.info {
@@ -11521,6 +11521,17 @@ footer {
   .pagination li.active {
     background-color: rgba(0, 0, 0, 0.1);
     box-shadow: none; }
+
+#demo-notifier {
+  bottom: 0;
+  height: 30px;
+  display: block;
+  background: #ffb74d; }
+  #demo-notifier .bold {
+    font-weight: bold; }
+  #demo-notifier p {
+    text-align: center;
+    margin-top: 1px; }
 
 #landing-page h1 {
   top: 30%;
@@ -11616,8 +11627,12 @@ footer {
         margin-top: 0; }
     #dashboard .content .no-transactions {
       text-align: center; }
+  #dashboard #message-box {
+    position: absolute;
+    top: -60px;
+    right: 80px; }
 
-.address-container {
+#deposit-page .address-container {
   position: absolute;
   top: 50%;
   left: 5%;
@@ -11626,12 +11641,17 @@ footer {
   color: white;
   font-size: 2.0em;
   font-weight: 200; }
-  .address-container .address {
+  #deposit-page .address-container .address {
     font-weight: 400;
     font-size: 0.8em; }
-  .address-container #loading-container .progress {
+  #deposit-page .address-container #loading-container .progress {
     width: 50%;
     left: 25%; }
+
+#deposit-page #message-box {
+  position: absolute;
+  top: 60px;
+  right: 80px; }
 
 #login-page h1 {
   width: 100%; }

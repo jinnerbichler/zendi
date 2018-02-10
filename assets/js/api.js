@@ -36,7 +36,7 @@ function postLogin(form, url) {
 }
 
 
-function getNewAddress() {
+function getDepositAddress() {
     return fetch('/new_address', {
         method: 'GET',
         credentials: 'same-origin',
@@ -110,7 +110,7 @@ function extractText(response) {
 export {
     postSendToken,
     postLogin,
-    getNewAddress,
+    getDepositAddress,
     getDashboardTransactions,
     postTriggerTransactionExecution,
     getBalance

@@ -66,6 +66,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'web.views.template_settings'
             ],
         },
     },
@@ -152,7 +153,4 @@ LOGIN_REDIRECT_URL = '/dashboard/'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = '1025'
 
-#############################
-# Stellar Lumen settings
-#############################
-STELLAR_TESTNET = os.getenv('STELLAR_TESTNET', True)
+DEMO_MODE = os.getenv('DEMO_MODE', 'false') == 'true'

@@ -52,19 +52,30 @@
         $(document).ready(function () {
 
             // fetch balance
-            window.bundle.fetchBalance(function (balanceJson) {
+            window.bundle.fetchBalance(function (balanceJson, error) {
+
+                if (error != null) {
+                    window.bundle.showMessageBox('Error while fetching balance.', 'error');
+                    return
+                }
+
                 console.log('fetched balance ' + JSON.stringify(balanceJson));
                 $('.user-balance').text(balanceJson['formatted']);
                 $('#balance-card').find('.updating').hide();
             });
 
+            // fetch transactions
             const progessIndicator = $('.transactions-update');
             window.updateTransactionPage = function (page, cached) {
 
                 progessIndicator.fadeIn(200);
 
-                // fetch transactions and update UI
-                window.bundle.fetchDashboardTransactions(page, cached, function (transactionsHtml) {
+                window.bundle.fetchDashboardTransactions(page, cached, function (transactionsHtml, error) {
+
+                    if (error != null) {
+                        window.bundle.showMessageBox('Error while fetching transactions.', 'error');
+                        return
+                    }
 
                     // append list of transactions
                     $('#transaction-ready-container').html(transactionsHtml);

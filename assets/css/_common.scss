@@ -51,7 +51,7 @@
 #message-box {
   margin-top: 20px;
   background-color: color("blue", "base");
-  opacity: 0.95;
+  opacity: 0.90;
 
   .close {
     cursor: pointer;
@@ -105,5 +105,22 @@ footer {
       background-color: rgba(0, 0, 0, 0.1);
       box-shadow: none;
     }
+  }
+}
+
+#demo-notifier {
+  bottom: 0;
+  height: 30px;
+  display: block;
+  background: color('orange', 'lighten-2');
+
+  .bold {
+    font-weight: bold;
+  }
+
+  p {
+    text-align: center;
+    margin-top: 1px;
+
   }
 }

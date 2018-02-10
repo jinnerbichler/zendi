@@ -16,7 +16,7 @@ from stellar.models import StellarAccount, StellarTransaction
 
 logger = logging.getLogger(__name__)
 
-network = 'TESTNET' if settings.STELLAR_TESTNET else 'PUBLIC'
+network = 'TESTNET' if settings.DEMO_MODE else 'PUBLIC'
 
 
 def create_account(user):
@@ -31,7 +31,7 @@ def create_account(user):
     StellarAccount.objects.create(seed=seed, address=public_key, user=user, balance=0.0)
 
     # fund account
-    if settings.STELLAR_TESTNET:
+    if settings.DEMO_MODE:
         response = requests.get('https://horizon-testnet.stellar.org/friendbot?addr=' + public_key)
         response.raise_for_status()
         if response.status_code == 200:
@@ -116,8 +116,9 @@ def _update_payments(address):
 
     cursor = None
     while True:
+
+        # fetch payments
         payments = address.payments(cursor=cursor, order='desc', limit='10')
-        records = payments['_embedded']['records']
 
         # determine cursor of next page
         next_link = payments['_links']['next']['href']
@@ -129,7 +130,7 @@ def _update_payments(address):
         cursor = new_cursor
 
         # store new records
-        for payment in records:
+        for payment in payments['_embedded']['records']:
 
             # only check relevant payments
             if payment['type'] in ['create_account', 'payment']:
