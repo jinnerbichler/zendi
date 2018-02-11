@@ -10,7 +10,8 @@ import {
     getDashboardTransactions,
     postTriggerTransactionExecution,
     postTriggerWithdrawExecution,
-    getBalance
+    getBalance,
+    postFeedback
 } from './api';
 import 'materialize-css';
 import {showMessageBox, hideMessageBox} from "./common";
@@ -18,6 +19,9 @@ import * as EmailValidator from 'email-validator';
 
 $(document).ready(function () {
     $('select').material_select();
+    $('.modal').modal();
+
+    initFeedbackModal();
 });
 
 $('#send-form').submit(function (event) {
@@ -28,15 +32,15 @@ $('#send-form').submit(function (event) {
     const formData = new FormData(form);
     const amount = formData.get('amount');
     if (EmailValidator.validate(formData.get('sender_mail')) === false) {
-        showMessageBox(`Sender's mail address is invalid`, 'error');
+        showMessageBox(`Sender's mail address is invalid.`, 'error');
         return false;
     }
     if (EmailValidator.validate(formData.get('receiver_mail')) === false) {
-        showMessageBox(`Receiver's mail address is invalid`, 'error');
+        showMessageBox(`Receiver's mail address is invalid.`, 'error');
         return false;
     }
     if (!amount || amount === '0') {
-        showMessageBox(`Invalid amount`, 'error');
+        showMessageBox(`The entered amount is invalid.`, 'error');
         return false;
     }
 
@@ -158,6 +162,24 @@ function initPriceConversion() {
     });
 }
 
+function initFeedbackModal() {
+    const feedbackModal = $('#feedback-modal');
+
+    feedbackModal.modal('open');
+
+    // cancel button
+    feedbackModal.find('#feedback-cancel-btn').click(function () {
+        feedbackModal.modal('close');
+    });
+
+    // send button
+    feedbackModal.find('#feedback-send-btn').click(function () {
+        console.log('Sending feedback');
+        const feedbackForm = $('#feedback-form')[0];
+        postFeedback(feedbackForm);
+        feedbackModal.modal('close');
+    });
+}
 
 // global exports
 const bundle = {};

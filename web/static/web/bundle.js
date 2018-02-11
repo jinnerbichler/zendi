@@ -64,7 +64,7 @@ var EntryPoint =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 12);
+/******/ 	return __webpack_require__(__webpack_require__.s = 14);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -11144,13 +11144,13 @@ jQuery.Velocity ? console.log("Velocity is already loaded. You may be needlessly
       }
     }, destroy: function destroy() {
       this.element && lc(this, !1), this.handlers = {}, this.session = {}, this.input.destroy(), this.element = null;
-    } }, n(hc, { INPUT_START: O, INPUT_MOVE: P, INPUT_END: Q, INPUT_CANCEL: R, STATE_POSSIBLE: Rb, STATE_BEGAN: Sb, STATE_CHANGED: Tb, STATE_ENDED: Ub, STATE_RECOGNIZED: Vb, STATE_CANCELLED: Wb, STATE_FAILED: Xb, DIRECTION_NONE: S, DIRECTION_LEFT: T, DIRECTION_RIGHT: U, DIRECTION_UP: V, DIRECTION_DOWN: W, DIRECTION_HORIZONTAL: X, DIRECTION_VERTICAL: Y, DIRECTION_ALL: Z, Manager: kc, Input: ab, TouchAction: Pb, TouchInput: Eb, MouseInput: rb, PointerEventInput: wb, TouchMouseInput: Gb, SingleTouchInput: Ab, Recognizer: Yb, AttrRecognizer: ac, Tap: gc, Pan: bc, Swipe: fc, Pinch: cc, Rotate: ec, Press: dc, on: t, off: u, each: m, merge: o, extend: n, inherit: p, bindFn: q, prefixed: B }), ( false ? "undefined" : _typeof(__webpack_require__(10))) == g && __webpack_require__(11) ? !(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+    } }, n(hc, { INPUT_START: O, INPUT_MOVE: P, INPUT_END: Q, INPUT_CANCEL: R, STATE_POSSIBLE: Rb, STATE_BEGAN: Sb, STATE_CHANGED: Tb, STATE_ENDED: Ub, STATE_RECOGNIZED: Vb, STATE_CANCELLED: Wb, STATE_FAILED: Xb, DIRECTION_NONE: S, DIRECTION_LEFT: T, DIRECTION_RIGHT: U, DIRECTION_UP: V, DIRECTION_DOWN: W, DIRECTION_HORIZONTAL: X, DIRECTION_VERTICAL: Y, DIRECTION_ALL: Z, Manager: kc, Input: ab, TouchAction: Pb, TouchInput: Eb, MouseInput: rb, PointerEventInput: wb, TouchMouseInput: Gb, SingleTouchInput: Ab, Recognizer: Yb, AttrRecognizer: ac, Tap: gc, Pan: bc, Swipe: fc, Pinch: cc, Rotate: ec, Press: dc, on: t, off: u, each: m, merge: o, extend: n, inherit: p, bindFn: q, prefixed: B }), ( false ? "undefined" : _typeof(__webpack_require__(12))) == g && __webpack_require__(13) ? !(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
     return hc;
   }.call(exports, __webpack_require__, exports, module),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "undefined" != typeof module && module.exports ? module.exports = hc : a[c] = hc;
 }(window, document, "Hammer");;(function (factory) {
   if (true) {
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(0), __webpack_require__(7)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(0), __webpack_require__(8)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -19997,11 +19997,11 @@ var _jquery = __webpack_require__(0);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
+__webpack_require__(11);
+
+__webpack_require__(10);
+
 __webpack_require__(9);
-
-__webpack_require__(35);
-
-__webpack_require__(8);
 
 var _api = __webpack_require__(5);
 
@@ -20009,7 +20009,7 @@ __webpack_require__(1);
 
 var _common = __webpack_require__(6);
 
-var _emailValidator = __webpack_require__(36);
+var _emailValidator = __webpack_require__(7);
 
 var EmailValidator = _interopRequireWildcard(_emailValidator);
 
@@ -20019,6 +20019,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 (0, _jquery2.default)(document).ready(function () {
     (0, _jquery2.default)('select').material_select();
+    (0, _jquery2.default)('.modal').modal();
+
+    initFeedbackModal();
 });
 
 (0, _jquery2.default)('#send-form').submit(function (event) {
@@ -20029,15 +20032,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     var formData = new FormData(form);
     var amount = formData.get('amount');
     if (EmailValidator.validate(formData.get('sender_mail')) === false) {
-        (0, _common.showMessageBox)('Sender\'s mail address is invalid', 'error');
+        (0, _common.showMessageBox)('Sender\'s mail address is invalid.', 'error');
         return false;
     }
     if (EmailValidator.validate(formData.get('receiver_mail')) === false) {
-        (0, _common.showMessageBox)('Receiver\'s mail address is invalid', 'error');
+        (0, _common.showMessageBox)('Receiver\'s mail address is invalid.', 'error');
         return false;
     }
     if (!amount || amount === '0') {
-        (0, _common.showMessageBox)('Invalid amount', 'error');
+        (0, _common.showMessageBox)('The entered amount is invalid.', 'error');
         return false;
     }
 
@@ -20142,6 +20145,25 @@ function initPriceConversion() {
         (0, _jquery2.default)('#id_amount').on('input propertychange paste', function () {
             updateFiat(price_usd);
         });
+    });
+}
+
+function initFeedbackModal() {
+    var feedbackModal = (0, _jquery2.default)('#feedback-modal');
+
+    feedbackModal.modal('open');
+
+    // cancel button
+    feedbackModal.find('#feedback-cancel-btn').click(function () {
+        feedbackModal.modal('close');
+    });
+
+    // send button
+    feedbackModal.find('#feedback-send-btn').click(function () {
+        console.log('Sending feedback');
+        var feedbackForm = (0, _jquery2.default)('#feedback-form')[0];
+        (0, _api.postFeedback)(feedbackForm);
+        feedbackModal.modal('close');
     });
 }
 
@@ -20687,6 +20709,14 @@ function getBalance() {
     }).then(checkStatus).then(logging).then(parseJSON);
 }
 
+function postFeedback(form) {
+    return fetch('/feedback', {
+        method: 'POST',
+        body: new FormData(form),
+        credentials: 'same-origin'
+    }).then(checkStatus).then(logging);
+}
+
 // #####################################################################
 // ###################### Response Callbacks ###########################
 // #####################################################################
@@ -20734,6 +20764,7 @@ exports.getDashboardTransactions = getDashboardTransactions;
 exports.postTriggerTransactionExecution = postTriggerTransactionExecution;
 exports.postTriggerWithdrawExecution = postTriggerWithdrawExecution;
 exports.getBalance = getBalance;
+exports.postFeedback = postFeedback;
 
 /***/ }),
 /* 6 */
@@ -20785,6 +20816,38 @@ exports.hideMessageBox = hideMessageBox;
 
 /***/ }),
 /* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var tester = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-?\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+// Thanks to:
+// http://fightingforalostcause.net/misc/2006/compare-email-regex.php
+// http://thedailywtf.com/Articles/Validating_Email_Addresses.aspx
+// http://stackoverflow.com/questions/201323/what-is-the-best-regular-expression-for-validating-email-addresses/201378#201378
+exports.validate = function (email) {
+	if (!email) return false;
+
+	if (email.length > 254) return false;
+
+	var valid = tester.test(email);
+	if (!valid) return false;
+
+	// Further checking of some things regex can't handle
+	var parts = email.split("@");
+	if (parts[0].length > 64) return false;
+
+	var domainParts = parts[1].split(".");
+	if (domainParts.some(function (part) {
+		return part.length > 63;
+	})) return false;
+
+	return true;
+};
+
+/***/ }),
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23424,19 +23487,25 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 })(window, document, 'Hammer');
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 9 */
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "logo_white.png";
+
+/***/ }),
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "stellar-rocket-300.png";
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports) {
 
 module.exports = function() {
@@ -23445,7 +23514,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
@@ -23454,72 +23523,12 @@ module.exports = __webpack_amd_options__;
 /* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(4);
 module.exports = __webpack_require__(3);
 
-
-/***/ }),
-/* 13 */,
-/* 14 */,
-/* 15 */,
-/* 16 */,
-/* 17 */,
-/* 18 */,
-/* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */,
-/* 23 */,
-/* 24 */,
-/* 25 */,
-/* 26 */,
-/* 27 */,
-/* 28 */,
-/* 29 */,
-/* 30 */,
-/* 31 */,
-/* 32 */,
-/* 33 */,
-/* 34 */,
-/* 35 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "logo_white.png";
-
-/***/ }),
-/* 36 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var tester = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-?\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
-// Thanks to:
-// http://fightingforalostcause.net/misc/2006/compare-email-regex.php
-// http://thedailywtf.com/Articles/Validating_Email_Addresses.aspx
-// http://stackoverflow.com/questions/201323/what-is-the-best-regular-expression-for-validating-email-addresses/201378#201378
-exports.validate = function (email) {
-	if (!email) return false;
-
-	if (email.length > 254) return false;
-
-	var valid = tester.test(email);
-	if (!valid) return false;
-
-	// Further checking of some things regex can't handle
-	var parts = email.split("@");
-	if (parts[0].length > 64) return false;
-
-	var domainParts = parts[1].split(".");
-	if (domainParts.some(function (part) {
-		return part.length > 63;
-	})) return false;
-
-	return true;
-};
 
 /***/ })
 /******/ ]);
