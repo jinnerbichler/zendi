@@ -74,6 +74,16 @@ function getBalance() {
         .then(parseJSON)
 }
 
+function postFeedback(form) {
+    return fetch('/feedback', {
+        method: 'POST',
+        body: new FormData(form),
+        credentials: 'same-origin',
+    }).then(checkStatus)
+        .then(logging)
+
+}
+
 // #####################################################################
 // ###################### Response Callbacks ###########################
 // #####################################################################
@@ -124,5 +134,6 @@ export {
     getDashboardTransactions,
     postTriggerTransactionExecution,
     postTriggerWithdrawExecution,
-    getBalance
+    getBalance,
+    postFeedback
 }

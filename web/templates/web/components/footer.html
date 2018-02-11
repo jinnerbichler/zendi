@@ -1,5 +1,39 @@
 {% load static %}
 
+{# Feedback #}
+<a id="gaf-button" class="modal-trigger" href="#feedback-modal">Feedback</a>
+<div id="feedback-modal" class="modal">
+    <div class="modal-content">
+        <h4>Thank you for your Feedback!</h4>
+        <div class="row feedback-body">
+            <form id="feedback-form" class="col s12">
+
+                {% csrf_token %}
+                {{ form.media }}
+
+                <div class="row">
+                    <div class="input-field col s12">
+                        <label for="feedback-message">Message:</label>
+                        <textarea id="feedback-message" name="message" class="materialize-textarea"
+                                  placeholder="Your feedback"></textarea>
+                    </div>
+                </div>
+                <div class="row last-row">
+                    <div class="input-field col s12">
+                        <label for="feedback-email">Email:</label>
+                        <input id="feedback-email" name="email" placeholder="Your email" type="email">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a id="feedback-cancel-btn" href="#!"
+           class="modal-action waves-effect waves-green btn-flat">Cancel</a>
+        <a id="feedback-send-btn" href="#!"
+           class="modal-action waves-effect waves-green btn-flat">Send</a>
+    </div>
+</div>
 
 <!-- Footer-->
 <footer>
