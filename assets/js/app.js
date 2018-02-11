@@ -14,6 +14,7 @@ import {
 } from './api';
 import 'materialize-css';
 import {showMessageBox, hideMessageBox} from "./common";
+import * as EmailValidator from 'email-validator';
 
 $(document).ready(function () {
     $('select').material_select();
@@ -22,9 +23,26 @@ $(document).ready(function () {
 $('#send-form').submit(function (event) {
     event.preventDefault();
 
+    // validate form
+    const form = this;
+    const formData = new FormData(form);
+    const amount = formData.get('amount');
+    if (EmailValidator.validate(formData.get('sender_mail')) === false) {
+        showMessageBox(`Sender's mail address is invalid`, 'error');
+        return false;
+    }
+    if (EmailValidator.validate(formData.get('receiver_mail')) === false) {
+        showMessageBox(`Receiver's mail address is invalid`, 'error');
+        return false;
+    }
+    if (!amount || amount === '0') {
+        showMessageBox(`Invalid amount`, 'error');
+        return false;
+    }
+
+    // hide message box after validation
     hideMessageBox();
 
-    const form = this;
     postSendToken(form)
         .then((jsonResponse) => {
             const messageType = 'error' in jsonResponse ? 'error' : 'info';
