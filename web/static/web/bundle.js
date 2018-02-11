@@ -20151,8 +20151,6 @@ function initPriceConversion() {
 function initFeedbackModal() {
     var feedbackModal = (0, _jquery2.default)('#feedback-modal');
 
-    feedbackModal.modal('open');
-
     // cancel button
     feedbackModal.find('#feedback-cancel-btn').click(function () {
         feedbackModal.modal('close');

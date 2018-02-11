@@ -165,8 +165,6 @@ function initPriceConversion() {
 function initFeedbackModal() {
     const feedbackModal = $('#feedback-modal');
 
-    feedbackModal.modal('open');
-
     // cancel button
     feedbackModal.find('#feedback-cancel-btn').click(function () {
         feedbackModal.modal('close');
