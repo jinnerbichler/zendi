@@ -195,9 +195,11 @@ def logout(request):
 @csrf_exempt
 @require_POST
 def feedback(request):
-    sender = request.user
+    logger.info('Received feedback from {}'.format(request.user))
+
+    sender = request.user if request.user.is_authenticated() else None
     message = request.POST['message']
-    email = request.POST['email']
+    email = request.POST.get('email')
     UserFeedback.objects.create(sender=sender, message=message, email=email)
 
     return HttpResponse(status=204)

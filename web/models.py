@@ -7,7 +7,7 @@ import stellar.api
 
 
 class UserFeedback(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='feedback', blank=True, null=True)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='feedback', blank=True, null=True, default=None)
     email = models.TextField()
     message = models.TextField()
 
