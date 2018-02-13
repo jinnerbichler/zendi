@@ -32,6 +32,10 @@ def init():
 def logs():
     local('docker-compose --project-name zendi logs -f')
 
+@task
+def logs_web():
+    local('docker-compose --project-name zendi logs -f zendi_web')
+
 
 @task
 def run_local():
