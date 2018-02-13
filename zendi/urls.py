@@ -19,5 +19,6 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^accounts/', include('nopassword.urls', namespace="nopassword")),
     url(r'^zendi_admin/', admin.site.urls),
+    url(r'^federation/', include('stellar-federation.urls'), name='stellar-federation'),
     url(r'', include('web.urls'), name='web'),
 ]

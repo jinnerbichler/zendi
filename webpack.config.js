@@ -26,6 +26,10 @@ const copyFilesPlugin = new CopyWebpackPlugin([{
     // copy dependencies of theme
     from: 'assets/theme',
     to: 'theme'
+}, {
+    // copy well-known files
+    from: 'assets/well-known',
+    to: 'well-known'
 }]);
 
 // ------------------------------------------------------------------

@@ -1,0 +1,5 @@
+# Sample stellar.toml
+
+#   The endpoint which clients should query to resolve stellar addresses
+#   for users on your domain.
+FEDERATION_SERVER="https://api.stellar.org/federation"
