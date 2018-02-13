@@ -15,14 +15,14 @@ $board-bg-color: white;
   .content {
     background: rgba($board-bg-color, 0.0);
     min-height: 500px;
-    //padding: 30px;
     border-radius: 2px;
-    //@extend .z-depth-5;
 
     // ================== Balance Board ==========================
     #balance-card {
       @extend .z-depth-3, .black-text;
       background: rgba($board-bg-color, 0.9);
+      width: 360px;
+      height: 137px;
 
       .card-image {
         max-width: 25%;

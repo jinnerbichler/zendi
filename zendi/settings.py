@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'nopassword',
     'django_extensions',
     'stellar',
+    'stellar-federation',
     'web'
 ]
 
@@ -155,3 +156,5 @@ EMAIL_PORT = '1025'
 
 DEV_MODE = True
 DEMO_MODE = os.getenv('DEMO_MODE', 'false') == 'true'
+
+STELLAR_FEDERATION_CALLBACK = 'stellar.api.federation_callback'

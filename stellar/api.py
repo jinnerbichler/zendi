@@ -16,6 +16,16 @@ from stellar.models import StellarAccount, StellarTransaction
 
 logger = logging.getLogger(__name__)
 
+
+class InsufficientBalanceException(Exception):
+    def __init__(self, *args, user, proposed_amount, balance):
+        self.user = user
+        self.proposed_amount = proposed_amount
+        self.balance = balance
+        message = '{} has not enough balance ({}) for sending {} XLM'.format(user, balance, proposed_amount)
+        super().__init__(message, *args)
+
+
 network = 'TESTNET' if settings.DEMO_MODE else 'PUBLIC'
 
 
@@ -93,13 +103,8 @@ def transfer_lumen(sender, to_address, amount, memo=None):
     builder.submit()
 
 
-class InsufficientBalanceException(Exception):
-    def __init__(self, *args, user, proposed_amount, balance):
-        self.user = user
-        self.proposed_amount = proposed_amount
-        self.balance = balance
-        message = '{} has not enough balance ({}) for sending {} XLM'.format(user, balance, proposed_amount)
-        super().__init__(message, *args)
+def federation_callback(query, query_type):
+    pass
 
 
 def _get_address(public_key):

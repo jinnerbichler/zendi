@@ -38,13 +38,25 @@
 }
 
 .brand-logo {
+  float: left;
+
   .appendix {
     text-transform: none;
     font-weight: 100;
   }
+
   img {
-    height: 25px;
+    float: left;
+    height: 30px;
     width: auto;
+    margin-top: 22px;
+    margin-right: 10px;
+  }
+
+  p {
+    float: left;
+    margin-top: 0;
+    margin-bottom: 0;
   }
 }
 
