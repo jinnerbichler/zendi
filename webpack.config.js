@@ -30,6 +30,10 @@ const copyFilesPlugin = new CopyWebpackPlugin([{
     // copy well-known files
     from: 'assets/well-known',
     to: 'well-known'
+}, {
+    // copy well-known files
+    from: 'assets/well-known-demo',
+    to: 'well-known-demo'
 }]);
 
 // ------------------------------------------------------------------

@@ -1,3 +1,3 @@
-[submodule "stellar-federation"]
-	path = stellar-federation
+[submodule "stellar_federation"]
+	path = stellar_federation
 	url = https://github.com/zendi-org/django-stellar-federation

@@ -21,7 +21,7 @@ $board-bg-color: white;
     #balance-card {
       @extend .z-depth-3, .black-text;
       background: rgba($board-bg-color, 0.9);
-      width: 360px;
+      width: 380px;
       height: 137px;
 
       .card-image {

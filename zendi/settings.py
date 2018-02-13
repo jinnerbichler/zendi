@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'nopassword',
     'django_extensions',
     'stellar',
-    'stellar-federation',
+    'stellar_federation',
     'web'
 ]
 
