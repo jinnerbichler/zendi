@@ -157,4 +157,4 @@ EMAIL_PORT = '1025'
 DEV_MODE = True
 DEMO_MODE = os.getenv('DEMO_MODE', 'false') == 'true'
 
-STELLAR_FEDERATION_CALLBACK = 'stellar.api.federation_callback'
+STELLAR_FEDERATION_CALLBACK = 'web.user_utils.federation_callback'

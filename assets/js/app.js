@@ -32,11 +32,11 @@ $('#send-form').submit(function (event) {
     const formData = new FormData(form);
     const amount = formData.get('amount');
     if (EmailValidator.validate(formData.get('sender_mail')) === false) {
-        showMessageBox(`Sender's mail address is invalid.`, 'error');
+        showMessageBox(`Senders mail address is invalid.`, 'error');
         return false;
     }
     if (EmailValidator.validate(formData.get('receiver_mail')) === false) {
-        showMessageBox(`Receiver's mail address is invalid.`, 'error');
+        showMessageBox(`Receivers mail address is invalid.`, 'error');
         return false;
     }
     if (!amount || amount === '0') {
