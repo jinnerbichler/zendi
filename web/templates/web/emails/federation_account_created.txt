@@ -1,4 +1,4 @@
-Dear new account holder,
+Welcome to Zėndi,
 
 an account has been created for {{ email }} on {{ domain }}.
 
