@@ -8,8 +8,6 @@ from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.db.models import Q
 from django.utils.dateparse import parse_datetime
-from django.core.validators import validate_email
-from django.core.exceptions import ValidationError
 from stellar_base.address import Address
 from stellar_base.builder import Builder
 from stellar_base.keypair import Keypair
@@ -105,38 +103,6 @@ def transfer_lumen(sender, to_address, amount, memo=None):
 
     builder.sign()
     builder.submit()
-
-
-def federation_callback(request, query, query_type):
-    # check type of query
-    if query_type != 'name':
-        raise stellar_federation.NotImplementedException()
-
-    # validate email
-    email, domain = query.split('*')
-    try:
-        validate_email(email)
-    except ValidationError:
-        raise stellar_federation.NotFoundException()
-
-    # check if handled by domain
-    if domain != request.get_host():
-        raise stellar_federation.NotFoundException()
-
-    # get or create user
-    new_user, user = get_user_safe(email)
-
-    # ToDo: send email to user if new
-    if new_user:
-        logger.info('Created user {} from federation request (q={}, type={})'.format(user, query, query_type))
-
-    # build response
-    response = {
-        "stellar_address": query,
-        "account_id": user.stellaraccount.address,
-    }
-
-    return response
 
 
 def _get_address(public_key):

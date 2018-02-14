@@ -1,0 +1,9 @@
+Dear new account holder,
+
+an account has been created for {{ email }} on {{ domain }}.
+
+Please use the following url to log in to Zėndi:
+{{ login_url }}
+
+All the best,
+ your Zėndi team

@@ -6,7 +6,11 @@ from django.contrib.auth import authenticate
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 from nopassword.utils import get_username, get_username_field
+
+import stellar_federation
 
 logger = logging.getLogger(__name__)
 
@@ -45,6 +49,44 @@ def login_url(code, secure=False, host=None):
     return '%s://%s%s' % ('https' if secure else 'http', host, view[0])
 
 
+def federation_callback(request, query, query_type):
+    # check type of query
+    if query_type != 'name':
+        raise stellar_federation.NotImplementedException()
+
+    # validate email
+    email, domain = query.split('*')
+    try:
+        validate_email(email)
+    except ValidationError:
+        raise stellar_federation.NotFoundException('Address is not a valid email address')
+
+    # check if handled by domain
+    if domain != request.get_host():
+        raise stellar_federation.NotFoundException('Wrong hose name')
+
+    # get or create user
+    new_user, user = get_user_safe(email)
+
+    # build response
+    response = {
+        "stellar_address": query,
+        "account_id": user.stellaraccount.address,
+    }
+
+    if new_user:
+        logger.info('(Federation) Created user {} from federation request (q={}, type={})'.format(user, query,
+                                                                                                  query_type))
+        send_federation_account_created(request=request, user=user)
+
+        response['memo_type'] = 'text'
+        response['memo'] = 'new account created'
+
+    logger.info('(Federation) Returning account {} ({})'.format(user.stellaraccount.address, user))
+
+    return response
+
+
 def send_login_mail(request, next_url, email):
     # get user
     is_new, send_user = get_user_safe(email=email)
@@ -59,6 +101,31 @@ def send_login_mail(request, next_url, email):
     login_code.send_login_code(secure=request.is_secure(), host=request.get_host())
 
     return render_to_string('web/messages/login_sent.txt', context={'mail': send_user.email})
+
+
+def send_federation_account_created(request, user):
+    # create login code
+    login_code = authenticate(**{get_username_field(): user.username})
+    login_code.next = '/dashboard'
+    login_code.save()
+
+    # generate email body
+    url_for_login = login_url(code=login_code, secure=request.is_secure(), host=request.get_host())
+    context = {
+        'login_url': url_for_login,
+        'email': user.email,
+        'domain': request.get_host()
+    }
+    text_content = render_to_string('web/emails/federation_account_created.txt', context)
+
+    # send mail
+    to_email = [user.email]
+    from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'root@example.com')
+    subject = 'Welcome to Zėndi'
+    msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
+    msg.send()
+
+    logger.info('(Federation) Sent welcome mail to %s (federation)', user)
 
 
 def send_token_received_email(request, sender, receiver, amount, is_new, message):
