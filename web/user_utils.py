@@ -63,7 +63,7 @@ def federation_callback(request, query, query_type):
 
     # check if handled by domain
     if domain != request.get_host():
-        raise stellar_federation.NotFoundException('Wrong hose name')
+        raise stellar_federation.NotFoundException('Invalid host name')
 
     # get or create user
     new_user, user = get_user_safe(email)

@@ -1,5 +1,5 @@
 {% load i18n %}
-Hi,
+Hello,
 
 please use the following url to log in to Zėndi:
 {{ url }}
