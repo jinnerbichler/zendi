@@ -1,4 +1,4 @@
-{% extends "web/components/base.html" %}
+    {% extends "web/components/base.html" %}
 
 {% load i18n %}
 {% load static %}
@@ -6,17 +6,26 @@
 {% block content %}
 
     <div id="send-tokens-exec-page" class="triangle-content">
-
-        <h1>Sending Tokens</h1>
-
-        <div class="progress-container">
-            <p>You are sending {{ amount_with_unit }} to {{ receiver_mail|join:"" }}.</p>
-            <p class="progress-message">Sending transaction to ledger...</p>
-            <div class="progress">
-                <div class="indeterminate"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col s12">
+                    <h2 class="center">Sending Tokens</h2>
+                </div>
             </div>
-        </div>
 
+            <div class="row">
+                <div class="col s12 m8 offset-m2 center">
+                    <p>You are sending {{ amount_with_unit }} to {{ receiver_mail|join:"" }}.</p>
+                    <p class="progress-message">Sending transaction to ledger...</p>
+                    <div class="progress">
+                        <div class="indeterminate"></div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
     </div>
 
 {% endblock %}
@@ -25,5 +34,13 @@
     <script>
         window.bundle.triggerTransactionExecution();
         window.history.replaceState( {} , 'Dashboard', '/');
+
+        $('.button-collapse').sideNav({
+            menuWidth: '300px',
+            closeOnClick: true,
+            draggable: true,
+            edge: 'right',
+        });
+
     </script>
 {% endblock %}

@@ -1,19 +1,15 @@
 #send-tokens-exec-page {
+  color: $primary-color;
 
-  .progress-container {
-    position: absolute;
-    top: 40%;
-    left: 15%;
-    width: 70%;
-    text-align: center;
-    color: white;
-    font-size: 2.0em;
+  p {
+    font-size: 1.5em;
     font-weight: 300;
+    word-wrap: break-word;
   }
 
   .progress-message {
     font-weight: 300;
-    font-size: 0.5em;
+    font-size: 1em;
     margin-bottom: 0;
   }
 
