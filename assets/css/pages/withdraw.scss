@@ -1,26 +1,7 @@
 //noinspection CssRedundantUnit
 #withdraw-page {
 
-  h1 {
-    width: 80%;
-  }
-
   #withdraw-form {
-    position: absolute;
-    left: 25%;
-    top: 40%;
-    width: 50%;
-    text-align: center;
-
-    .input-field input {
-      font-size: 2.5em;
-      font-weight: 300;
-
-      &:active, &:focus {
-        //border-bottom-width: 0px;
-      }
-    }
-
     .exchange {
       color: $primary-color;
       margin-top: 30px;
@@ -45,6 +26,18 @@
 
     .indeterminate {
       background-color: white;
+    }
+  }
+
+  @media screen and (min-width: 600px) {
+    input {
+      font-size: 2.5em;
+    }
+  }
+
+  @media screen and (max-width: 600px){
+    input {
+      font-size: 1.5em;
     }
   }
 }
