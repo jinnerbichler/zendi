@@ -6,40 +6,41 @@
 
     <!--suppress HtmlUnknownTarget, XmlInvalidId -->
     <div id="dashboard" class="triangle-content">
-
-        {# message box #}
-        <div class="row">
-            <div class="col s6 offset-s3">
-                {% include 'web/components/message_box.html' %}
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col s8 offset-s2 content">
-                <div class="row">
-                    <div class="col s4 offset-s4 card horizontal" id="balance-card">
-                        <div class="card-content center-align">
-                            <span class="card-title">Balance</span>
-                            <p class="user-balance">{{ balance | stellar_display_format }}</p>
-                            <div class="updating">
-                                updating...
-                            </div>
-                            <p class="user-mail">{{ request.user.email }}</p>
-                        </div>
-                        <div class="card-image">
-                            <img src="{% static 'web/img/stellar-rocket-300.png' %}" alt="Stellar Lumen Logo">
-                        </div>
-                    </div>
+     <div class="container">
+            {# message box #}
+            <div class="row">
+                <div class="col s12">
+                    {% include 'web/components/message_box.html' %}
                 </div>
-                <div class="row recent-transactions">
-                    <h1>Recent Transactions</h1>
+            </div>
 
-                    <div id="transaction-ready-container">
-                        {% include 'web/components/transaction_list.html' with transactions=transactions %}
+            <div class="row">
+                <div class="col s12 content">
+                    <div class="row">
+                        <div class="col s12 m4 offset-m4 card horizontal" id="balance-card">
+                            <div class="card-content center-align">
+                                <span class="card-title">Balance</span>
+                                <p class="user-balance">{{ balance | stellar_display_format }}</p>
+                                <div class="updating">
+                                    updating...
+                                </div>
+                                <p class="user-mail">{{ request.user.email }}</p>
+                            </div>
+                            <div class="card-image">
+                                <img src="{% static 'web/img/stellar-rocket-300.png' %}" alt="Stellar Lumen Logo">
+                            </div>
+                        </div>
                     </div>
+                    <div class="row recent-transactions">
+                        <h1>Recent Transactions</h1>
 
-                    <div class="progress transactions-update">
-                        <div class="indeterminate"></div>
+                        <div id="transaction-ready-container">
+                            {% include 'web/components/transaction_list.html' with transactions=transactions %}
+                        </div>
+
+                        <div class="progress transactions-update">
+                            <div class="indeterminate"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -50,6 +51,13 @@
 {% block custom_scripts %}
     <script>
         $(document).ready(function () {
+
+            $('.button-collapse').sideNav({
+                menuWidth: '300px',
+                closeOnClick: true,
+                draggable: true,
+                edge: 'right',
+            });
 
             // fetch balance
             window.bundle.fetchBalance(function (balanceJson, error) {
