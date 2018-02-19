@@ -5,27 +5,33 @@ nav {
     background-color: transparent;
     box-shadow: none;
 
-    .nav-wrapper {
+    .appendix{
+        font-size: 0.8em;
+    }
+
+    .hide-on-small-only, .hide-on-med-and-down {
         margin: 0 5rem;
     }
 
-    ul {
+    .side-nav {
+        background-color: blueviolet;
+    }
+
+    .hide-on-med-and-down ul {
         @include display(flex);
         @include justify-content(space-between);
+    }
 
-        a {
+    .hide-on-med-and-down a {
             position: relative;
             display: inline;
-            padding: 0;
             font-size: 1.5rem;
             letter-spacing: -.04em;
-            border-bottom: 2px solid transparentize($white, .5);
 
             &:hover {
                 background-color: transparent;
                 border-bottom-color: $white;
             }
-        }
     }
 
     ul a,
@@ -40,7 +46,7 @@ nav {
     &.dark {
         background-color: transparentize($white, .03);
 
-        ul a,
+        ul a
         .brand-logo {
             color: $black;
         }

@@ -1,45 +1,52 @@
 {% load static %}
 
 <!--suppress HtmlUnknownTarget -->
+
 <div class="navbar-fixed zero-height">
     <nav>
-        <div class="nav-wrapper">
-            <div class="row">
-                <div class="col s12 l6">
-                    <div class="brand-logo">
-                        <a href="/">
-                            <img src="{% static 'web/img/logo_white.png' %}" alt="Nav-Logo">
-                            <p>Zėndi</p>
-                            <span class="appendix">{{ logo_appendix|default:"" }}</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="col s12 l6">
-                    <ul class="hide-on-med-and-down table-of-contents">
-                        <li>
-                            <a href="/">Send</a>
-                        </li>
-                        <li>
-                            <a href="/deposit">Deposit</a>
-                        </li>
-                        <li>
-                            <a href="/withdraw">Withdraw</a>
-                        </li>
-                        <li>
-                            <a href="/dashboard">Dashboard</a>
-                        </li>
+        <div class="nav-wrapper" >
+            <div class="left brand-logo hide-on-small-only">
+                <a href="/">
+                    <img src="{% static 'web/img/logo_white.png' %}" alt="Nav-Logo">
+                    <p>Zėndi</p>
+                    <span class="appendix">{{ logo_appendix|default:"" }}</span>
+                </a>
+            </div>
+            <div class="hide-on-med-and-up left brand-logo">
+                <a href="/">
+                    <img src="{% static 'web/img/logo_white.png' %}" alt="Nav-Logo">
+                    {% if request.path != '/' %}
+                        <span class="appendix">{{ request.path }}</span>
+                    {% else %}
+                        <span class="appendix">/send</span>
+                    {% endif %}
+                </a>
+            </div>
+            <a href="#" data-activates="mobile-menu" class="right button-collapse"><i class="material-icons">menu</i></a>
+                    <ul class="right hide-on-med-and-down ">
+                        <li> <a href="/">Send</a> </li>
+                        <li> <a href="/deposit">Deposit</a> </li>
+                        <li> <a href="/withdraw">Withdraw</a> </li>
+                        <li> <a href="/dashboard">Dashboard</a> </li>
                         {% if user.is_authenticated %}
-                            <li>
-                                <a href="/logout">Logout</a>
-                            </li>
+                            <li> <a href="/logout">Logout</a> </li>
                         {% else %}
-                            <li>
-                                <a href="/dashboard">Login</a>
-                            </li>
+                            <li> <a href="/dashboard">Login</a> </li>
                         {% endif %}
                     </ul>
-                </div>
-            </div>
+                    <ul>
+                    <ul class="side-nav" id="mobile-menu">
+                        <li> <a href="/">Send</a> </li>
+                        <li> <a href="/deposit">Deposit</a> </li>
+                        <li> <a href="/withdraw">Withdraw</a> </li>
+                        <li> <a href="/dashboard">Dashboard</a> </li>
+                        {% if user.is_authenticated %}
+                            <li> <a href="/logout">Logout</a> </li>
+                        {% else %}
+                            <li> <a href="/dashboard">Login</a> </li>
+                        {% endif %}
+                    </ul>
+                    </ul>
         </div>
     </nav>
 </div>
