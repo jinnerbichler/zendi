@@ -5,38 +5,54 @@
 {% block content %}
 
     <div id="deposit-page" class="triangle-content">
+        <div class="container">
 
-        {# message box #}
-        <div class="row">
-            <div class="col s6 offset-s3">
-                {% include 'web/components/message_box.html' %}
-            </div>
-        </div>
-
-        <h1>Deposit</h1>
-
-        <div class="address-container">
-            <div id="loading-container">
-                <p>Your address is beeing generated...</p>
-                <div class="progress">
-                    <div class="indeterminate"></div>
+            {# message box #}
+            <div class="row">
+                <div class="col s6 offset-s3">
+                    {% include 'web/components/message_box.html' %}
                 </div>
             </div>
-            <div id="ready-container" style="display: none;">
-                {% if disabled %}
-                    <p>Deposits are currently disabled.</p>
-                {% else %}
-                    <p>Please sent Lumen to the following address in order to play with them on Zėndi.</p>
-                    <p class="address">{{ deposit_address }}</p>
-                {% endif %}
+
+            <div class="row">
+                <div class="col s12">
+                    <h2 class="center">Deposit Lumen on your Zėndi account</h2>
+                </div>
             </div>
+
+            <div class="row">
+                <div class="col s12 m8 offset-m2 center">
+                    <div id="loading-container">
+                        <p>Your address is beeing generated...</p>
+                        <div class="progress">
+                            <div class="indeterminate"></div>
+                        </div>
+                    </div>
+                    <div id="ready-container" style="display: none;">
+                        {% if disabled %}
+                            <p>Deposits are currently disabled.</p>
+                        {% else %}
+                            <p>Please sent Lumen to the following address in order to play with them on Zėndi.</p>
+                            <p class="address">{{ deposit_address }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
         </div>
     </div>
-
 {% endblock %}
 
 {% block custom_scripts %}
     <script>
+
+        $('.button-collapse').sideNav({
+            menuWidth: '300px',
+            closeOnClick: true,
+            draggable: true,
+            edge: 'right',
+        });
 
         console.log('Fetching address...');
         window.bundle.fetchDepositAddress(function (newAddress, error) {
