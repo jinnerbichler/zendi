@@ -1,24 +1,21 @@
 #deposit-page {
-  .address-container {
-    position: absolute;
-    top: 50%;
-    left: 5%;
-    width: 90%;
-    text-align: center;
-    color: white;
-    font-size: 2.0em;
-    font-weight: 200;
 
-    .address {
-      font-weight: 400;
-      font-size: 0.8em;
-    }
+  color: $primary-color;
 
-    #loading-container .progress {
-      width: 50%;
-      left: 25%;
-    }
+  p {
+    font-size: 1.5em;
+    font-weight: 300;
+    word-wrap: break-word;
+  }
 
+  .address {
+    font-weight: 400;
+    font-size: 1em;
+  }
+
+  #loading-container .progress {
+    width: 50%;
+    left: 25%;
   }
 
   #message-box {
