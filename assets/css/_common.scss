@@ -39,6 +39,7 @@
 
 .brand-logo {
   float: left;
+  width: 200px;
 
   .appendix {
     text-transform: none;
@@ -193,4 +194,8 @@ footer {
   .modal-content {
     padding-bottom: 0;
   }
+}
+
+.additional-content {
+  padding-top: 40px;
 }
