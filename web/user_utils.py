@@ -1,6 +1,7 @@
 import logging
 
 from django.conf import settings
+from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.core.mail import EmailMultiAlternatives
@@ -21,6 +22,7 @@ def get_user_safe(email):
     If no such user exists, a new one will be generated (including a new seed).
     """
     try:
+        email = BaseUserManager.normalize_email(email=email)
         return False, User.objects.get(username=email)
     except User.DoesNotExist:
         pass
@@ -58,6 +60,7 @@ def federation_callback(request, query, query_type):
     email, domain = query.split('*')
     try:
         validate_email(email)
+        email = BaseUserManager.normalize_email(email=email)
     except ValidationError:
         raise stellar_federation.NotFoundException('Address is not a valid email address')
 
@@ -78,7 +81,6 @@ def federation_callback(request, query, query_type):
         logger.info('(Federation) Created user {} from federation request (q={}, type={})'.format(user, query,
                                                                                                   query_type))
         send_federation_account_created(request=request, user=user)
-
         response['memo_type'] = 'text'
         response['memo'] = 'new account created'
 
