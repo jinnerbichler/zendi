@@ -15,11 +15,7 @@
             <div class="hide-on-med-and-up left brand-logo">
                 <a href="/">
                     <img src="{% static 'web/img/logo_white.png' %}" alt="Nav-Logo">
-                    {% if request.path != '/' %}
-                        <span class="appendix">{{ request.path }}</span>
-                    {% else %}
-                        <span class="appendix">/send</span>
-                    {% endif %}
+                    <span class="appendix">{{ title | default:"Zendi" }}</span>
                 </a>
             </div>
             <a href="#" data-activates="mobile-menu" class="right button-collapse"><i class="material-icons">menu</i></a>
