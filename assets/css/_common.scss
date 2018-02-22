@@ -71,10 +71,12 @@
 
 .brand-logo {
   float: left;
+  width: 200px;
 
   .appendix {
     text-transform: none;
     font-weight: 100;
+    margin-left: 14px;
   }
 
   img {
@@ -217,4 +219,8 @@ footer {
   .modal-content {
     padding-bottom: 0;
   }
+}
+
+.additional-content {
+  padding-top: 40px;
 }

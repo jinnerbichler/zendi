@@ -69,7 +69,8 @@
                         </div>
                         <div class="col s5">
                             <div class="input-field fiat-amount">
-                                <input type="text" value="0 USD" name="fiat-amount" id="fiat_amount" min="0.000001"
+                                <input type="text" value="0 USD" name="fiat-amount" id="fiat_amount"
+                                       min="0.000001"
                                        step="any" required="" readonly>
                             </div>
                         </div>
@@ -103,6 +104,116 @@
         </form>
         </div>
     </div>
+
+{% endblock %}
+
+{% block additional_content %}
+
+    <section class="container center additional-content features">
+        <div class="row">
+            <div class="col s12">
+                <h2>Send Lumen to any email address</h2>
+                <h3>Zėndi is a revolutionary platform that empowers people to send<br>
+                    Stellar Lumens to their friends, business partners or other organisations</h3>
+            </div>
+        </div>
+
+        <div class="row push-row">
+            <div class="col s12 l4 big-margin-on-medium-and-down">
+                <!--i.icon-basic-heart.blue-purple-gradient-->
+                <svg class="feature-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="150px" height="150px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+                                <path fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" d="M1,21c0,20,31,38,31,38s31-18,31-38              c0-8.285-6-16-15-16c-8.285,0-16,5.715-16,14c0-8.285-7.715-14-16-14C7,5,1,12.715,1,21z"></path>
+                            </svg>
+                <div class="feature-title">Joyful Payments</div>
+                <div class="feature-description">Payments can be executed with ease.</div>
+            </div>
+
+            <div class="col s12 l4 big-margin-on-medium-and-down">
+                <!--i.icon-basic-accelerator.blue-purple-gradient-->
+                <img class="feature-icon" src="{% static 'web/img/email_icon.png' %}">
+                <div class="feature-title">Exchange Value via Email</div>
+                <div class="feature-description">Send Lumens between emails.</div>
+            </div>
+
+            <div class="col s12 l4">
+                <img class="feature-icon" src="{% static 'web/img/account_icon.png' %}">
+                <div class="feature-title">Automatic Accounts</div>
+                <div class="feature-description">Not existent accounts are created automatically.</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s12 l4 big-margin-on-medium-and-down">
+                <!--i.icon-basic-bolt.blue-purple-gradient-->
+                <svg class="feature-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="150px" height="150px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+                                <polygon fill="none" stroke="#000000" stroke-width="2" stroke-linejoin="bevel" stroke-miterlimit="10" points="40,1 17,37 31,37               24,63 50,27 36,27 "></polygon>
+                            </svg>
+                <div class="feature-title">Fast Transactions</div>
+                <div class="feature-description">Send Lumen within 2-3 seconds per transaction.</div>
+            </div>
+
+            <div class="col s12 l4 big-margin-on-medium-and-down">
+                <img class="feature-icon" src="{% static 'web/img/relax_icon.png' %}">
+                <div class="feature-title">Lots of fun</div>
+                <div class="feature-description">Sending Lumens can be fun.</div>
+            </div>
+
+            <div class="col s12 l4">
+                <!--i.icon-basic-signs.blue-purple-gradient-->
+                <svg class="feature-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="150px" height="150px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+                                <polygon fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" points="55,24 22,24 22,12 55,12 62,18 "></polygon>
+                                <polygon fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" points="9,28 42,28 42,40 9,40 2,34 "></polygon>
+                                <line fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" x1="32" y1="40" x2="32" y2="64"></line>
+                                <line fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" x1="32" y1="28" x2="32" y2="24"></line>
+                                <line fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" x1="32" y1="12" x2="32" y2="7"></line>
+                                <line fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" x1="24" y1="63" x2="40" y2="63"></line>
+                            </svg>
+                <div class="feature-title">Always find each other</div>
+                <div class="feature-description">Emails are easier to remember than cryptic addresses.</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section scrollspy blue-purple-gradient additional-content" id="contact">
+        <div class="container">
+            <div class="row center">
+                <div class="col s12">
+                    <h2 class="white-text">Message us</h2>
+                </div>
+            </div>
+            <form id="mail-form" action="mailer/mailer.php" novalidate="" autocomplete="off">
+                <div class="row">
+                    <div class="col s12 l6">
+                        <div class="input-field">
+                            <input id="name" type="text" name="name">
+                            <label for="name">Name</label>
+                        </div>
+                    </div>
+                    <div class="col s12 l6">
+                        <div class="input-field">
+                            <input id="email" type="email" name="email">
+                            <label for="email">Email</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <div class="input-field">
+                            <textarea class="materialize-textarea" id="message" name="message"></textarea>
+                            <label for="message">Message</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 center">
+                        <button class="btn btn-large btn-flat waves-effect waves-dark white-text"
+                                id="send-message" type="submit">Send
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
 {% endblock %}
 
 
