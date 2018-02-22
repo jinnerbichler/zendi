@@ -26,6 +26,40 @@
   }
 }
 
+.features {
+
+  h2 {
+    margin-bottom: 0;
+  }
+
+  h3 {
+    margin-top: 15px;
+    margin-bottom: 25px;
+    line-height: 130%;
+  }
+
+  .feature-icon {
+    max-height: 150px;
+  }
+
+  .feature-title {
+    margin: 2rem 0 .5rem;
+    font-size: 2rem;
+    font-weight: 300;
+    line-height: 1;
+  }
+
+  .feature-description {
+    font-size: 1.25rem;
+    color: #bdbdbd;
+  }
+
+  .row {
+    margin-top: 50px;
+  }
+}
+
+
 @media screen and (max-width: 600px){
   input {
     font-size: 1.5em;
