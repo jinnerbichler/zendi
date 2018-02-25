@@ -13,5 +13,6 @@ urlpatterns = [
     url(r'^logout', views.logout, name='logout'),
     url(r'^login', views.login, name='login'),
     url(r'^feedback', views.feedback, name='feedback'),
-    url(r'^new_address', views.deposit_address, name='new_address')
+    url(r'^new_address', views.deposit_address, name='new_address'),
+    url(r'^zend', views.send_external, name='send_external')
 ]

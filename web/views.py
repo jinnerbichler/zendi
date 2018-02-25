@@ -209,6 +209,11 @@ def feedback(request):
     return HttpResponse(status=204)
 
 
+@require_GET
+def send_external(request):
+    return redirect('/')
+
+
 def template_settings(request):
     return {
         'DEMO_MODE': settings.DEMO_MODE,
