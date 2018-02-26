@@ -3,6 +3,7 @@ from typing import List, Optional
 from urllib.parse import urlparse, parse_qs
 
 import requests
+import time
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import IntegrityError
@@ -44,11 +45,18 @@ def create_account(user):
 
     # fund account
     if settings.DEMO_MODE:
-        response = requests.get('https://horizon-testnet.stellar.org/friendbot?addr=' + public_key)
-        response.raise_for_status()
-        if response.status_code == 200:
-            logger.info('[TESTNET] Successfully funded address {} ()'.format(
-                public_key, response.json()['_links']['transaction']['href']))
+        for _ in range(5):
+            # noinspection PyBroadException
+            try:
+                response = requests.get('https://horizon-testnet.stellar.org/friendbot?addr=' + public_key)
+                response.raise_for_status()
+                if response.status_code == 200:
+                    logger.info('[TESTNET] Successfully funded address {} ()'.format(
+                        public_key, response.json()['_links']['transaction']['href']))
+                    break
+            except:
+                pass
+            time.sleep(1)
 
     logger.info('Created Stellar Lumen account {} for {}'.format(public_key, user))
 

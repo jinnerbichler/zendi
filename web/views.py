@@ -29,6 +29,10 @@ TRANSACTIONS_PER_PAGE = 5
 @require_GET
 def index(request):
     initial_values = {'sender_mail': request.user.email} if request.user.is_authenticated else {}
+    if 'receiver' in request.GET:
+        initial_values['receiver_mail'] = request.GET['receiver']
+    if 'amount' in request.GET:
+        initial_values['amount'] = request.GET['amount']
     form = SendTokensForm(initial=initial_values)
     return render(request, 'web/pages/landing.html', {'form': form})
 
