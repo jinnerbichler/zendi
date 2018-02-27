@@ -32,8 +32,8 @@
     }
   }
 }
-#features {
 
+#features {
   h2 {
     margin-bottom: 0;
   }
@@ -65,8 +65,9 @@
   }
 }
 
+
 #contact {
-    @media screen and (min-width: 600px) {
+  @media screen and (min-width: 600px) {
     input, textarea {
       font-size: 2.5em;
     }
