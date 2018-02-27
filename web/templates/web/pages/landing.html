@@ -226,5 +226,17 @@
             });
         });
 
+        var scrollTop = 0;
+        var imageHeight = $('#output').height();
+
+        $(window).on("scroll", function() {
+            scrollTop = $(window).scrollTop();
+            if (scrollTop >= imageHeight) {
+                $('#navbar').addClass('scrolled-nav');
+            } else if (scrollTop < imageHeight) {
+                $('#navbar').removeClass('scrolled-nav');
+            }
+        });
+
     </script>
 {% endblock %}
