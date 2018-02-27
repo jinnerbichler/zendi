@@ -6,7 +6,7 @@
     {% if transactions %}
         {% for transaction in transactions %}
 
-            <li class="transaction">
+            <li class="transaction hide-on-small-only">
                 <div class="collapsible-header row">
                     <div class="col s1 icon">
                         <i class="material-icons">
@@ -80,6 +80,79 @@
                     <div class="col s4">
                         Type:<br>
                         {{ transaction.type | stellar_type_format }}
+                    </div>
+                </div>
+            </li>
+
+            <li class="transaction hide-on-med-and-up">
+                <div class="collapsible-header row">
+                    <div class="col s1 icon">
+                        <i class="material-icons">
+                            {% if transaction.sender == request.user %}
+                                call_made
+                            {% elif transaction.receiver == request.user %}
+                                call_received
+                            {% else %}
+                                remove
+                            {% endif %}
+                        </i>
+                    </div>
+                    <div class="col s6">{{ transaction.created_at }}</div>
+                    <div class="col s4">{{ transaction.amount|stellar_display_format }}</div>
+                    <div class="col s1 left-align">
+                        <i class="material-icons">check</i>
+                    </div>
+                </div>
+                <div class="collapsible-body" style="display: none;">
+                    <div class="row ">
+                        <div class="col s3 ">
+                            {% if transaction.receiver == request.user %}
+                                From address:
+                            {% else %}
+                                To address:
+                            {% endif %}
+                        </div>
+                        <div class="col s9">
+                            {% if transaction.receiver == request.user %}
+                                <a href="{{ transaction.sender_address|stellar_address_info_url }}"
+                                   target="_blank">
+                                    {{ transaction.sender_address|truncatechars:30 }}
+                                </a>
+                                <br>
+                                {% if transaction.sender %}
+                                    <span>({{ transaction.sender.email }})</span>
+                                {% endif %}
+                            {% else %}
+                                <a href="{{ transaction.receiver_address|stellar_address_info_url }}"
+                                   target="_blank">
+                                    {{ transaction.receiver_address|truncatechars:30 }}
+                                </a>
+                                <br>
+                                {% if transaction.receiver %}
+                                    <span>({{ transaction.receiver.email }})</span>
+                                {% endif %}
+                            {% endif %}
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s3 ">
+                            Transaction:
+                        </div>
+                        <div class="col s9">
+                            <a href="{{ transaction.transaction_hash|stellar_transaction_info_url }}"
+                               target="_blank">
+                                {{ transaction.transaction_hash|truncatechars:30 }}
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s3">
+                            Type:<br>
+                        </div>
+                        <div class="col s9">
+                            {{ transaction.type | stellar_type_format }}
+                        </div>
                     </div>
                 </div>
             </li>
