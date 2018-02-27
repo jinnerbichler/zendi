@@ -34,7 +34,7 @@ def index(request):
     if 'amount' in request.GET:
         initial_values['amount'] = request.GET['amount']
     form = SendTokensForm(initial=initial_values)
-    return render(request, 'web/pages/landing.html', {'form': form})
+    return render(request, 'web/pages/landing.html', {'form': form, 'title': 'Send'})
 
 
 @require_http_methods(["GET", "POST"])
@@ -112,7 +112,7 @@ def send_tokens_exec(request):
 @require_http_methods(["GET", "POST"])
 def withdraw(request):
     if request.method == 'GET':
-        return render(request, 'web/pages/withdraw.html')
+        return render(request, 'web/pages/withdraw.html', {'title': 'Withdraw'})
     elif request.method == 'POST':
         sender = request.user
         address = request.POST['address']
@@ -130,7 +130,7 @@ def withdraw(request):
 @login_required
 @require_GET
 def deposit(request):
-    return render(request, 'web/pages/deposit.html', {'disabled': False})
+    return render(request, 'web/pages/deposit.html', {'disabled': False, 'title': 'Deposit'})
 
 
 @login_required
@@ -152,7 +152,8 @@ def dashboard(request):
                                                         'balance': balance,
                                                         'transactions': transactions,
                                                         'message': user_message,
-                                                        'message_type': message_type})
+                                                        'message_type': message_type,
+                                                        'title': 'Dashboard'})
 
 
 @login_required
