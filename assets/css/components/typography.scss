@@ -51,7 +51,6 @@ h2 {
 .hero h1 {
     @include transform(translate3d(-50%, -50%, 0));
     position: absolute;
-    top: 50%;
     left: 50%;
     margin: 0;
     font-size: 7rem;
