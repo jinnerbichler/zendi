@@ -62,6 +62,11 @@
   .feature-description {
     font-size: 1.25rem;
     color: #bdbdbd;
+
+    a {
+      color: #bdbdbd;
+      text-decoration: underline;
+    }
   }
 
   .row {
