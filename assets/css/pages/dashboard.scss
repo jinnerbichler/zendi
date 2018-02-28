@@ -31,10 +31,6 @@ $board-bg-color: white;
         margin: 30px 0 0 40px;
       }
 
-      .card-title {
-        font-size: 27px;
-      }
-
       .card-content {
         padding: 18px;
         max-width: 60%;
@@ -46,9 +42,18 @@ $board-bg-color: white;
         color: grey;
       }
 
-      p {
-        font-size: 27px;
-      }
+        @media screen and (min-width: 600px) {
+          .card-title,p {
+            font-size: 27px;
+          }
+        }
+
+        @media screen and (max-width: 600px) {
+          .card-title,p {
+            font-size: 20px;
+          }
+        }
+
 
       .user-mail {
         margin-top: 3px;
