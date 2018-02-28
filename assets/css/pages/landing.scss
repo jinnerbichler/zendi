@@ -1,20 +1,9 @@
 #landing-page {
-  h1 {
-    top: 30%;
-    font-size: 4.5em;
-  }
-
   .row {
     margin-bottom: 0;
   }
 
   #send-form {
-    position: absolute;
-    left: 25%;
-    top: 50%;
-    width: 50%;
-    text-align: center;
-
     .exchange {
       color: $primary-color;
       margin-top: 30px;
@@ -31,13 +20,20 @@
     }
   }
 
-  input {
-    font-size: 2.5em;
+  @media screen and (min-width: 600px) {
+    input {
+      font-size: 2.5em;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    input {
+      font-size: 1.5em;
+    }
   }
 }
 
-.features {
-
+#features {
   h2 {
     margin-bottom: 0;
   }
@@ -49,7 +45,7 @@
   }
 
   .feature-icon {
-    max-height: 150px;
+    max-height: 100px;
   }
 
   .feature-title {
@@ -66,5 +62,20 @@
 
   .row {
     margin-top: 50px;
+  }
+}
+
+
+#contact {
+  @media screen and (min-width: 600px) {
+    input, textarea {
+      font-size: 2.5em;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    input, textarea {
+      font-size: 1.5em;
+    }
   }
 }

@@ -6,37 +6,44 @@
 {% block content %}
 
     <div id="login-page" class="triangle-content">
-
-        <h1>Enter your mail to sign in</h1>
-
-        <form method="post" class="login-form" id="login-form" autocomplete="off">
-            {% csrf_token %}
-            {{ form.media }}
-
+        <div class="container">
             <div class="row">
                 <div class="col s12">
-                    <div class="input-field">
-                        <input id="username-input"
-                               name="username"
-                               type="email"
-                               class="username">
-                    </div>
-                    <div class="controls">
-                        <button type="submit"
-                                class="btn btn-large btn-flat waves-effect waves-dark white-text">
-                            {% trans "Login" %}
-                        </button>
-                    </div>
+                    <h2 class="center">Enter your mail to sign in</h2>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col s12">
-                    {% include 'web/components/message_box.html' %}
-                </div>
-            </div>
-        </form>
+            <form method="post" class="login-form" id="login-form" autocomplete="off">
+                {% csrf_token %}
+                {{ form.media }}
 
+                <div class="row">
+                    <div class="col s12 m8 offset-m2">
+                        <div class="input-field">
+                            <label>Your mail address</label>
+                            <input id="username-input"
+                                   name="username"
+                                   type="email"
+                                   class="username">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 center">
+                            <button type="submit"
+                                    class="btn btn-large btn-flat waves-effect waves-dark white-text">
+                                {% trans "Login" %}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col s12">
+                        {% include 'web/components/message_box.html' %}
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 {% endblock %}
 
@@ -44,6 +51,13 @@
     <script>
         $(document).ready(function () {
             $('#username-input').focus();
+
+            $('.button-collapse').sideNav({
+                menuWidth: '300px',
+                closeOnClick: true,
+                draggable: true,
+                edge: 'right',
+            });
         });
     </script>
 {% endblock %}

@@ -1,11 +1,43 @@
 .main {
 
-  min-width: 1400px;
-
   h1 {
     font-size: 4.5em;
   }
+
+  @media screen and (min-width: 600px) {
+  h2 {
+    font-size: 5rem;
+    font-weight: 200;
+    letter-spacing: 5px;
+    color: $white;
+    text-transform: uppercase;
+  }
+
+  .triangle-content {
+    position: absolute;
+    top: 15%;
+    width: 100%;
+  }
 }
+
+@media screen and (max-width: 600px){
+  h2 {
+    font-size: 3.72rem;
+    font-weight: 200;
+    letter-spacing: 5px;
+    color: $white;
+    text-transform: uppercase;
+  }
+
+  .triangle-content {
+    position: absolute;
+    top: 10%;
+    width: 100%;
+  }
+}
+}
+
+
 
 .input-field {
   color: $primary-color;
@@ -77,13 +109,6 @@
 
   &.error {
     background-color: color("red", "base");
-  }
-}
-
-.triangle-content {
-  h1 {
-    top: 30%;
-    font-size: 4.5em;
   }
 }
 

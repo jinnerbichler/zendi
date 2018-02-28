@@ -2,11 +2,6 @@ $board-bg-color: white;
 
 #dashboard {
 
-  position: absolute;
-  top: 8rem; // space to navbar
-  left: 0;
-  width: 100%;
-
   h1 {
     margin-top: 60px;
     position: relative;
@@ -17,16 +12,23 @@ $board-bg-color: white;
     min-height: 500px;
     border-radius: 2px;
 
+  .center-cols > .col {
+    float:none; /* disable the float */
+    display: inline-block; /* make blocks inline-block */
+    text-align: initial; /* restore text-align to default */
+  }
+
     // ================== Balance Board ==========================
+
     #balance-card {
       @extend .z-depth-3, .black-text;
       background: rgba($board-bg-color, 0.9);
-      width: 380px;
+      min-width: 300px;
       height: 137px;
 
       .card-image {
         max-width: 25%;
-        margin: 30px 0 0 30px;
+        margin: 30px 0 0 40px;
       }
 
       .card-title {
@@ -100,6 +102,10 @@ $board-bg-color: white;
             padding: 2rem 1rem 2rem 1rem;
           }
 
+          .collapsible-body .row {
+            margin-bottom: 15px;
+          }
+
           a {
             text-decoration: underline;
           }
@@ -126,11 +132,5 @@ $board-bg-color: white;
     .no-transactions {
       text-align: center;
     }
-  }
-
-  #message-box {
-    position: absolute;
-    top: -60px;
-    right: 80px;
   }
 }
