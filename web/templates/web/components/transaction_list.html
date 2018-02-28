@@ -105,18 +105,18 @@
                 </div>
                 <div class="collapsible-body" style="display: none;">
                     <div class="row ">
-                        <div class="col s3 ">
+                        <div class="col s4 ">
                             {% if transaction.receiver == request.user %}
                                 From address:
                             {% else %}
                                 To address:
                             {% endif %}
                         </div>
-                        <div class="col s9">
+                        <div class="col s8">
                             {% if transaction.receiver == request.user %}
                                 <a href="{{ transaction.sender_address|stellar_address_info_url }}"
                                    target="_blank">
-                                    {{ transaction.sender_address|truncatechars:30 }}
+                                    {{ transaction.sender_address|truncatechars:20 }}
                                 </a>
                                 <br>
                                 {% if transaction.sender %}
@@ -125,7 +125,7 @@
                             {% else %}
                                 <a href="{{ transaction.receiver_address|stellar_address_info_url }}"
                                    target="_blank">
-                                    {{ transaction.receiver_address|truncatechars:30 }}
+                                    {{ transaction.receiver_address|truncatechars:20 }}
                                 </a>
                                 <br>
                                 {% if transaction.receiver %}
@@ -136,21 +136,21 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col s3 ">
+                        <div class="col s4 ">
                             Transaction:
                         </div>
-                        <div class="col s9">
+                        <div class="col s8">
                             <a href="{{ transaction.transaction_hash|stellar_transaction_info_url }}"
                                target="_blank">
-                                {{ transaction.transaction_hash|truncatechars:30 }}
+                                {{ transaction.transaction_hash|truncatechars:20 }}
                             </a>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col s3">
+                        <div class="col s4">
                             Type:<br>
                         </div>
-                        <div class="col s9">
+                        <div class="col s8">
                             {{ transaction.type | stellar_type_format }}
                         </div>
                     </div>
