@@ -42,13 +42,13 @@ $board-bg-color: white;
         color: grey;
       }
 
-        @media screen and (min-width: 600px) {
+        @media screen and (min-width: 1560px) {
           .card-title,p {
             font-size: 27px;
           }
         }
 
-        @media screen and (max-width: 600px) {
+        @media screen and (max-width: 1560px) {
           .card-title,p {
             font-size: 20px;
           }
