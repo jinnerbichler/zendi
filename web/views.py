@@ -177,7 +177,9 @@ def login(request):
     if request.method == 'POST':
 
         # create new user if necessary
-        get_user_safe(email=request.POST['username'])
+        is_new, _ = get_user_safe(email=request.POST['username'])
+        if is_new:
+            logger.info('Created user for login')
 
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():

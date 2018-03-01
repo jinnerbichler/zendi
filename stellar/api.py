@@ -1,9 +1,8 @@
 import logging
+import time
 from typing import List, Optional
 from urllib.parse import urlparse, parse_qs
 
-import requests
-import time
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import IntegrityError
@@ -11,11 +10,14 @@ from django.db.models import Q
 from django.utils.dateparse import parse_datetime
 from stellar_base.address import Address
 from stellar_base.builder import Builder
+from stellar_base.operation import CreateAccount
 from stellar_base.keypair import Keypair
+from stellar_base.horizon import horizon_testnet, horizon_livenet
+from stellar_base.transaction import Transaction
+from stellar_base.memo import TextMemo
+from stellar_base.transaction_envelope import TransactionEnvelope
 
-import stellar_federation
 from stellar.models import StellarAccount, StellarTransaction
-from web.user_utils import get_user_safe
 
 logger = logging.getLogger(__name__)
 
@@ -43,19 +45,43 @@ def create_account(user):
     # store account
     StellarAccount.objects.create(seed=seed, address=public_key, user=user, balance=0.0)
 
+    horizon = horizon_testnet() if settings.DEMO_MODE else horizon_livenet()
+
     # fund account
     if settings.DEMO_MODE:
         for _ in range(5):
             # noinspection PyBroadException
             try:
-                response = requests.get('https://horizon-testnet.stellar.org/friendbot?addr=' + public_key)
-                response.raise_for_status()
-                if response.status_code == 200:
-                    logger.info('[TESTNET] Successfully funded address {} ()'.format(
-                        public_key, response.json()['_links']['transaction']['href']))
-                    break
-            except:
-                pass
+                funding_keypair = Keypair.from_seed(settings.FUNDING_ACCOUNT_SEED)
+
+                # create operation
+                create_account_operation = CreateAccount({
+                    'destination': public_key,
+                    'starting_balance': '1'
+                })
+
+                # create transaction
+                sequence = horizon.account(funding_keypair.address().decode()).get('sequence')
+                tx = Transaction(
+                    source=funding_keypair.address().decode(),
+                    opts={
+                        'sequence': sequence,
+                        'memo': TextMemo('Creating new Zendi account.'),
+                        'operations': [create_account_operation]
+                    }
+                )
+
+                # create and sign envelope
+                envelope = TransactionEnvelope(tx=tx, opts={"network_id": "TESTNET"})
+                envelope.sign(funding_keypair)
+
+                # Submit the transaction to Horizon
+                te_xdr = envelope.xdr()
+                horizon.submit(te_xdr)
+
+                break
+            except Exception as ex:
+                    logger.error('Error while funding account', ex)
             time.sleep(1)
 
     logger.info('Created Stellar Lumen account {} for {}'.format(public_key, user))
