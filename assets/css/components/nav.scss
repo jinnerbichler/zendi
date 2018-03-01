@@ -26,11 +26,17 @@ nav {
         @include justify-content(space-between);
     }
 
+    ul li {
+        padding-left: 50px;
+    }
+
     .hide-on-med-and-down a {
             position: relative;
             display: inline;
             font-size: 1.5rem;
             letter-spacing: -.04em;
+            padding: 0;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.5);
 
             &:hover {
                 background-color: transparent;
