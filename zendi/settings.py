@@ -50,7 +50,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'
 ]
 
 ROOT_URLCONF = 'zendi.urls'
@@ -122,6 +122,11 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'stream': sys.stdout,
             'formatter': 'verbose'
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'include_html': True,
         }
     },
     'loggers': {
@@ -143,6 +148,8 @@ LOGGING = {
     }
 }
 
+ADMINS = [('Johannes', 'j.innerbichler@gmail.com')]
+
 # Nopassword settings
 NOPASSWORD_LOGIN_CODE_TIMEOUT = 60 * 24 * 14  # in seconds
 
@@ -156,6 +163,6 @@ EMAIL_PORT = '1025'
 
 DEV_MODE = True
 DEMO_MODE = os.getenv('DEMO_MODE', 'false') == 'true'
-FUNDING_ACCOUNT_SEED = 'SA3W53XXG64ITFFIYQSBIJDG26LMXYRIMEVMNQMFAQJOYCZACCYBA34L'
+FUNDING_ACCOUNT_SEED = 'SCQTPRECXWHQNBWSMK3TCFT5JXN346XWLE2ED6INW2FCZ3GXAE6JRPAU'
 
 STELLAR_FEDERATION_CALLBACK = 'web.user_utils.federation_callback'
