@@ -2,9 +2,19 @@
 
 Clone with `git clone --recursive https://github.com/jinnerbichler/zendi` in order to include submodules.
 
+## Execution
+
+Run with
+
+```
+python manage.py runserver
+```
+
+in order to start Zendi locally.
+
 ## Docker
 
-The file `docker-compose.yml` sets up a composition of necessary services (e.g. GOST), which can be used for local development.
+The file `docker-compose.yml` sets up a composition of necessary services (e.g. Postgre database), which can be used for local development.
 
 Run
 
@@ -12,7 +22,7 @@ Run
 docker-compose up
 ```
 
-for building the application and start necessa.ry services via Docker.
+for building the application and start necessary services via Docker.
 
 **Depencencies**:
 
