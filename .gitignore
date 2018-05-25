@@ -178,7 +178,6 @@ ENV/
 # End of https://www.gitignore.io/api/osx,pydev,python,pycharm
 
 db.sqlite3
-env
 node_modules
 .secrets.sh
 infrastructure/jenkins/jenkins_home/
