@@ -20,7 +20,7 @@ ALLOWED_HOSTS = ['*']
 # Mailjets SMTP server
 EMAIL_HOST = 'in-v3.mailjet.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'a2e5453485a3fd837b8dd5bf6192c1ea'
+EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'j.innerbichler@gmail.com'
