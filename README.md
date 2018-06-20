@@ -1,5 +1,8 @@
 # Zendi
 
+Zėndi provides Stellar Lumen accounts to everyone who has a working email address. It even allows people to exchange Lumens between emails, whereas accounts are created automatically if the email of the recipient not yet linked to an account.
+The idea behind Zėndi is to be as simple and minimalistic as possible. You don't even need a password. Every authentication is done in a passwordless manner.
+
 Clone with `git clone --recursive https://github.com/jinnerbichler/zendi` in order to include submodules.
 
 ## Execution
